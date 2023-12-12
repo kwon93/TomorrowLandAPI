@@ -53,4 +53,26 @@ class PostsControllerTest {
 
 
     }
+
+    @Test
+    @DisplayName("createPosts(): 제목, 내용이 없을시 ExceptionResponse를 반환 해야한다.")
+    void test2() throws Exception {
+        //given
+        CreatePostsRequest request = CreatePostsRequest.builder()
+                .title("")
+                .content("")
+                .build();
+
+
+        // expected
+        mockMvc.perform(post("/api/posts")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.errorMessage").value("잘못된 요청입니다."))
+                .andDo(print());
+    }
+
 }
