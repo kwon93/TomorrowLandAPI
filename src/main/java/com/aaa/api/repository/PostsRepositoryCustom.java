@@ -1,11 +1,11 @@
 package com.aaa.api.repository;
 
 import com.aaa.api.domain.Posts;
-import org.springframework.stereotype.Repository;
+import com.aaa.api.dto.request.PostSearch;
 
 import java.util.List;
 
-public interface PostRepositoryCustom {
+public interface PostsRepositoryCustom {
 
-    List<Posts> getList(int page);
+    List<Posts> getList(PostSearch postSearch);
 }

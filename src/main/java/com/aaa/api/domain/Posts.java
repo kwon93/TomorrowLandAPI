@@ -1,7 +1,8 @@
 package com.aaa.api.domain;
 
-import com.aaa.api.domain.enumType.PostStatus;
+import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.dto.request.CreatePostsRequest;
+import com.aaa.api.dto.request.UpdatePostsRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,13 +31,22 @@ public class Posts extends BaseEntity{
     private Users user;
 
     @Enumerated
-    private PostStatus postStatus;
+    private PostsCategory category;
 
 
     @Builder
-    public Posts(String title, String content) {
+    public Posts(String title, String content, PostsCategory postsCategory) {
         this.title = title;
         this.content = content;
+        this.category = postsCategory;
+    }
+
+    public Posts updatePosts(UpdatePostsRequest request){
+        return Posts.builder()
+                .title(request.getTitle())
+                .content(request.getCotent())
+                .postsCategory(request.getPostsCategory())
+                .build();
     }
 
 
