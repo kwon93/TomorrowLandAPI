@@ -43,7 +43,7 @@ public class Posts extends BaseEntity{
 
     public Posts updatePosts(UpdatePostsRequest request){
         this.title = request.getTitle();
-        this.content = request.getCotent();
+        this.content = request.getContent();
         this.category = request.getPostsCategory();
 
         return this;
@@ -52,6 +52,7 @@ public class Posts extends BaseEntity{
 
     public static Posts of(CreatePostsRequest request){
         return Posts.builder()
+                .postsCategory(request.getCategory())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();

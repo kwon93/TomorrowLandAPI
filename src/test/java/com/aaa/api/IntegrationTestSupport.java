@@ -4,13 +4,16 @@ package com.aaa.api;
 import com.aaa.api.domain.Users;
 import com.aaa.api.repository.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.service.AuthService;
 import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public abstract class IntegrationTestSupport {
 
     //Posts
@@ -25,6 +28,10 @@ public abstract class IntegrationTestSupport {
     protected UsersService usersService;
     @Autowired
     protected UsersRepository usersRepository;
+
+    //Auth
+    @Autowired
+    protected AuthService authService;
 
 
     @AfterEach

@@ -115,7 +115,7 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         UpdatePostsRequest request = UpdatePostsRequest.builder()
                 .title(updateTitle)
-                .cotent(updateContent)
+                .content(updateContent)
                 .postsCategory(updateCategory)
                 .build();
 

@@ -163,7 +163,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
         UpdatePostsRequest request = UpdatePostsRequest.builder()
                 .title(updateTitle)
-                .cotent(updateContent)
+                .content(updateContent)
                 .postsCategory(updateCategory)
                 .build();
 

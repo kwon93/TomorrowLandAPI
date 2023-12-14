@@ -10,14 +10,13 @@ import lombok.NoArgsConstructor;
 public class UpdatePostsRequest {
 
     private String title;
-    private String cotent;
+    private String content;
     private PostsCategory postsCategory;
 
-
     @Builder
-    public UpdatePostsRequest(String title, String cotent, PostsCategory postsCategory) {
+    public UpdatePostsRequest(String title, String content, PostsCategory postsCategory) {
         this.title = title;
-        this.cotent = cotent;
+        this.content = content;
         this.postsCategory = postsCategory;
     }
 }
