@@ -1,4 +1,38 @@
+package com.aaa.api.repository;
+
+import com.aaa.api.IntegrationTestSupport;
+import com.aaa.api.domain.Users;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-class UsersRepositoryTest {
-  
+
+
+
+
+class UsersRepositoryTest extends IntegrationTestSupport {
+
+
+    @Test
+    @DisplayName("findByEmail(): 이메일과 일치하는 사용자를 DB에서 반환한다.")
+    void test() throws Exception {
+        //given
+        final String email = "kwon93@naver.com";
+        Users userInTest = createUserInTest();
+
+        // when
+        Users users = usersRepository.findByEmail(email).get();
+
+        //then
+        assertThat(users).isNotNull();
+        assertThat(users.getEmail()).isEqualTo(email);
+
+    }
+
+
+
 }
