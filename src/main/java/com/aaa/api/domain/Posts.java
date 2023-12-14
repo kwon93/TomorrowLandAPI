@@ -42,11 +42,11 @@ public class Posts extends BaseEntity{
     }
 
     public Posts updatePosts(UpdatePostsRequest request){
-        return Posts.builder()
-                .title(request.getTitle())
-                .content(request.getCotent())
-                .postsCategory(request.getPostsCategory())
-                .build();
+        this.title = request.getTitle();
+        this.content = request.getCotent();
+        this.category = request.getPostsCategory();
+
+        return this;
     }
 
 

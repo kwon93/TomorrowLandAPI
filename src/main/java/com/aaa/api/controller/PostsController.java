@@ -6,7 +6,6 @@ import com.aaa.api.dto.request.UpdatePostsRequest;
 import com.aaa.api.dto.response.PostsResponse;
 import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,8 +21,10 @@ public class PostsController {
     private final PostsService postsService;
 
     @PostMapping("posts")
-    public PostsResponse createPosts(@RequestBody @Validated CreatePostsRequest request){
-        return postsService.createPosts(request);
+    public ResponseEntity<PostsResponse> createPosts(@RequestBody @Validated CreatePostsRequest request){
+                PostsResponse posts = postsService.create(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
 
     @GetMapping("posts")

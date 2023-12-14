@@ -21,7 +21,7 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public PostsResponse createPosts(CreatePostsRequest request) {
+    public PostsResponse create(CreatePostsRequest request) {
         Posts posts = Posts.of(request);
         postsRepository.save(posts);
 
@@ -46,9 +46,9 @@ public class PostsService {
         Posts posts = findPostsById(id);
 
         Posts updatedPosts = posts.updatePosts(request);
-        postsRepository.save(updatedPosts);
+        Posts updatePosts = postsRepository.save(updatedPosts);
 
-        return PostsResponse.of(updatedPosts);
+        return PostsResponse.of(updatePosts);
     }
 
 
@@ -60,9 +60,8 @@ public class PostsService {
 
 
     private Posts findPostsById(Long id) {
-        Posts posts = postsRepository.findById(id)
+        return postsRepository.findById(id)
                 .orElseThrow(PostNotfound::new);
-        return posts;
     }
 
 }
