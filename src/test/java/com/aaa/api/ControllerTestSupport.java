@@ -1,10 +1,8 @@
 package com.aaa.api;
 
-import com.aaa.api.config.YmlProperties;
 import com.aaa.api.controller.AuthController;
 import com.aaa.api.controller.PostsController;
 import com.aaa.api.controller.UsersController;
-import com.aaa.api.repository.PostsRepository;
 import com.aaa.api.service.AuthService;
 import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
@@ -29,8 +27,6 @@ public abstract class ControllerTestSupport {
     protected UsersService usersService;
     @MockBean
     protected AuthService authService;
-    @MockBean
-    protected YmlProperties ymlProperties;
 
 
 }

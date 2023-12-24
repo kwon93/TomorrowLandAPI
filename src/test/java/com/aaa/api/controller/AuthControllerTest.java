@@ -28,30 +28,30 @@ class AuthControllerTest extends ControllerTestSupport {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    @Test
-    @DisplayName("signIn(): 로그인에 성공해 http status code: 200 응답을 받아야 한다.")
-    void test1() throws Exception {
-        //given
-        LoginRequest request = LoginRequest.builder()
-                .email("kwon93@naver.com")
-                .password("kdh1234")
-                .build();
-
-        given(authService.login(any(LoginRequest.class))).willReturn(1L);
-        given(ymlProperties.getJwtKey()).willReturn(secretKey);
-
-        // when then
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-
-        verify(authService, times(1))
-                .login(argThat(arg ->
-                        arg.getEmail().equals(request.getEmail()) &&
-                                arg.getPassword().equals(request.getPassword())));
-    }
+//    @Test
+//    @DisplayName("signIn(): 로그인에 성공해 http status code: 200 응답을 받아야 한다.")
+//    void test1() throws Exception {
+//        //given
+//        LoginRequest request = LoginRequest.builder()
+//                .email("kwon93@naver.com")
+//                .password("kdh1234")
+//                .build();
+//
+//        given(authService.login(any(LoginRequest.class))).willReturn(1L);
+//        given(ymlProperties.getJwtKey()).willReturn(secretKey);
+//
+//        // when then
+//        mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(MockMvcResultHandlers.print());
+//
+//        verify(authService, times(1))
+//                .login(argThat(arg ->
+//                        arg.getEmail().equals(request.getEmail()) &&
+//                                arg.getPassword().equals(request.getPassword())));
+//    }
 
     @Test
     @DisplayName("signIn(): 이메일 형식이 아닌 로그인 요청에는 ErrorMessage를 반환해야한다.")

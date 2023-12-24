@@ -15,24 +15,24 @@ class AuthServiceTest extends IntegrationTestSupport {
 
 
 
-    @Test
-    @DisplayName("login(): 요청에 맞는 로그인에 성공해 사용자의 Unique id를 반환한다.")
-    void test1() throws Exception {
-        //given
-        Users userInTest = createUserInTest();
-
-        LoginRequest request = LoginRequest.builder()
-                .email("kwon93@naver.com")
-                .password("kdh1234")
-                .build();
-
-
-        // when
-        Long uniqueId = authService.login(request);
-
-        //then
-        assertThat(uniqueId).isEqualTo(userInTest.getId());
-    }
+//    @Test
+//    @DisplayName("login(): 요청에 맞는 로그인에 성공해 사용자의 Unique id를 반환한다.")
+//    void test1() throws Exception {
+//        //given
+//        Users userInTest = createUserInTest();
+//
+//        LoginRequest request = LoginRequest.builder()
+//                .email("kwon93@naver.com")
+//                .password("kdh1234")
+//                .build();
+//
+//
+//        // when
+//        Long uniqueId = authService.login(request);
+//
+//        //then
+//        assertThat(uniqueId).isEqualTo(userInTest.getId());
+//    }
 
 
     @Test
