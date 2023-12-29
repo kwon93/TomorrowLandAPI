@@ -1,10 +1,8 @@
 package com.aaa.api.service;
 
-import com.aaa.api.config.data.security.jwt.JwtTokenProvider;
-import com.aaa.api.domain.Users;
+import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.dto.request.LoginRequest;
 import com.aaa.api.dto.response.JwtToken;
-import com.aaa.api.exception.InvalidSignInInfomation;
 import com.aaa.api.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +25,7 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 
-        Authentication authenticate
+            Authentication authenticate
                 = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         return jwtTokenProvider.generateToken(authenticate);

@@ -3,6 +3,7 @@ package com.aaa.api.controller;
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.dto.request.CreateUsersRequest;
 import com.aaa.api.dto.request.LoginRequest;
+import com.aaa.api.dto.response.JwtToken;
 import com.aaa.api.service.AuthService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,9 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -28,32 +32,35 @@ class AuthControllerTest extends ControllerTestSupport {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-//    @Test
-//    @DisplayName("signIn(): 로그인에 성공해 http status code: 200 응답을 받아야 한다.")
-//    void test1() throws Exception {
-//        //given
-//        LoginRequest request = LoginRequest.builder()
-//                .email("kwon93@naver.com")
-//                .password("kdh1234")
-//                .build();
-//
-//        given(authService.login(any(LoginRequest.class))).willReturn(1L);
-//        given(ymlProperties.getJwtKey()).willReturn(secretKey);
-//
-//        // when then
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andDo(MockMvcResultHandlers.print());
-//
-//        verify(authService, times(1))
-//                .login(argThat(arg ->
-//                        arg.getEmail().equals(request.getEmail()) &&
-//                                arg.getPassword().equals(request.getPassword())));
-//    }
+    @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
+    @DisplayName("signIn(): 로그인에 성공해 http status code: 200 응답을 받아야 한다.")
+    void test1() throws Exception {
+        //given
+        LoginRequest request = LoginRequest.builder()
+                .email("kwon93@naver.com")
+                .password("kdh1234")
+                .build();
+
+        given(authService.login(any(LoginRequest.class))).willReturn(JwtToken.builder().build());
+
+        // when then
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        verify(authService, times(1))
+                .login(argThat(arg ->
+                        arg.getEmail().equals(request.getEmail()) &&
+                                arg.getPassword().equals(request.getPassword())));
+    }
 
     @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
     @DisplayName("signIn(): 이메일 형식이 아닌 로그인 요청에는 ErrorMessage를 반환해야한다.")
     void test2() throws Exception {
         //given
@@ -64,6 +71,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -75,6 +83,7 @@ class AuthControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
     @DisplayName("signIn(): 이메일을 입력하지않은 로그인 요청에는 ErrorMessage를 반환해야한다.")
     void test3() throws Exception {
         //given
@@ -84,6 +93,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -95,6 +105,7 @@ class AuthControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
     @DisplayName("signIn(): 비밀번호 형식에 맞지 않는 로그인 요청에는 ErrorMessage를 반환해야한다.")
     void test4() throws Exception {
         //given
@@ -105,6 +116,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -116,6 +128,7 @@ class AuthControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
     @DisplayName("signIn(): 비밀번호 입력이 없는 로그인 요청에는 ErrorMessage를 반환해야한다.")
     void test5() throws Exception {
         //given
@@ -125,6 +138,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -134,10 +148,5 @@ class AuthControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.validation.password").value("비밀번호를 입력해주세요."))
                 .andDo(print());
     }
-
-
-
-
-
 
 }

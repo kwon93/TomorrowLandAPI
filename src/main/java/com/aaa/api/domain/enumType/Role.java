@@ -1,7 +1,20 @@
 package com.aaa.api.domain.enumType;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
 
-    ROLE_USER,
-    ROLE_ADMIN
+    USER("USER"),
+    ADMIN("ADMIN");
+
+    String role;
+
+    Role(String role) {
+        this.role = role;
+    }
+
+    public String value() {
+        return role;
+    }
 }

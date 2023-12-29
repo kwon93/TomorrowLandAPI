@@ -19,8 +19,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
-public class Users extends BaseEntity implements UserDetails {
+public class Users extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,20 +33,17 @@ public class Users extends BaseEntity implements UserDetails {
 
     private String name;
 
+
     private Integer point;
 
     @Enumerated(EnumType.STRING)
     private UserLevel userLevel;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
-    @Override
-    public List<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-    }
+    @Enumerated(EnumType.STRING)
+    private Role roles;
+
+
+
 
     @Builder
     public Users(String email, String password, String name, Integer point, UserLevel userLevel, Role role) {
@@ -56,7 +52,7 @@ public class Users extends BaseEntity implements UserDetails {
         this.name = name;
         this.point = 100;
         this.userLevel = UserLevel.Beginner;
-        this.roles.add(role.toString());
+        this.roles = role;
     }
 
     public static Users of(CreateUsersRequest request, String password){
@@ -64,31 +60,11 @@ public class Users extends BaseEntity implements UserDetails {
                 .email(request.getEmail())
                 .password(password)
                 .name(request.getName())
+                .role(request.getRole())
+                .point(100)
+                .userLevel(UserLevel.Beginner)
                 .build();
     }
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

@@ -2,14 +2,17 @@ package com.aaa.api;
 
 
 import com.aaa.api.domain.Users;
+import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.repository.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.AuthService;
 import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -33,6 +36,9 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected AuthService authService;
 
+    //passwordEncoder
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
 
     @AfterEach
     protected void tearDown() {
@@ -40,11 +46,13 @@ public abstract class IntegrationTestSupport {
         postsRepository.deleteAllInBatch();
     }
 
+    @Transactional
     protected Users createUserInTest(){
         Users users = Users.builder()
                 .email("kwon93@naver.com")
-                .password("kdh1234")
+                .password(passwordEncoder.encode("kdh1234"))
                 .name("kwon")
+                .role(Role.ADMIN)
                 .build();
 
         usersRepository.save(users);

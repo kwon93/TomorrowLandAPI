@@ -7,6 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,6 +25,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
 
     @Test
+    @WithMockUser
     @DisplayName("signup(): 회원가입 요청에 성공해 http status code: 201 응답을 받아야 한다.")
     void test1() throws Exception {
         //given
@@ -35,10 +39,11 @@ class UsersControllerTest extends ControllerTestSupport {
                 .name(name)
                 .build();
 
-        given(usersService.createUser(any(CreateUsersRequest.class))).willReturn(1L);
+        given(usersService.createUser(any(CreateUsersRequest.class))).willReturn("ADMIN");
 
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -49,6 +54,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
 
     @Test
+    @WithMockUser
     @DisplayName("createUser(): 이메일 형식이 아닌 요청에는 ErrorMessage를 반환해야한다.")
     void test2() throws Exception {
         //given
@@ -60,6 +66,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -72,6 +79,7 @@ class UsersControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser
     @DisplayName("createUser(): 이메일을 작성하지않은 요청에는 ErrorMessage를 반환해야한다.")
     void test3() throws Exception {
         //given
@@ -82,6 +90,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -93,6 +102,7 @@ class UsersControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser
     @DisplayName("createUser(): 잘못된 비밀번호 양식 요청에는 ErrorMessage를 반환해야한다.")
     void test4() throws Exception {
         //given
@@ -104,6 +114,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -116,6 +127,7 @@ class UsersControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser
     @DisplayName("createUser(): 이름이 6글자 넘어간 요청에는 ErrorMessage를 반환해야한다.")
     void test5() throws Exception {
         //given
@@ -127,6 +139,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )

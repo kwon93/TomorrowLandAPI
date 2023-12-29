@@ -34,24 +34,4 @@ class UsersRepositoryTest extends IntegrationTestSupport {
 
     }
 
-
-
-    @Test
-    @DisplayName("findByEmailAndPassword(): 이메일과 비밀번호가 일치하는 사용자를 DB에서 반환한다.")
-    void test2() throws Exception {
-        //given
-        final String email = "kwon93@naver.com";
-        final String password = "kdh1234";
-
-
-        Users userInTest = createUserInTest();
-        // when
-        Users users = usersRepository.findByEmailAndPassword(email, password)
-                .orElseThrow(InvalidSignInInfomation::new);
-        //then
-        assertThat(users.getEmail()).isEqualTo(email);
-        assertThat(users.getPassword()).isEqualTo(password);
-    }
-
-
 }

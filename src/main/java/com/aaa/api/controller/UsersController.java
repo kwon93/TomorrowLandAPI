@@ -19,10 +19,10 @@ public class UsersController {
     private final UsersService usersService;
 
     @PostMapping("signup")
-    public ResponseEntity<Long> signup(@RequestBody @Validated CreateUsersRequest createUsersRequest){
-        long userId = usersService.createUser(createUsersRequest);
+    public ResponseEntity<String > signup(@RequestBody @Validated CreateUsersRequest createUsersRequest){
+        String userRole = usersService.createUser(createUsersRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
     }
 
 }

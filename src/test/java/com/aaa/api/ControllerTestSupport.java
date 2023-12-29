@@ -1,5 +1,6 @@
 package com.aaa.api;
 
+import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.controller.AuthController;
 import com.aaa.api.controller.PostsController;
 import com.aaa.api.controller.UsersController;
@@ -27,6 +28,8 @@ public abstract class ControllerTestSupport {
     protected UsersService usersService;
     @MockBean
     protected AuthService authService;
+    @MockBean
+    protected JwtTokenProvider jwtTokenProvider;
 
 
 }

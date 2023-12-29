@@ -1,6 +1,7 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
+import com.aaa.api.config.security.SecurityConfig;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.dto.request.CreatePostsRequest;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -20,6 +23,7 @@ import java.util.stream.IntStream;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostsControllerTest extends ControllerTestSupport {
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("createPosts(): 글작성 요청에 성공해 http status code: 201 응답을 받아야 한다.")
     void test() throws Exception {
         //given
@@ -47,6 +52,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/posts")
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
         )
@@ -58,6 +64,7 @@ class PostsControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("createPosts(): 제목, 내용이 없을시 ExceptionResponse를 반환 해야한다.")
     void test2() throws Exception {
         //given
@@ -69,6 +76,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/posts")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -80,6 +88,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("getAllPosts(): 1페이지 조회에 성공한다.")
     void test3() throws Exception {
         //given
@@ -96,7 +105,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .build();
 
         // when
-        mockMvc.perform(get("/api/posts?page=1&size=10"))
+        mockMvc.perform(get("/api/posts?page=1&size=10").with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -105,6 +114,7 @@ class PostsControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("getAllPosts(): 0페이지 조회시 1페이지 조회에 성공한다.")
     void test4() throws Exception {
         //given
@@ -120,7 +130,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .build();
 
         //then
-        mockMvc.perform(get("/api/posts?page=0"))
+        mockMvc.perform(get("/api/posts?page=0").with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -130,6 +140,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("getOne(): 단건조회에 성공해 http status 200 응답을 받아야한다..")
     void test5() throws Exception {
         //given
@@ -143,7 +154,7 @@ class PostsControllerTest extends ControllerTestSupport {
         given(postsService.getOne(response.getId())).willReturn(response);
 
         // when then
-        mockMvc.perform(get("/api/posts/{postId}",response.getId()))
+        mockMvc.perform(get("/api/posts/{postId}",response.getId()).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.content").value("내용"))
@@ -154,6 +165,7 @@ class PostsControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("updatePosts(): 게시물 수정에 성공해 http status 200 응답을 받아야한다.")
     void test6() throws Exception {
         //given
@@ -178,6 +190,7 @@ class PostsControllerTest extends ControllerTestSupport {
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -190,13 +203,14 @@ class PostsControllerTest extends ControllerTestSupport {
     }
 
     @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("updatePosts(): 게시물 삭제에 성공해 204응답을 받아야한다.")
     void test7() throws Exception {
         //given
         final Long id = 1L;
 
         // when then
-        mockMvc.perform(delete("/api/posts/{postId}",id))
+        mockMvc.perform(delete("/api/posts/{postId}",id).with(csrf()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 

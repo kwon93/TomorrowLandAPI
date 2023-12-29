@@ -20,7 +20,7 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public long createUser(CreateUsersRequest request) {
+    public String  createUser(CreateUsersRequest request) {
         duplicationEmailValidation(request);
 
         String encryptPassword = passwordEncoder.encode(request.getPassword());
@@ -28,7 +28,7 @@ public class UsersService {
         Users users = Users.of(request, encryptPassword);
         usersRepository.save(users);
 
-        return users.getId();
+        return users.getRoles().toString();
     }
 
     private void duplicationEmailValidation(CreateUsersRequest createUsersRequest) {

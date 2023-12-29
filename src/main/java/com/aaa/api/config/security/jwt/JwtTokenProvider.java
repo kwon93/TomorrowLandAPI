@@ -1,4 +1,4 @@
-package com.aaa.api.config.data.security.jwt;
+package com.aaa.api.config.security.jwt;
 
 import com.aaa.api.dto.response.JwtToken;
 import io.jsonwebtoken.*;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -33,10 +35,7 @@ public class JwtTokenProvider {
     }
 
     public JwtToken generateToken(Authentication authentication){
-        String  authorities = authentication.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+        String  authorities = authentication.getAuthorities().toString();
 
         long now = new Date().getTime();
 
@@ -48,7 +47,7 @@ public class JwtTokenProvider {
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .expiration(new Date(now + expirationDate))
+                .expiration(Date.from(Instant.now().plus(Duration.ofDays(14))))
                 .signWith(key)
                 .compact();
 
@@ -63,17 +62,14 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null){
-            throw new RuntimeException("권한정보없는 토큰");
+            throw new RuntimeException("권한 정보가 없는 토큰");
         }
 
-        List<SimpleGrantedAuthority> authorities
-                = Arrays.stream(claims.get("auth").toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        String authorities = claims.get("auth").toString();
 
-        User user = new User(claims.getSubject(), "", authorities);
+        User user = new User(claims.getSubject(), "", List.of(new SimpleGrantedAuthority(authorities)));
 
-        return new UsernamePasswordAuthenticationToken(user, "",authorities);
+        return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(authorities)));
     }
 
 
@@ -88,8 +84,6 @@ public class JwtTokenProvider {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
         }

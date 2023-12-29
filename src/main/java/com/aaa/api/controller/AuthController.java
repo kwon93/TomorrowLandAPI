@@ -6,8 +6,12 @@ import com.aaa.api.dto.response.SessionResponse;
 import com.aaa.api.service.AuthService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +28,17 @@ public class AuthController {
 
 
     @PostMapping("login")
-    public JwtToken signIn(@RequestBody @Validated LoginRequest loginRequest){
+    public ResponseEntity<?> signIn(@RequestBody @Validated LoginRequest loginRequest, HttpServletRequest request) {
 
-        return authService.login(loginRequest);
+        JwtToken jwtToken = authService.login(loginRequest);
 
-    }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken.getAccessToken());
+        headers.add("Refresh-Token", jwtToken.getRefreshToken());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .headers(headers)
+                .body(jwtToken);
+    };
+
 }
