@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private SecretKey key;
-    private @Value("${jwt.expiration}") Long expirationDate;
 
     public JwtTokenProvider(@Value("${jwt.secretKey}") String key) {
         byte[] decodedKey = Base64.getDecoder().decode(key);
@@ -39,6 +38,7 @@ public class JwtTokenProvider {
 
         long now = new Date().getTime();
 
+        long expirationDate = 300000L;
         String accessToken = Jwts.builder()
                 .subject(authentication.getName())
                 .claim("auth", authorities)

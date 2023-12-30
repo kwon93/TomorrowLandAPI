@@ -46,7 +46,6 @@ public abstract class IntegrationTestSupport {
         postsRepository.deleteAllInBatch();
     }
 
-    @Transactional
     protected Users createUserInTest(){
         Users users = Users.builder()
                 .email("kwon93@naver.com")

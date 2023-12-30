@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @EnableConfigurationProperties
 class AuthControllerTest extends ControllerTestSupport {
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
 
     @Test
     @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
