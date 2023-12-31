@@ -40,8 +40,6 @@ import static org.mockito.Mockito.*;
 
 class JwtTokenProviderTest extends IntegrationTestSupport {
 
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
     @Value("${jwt.secretKey}")
     private String secretKey;
     private SecretKey key;
@@ -90,7 +88,6 @@ class JwtTokenProviderTest extends IntegrationTestSupport {
         //given
         String accessToken = Jwts.builder()
                 .subject("username")
-                .claim("invalidAuth", Mockito.any())
                 .expiration(new Date(new Date().getTime() + 300000L))
                 .signWith(key)
                 .compact();
@@ -116,6 +113,7 @@ class JwtTokenProviderTest extends IntegrationTestSupport {
                 .expiration(expirationTime)
                 .signWith(key)
                 .compact();
+
         // when
         boolean validateResult = jwtTokenProvider.validateToken(accessToken);
 

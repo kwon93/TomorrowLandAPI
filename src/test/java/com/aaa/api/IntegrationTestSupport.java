@@ -1,6 +1,7 @@
 package com.aaa.api;
 
 
+import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.repository.PostsRepository;
@@ -12,6 +13,8 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -39,6 +42,8 @@ public abstract class IntegrationTestSupport {
     //passwordEncoder
     @Autowired
     protected PasswordEncoder passwordEncoder;
+    @Autowired
+    protected JwtTokenProvider jwtTokenProvider;
 
     @AfterEach
     protected void tearDown() {

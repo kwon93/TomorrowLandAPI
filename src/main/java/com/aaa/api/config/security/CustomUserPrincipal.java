@@ -13,4 +13,8 @@ public class CustomUserPrincipal extends User {
     public CustomUserPrincipal(Users users) {
         super(users.getEmail(), users.getPassword(), List.of(new SimpleGrantedAuthority(users.getRoles().value())));
     }
+
+    public CustomUserPrincipal of(Users users){
+        return new CustomUserPrincipal(users);
+    }
 }

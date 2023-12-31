@@ -5,30 +5,33 @@ import com.aaa.api.dto.request.CreateUsersRequest;
 import com.aaa.api.dto.request.LoginRequest;
 import com.aaa.api.dto.response.JwtToken;
 import com.aaa.api.service.AuthService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@EnableConfigurationProperties
+//@EnableConfigurationProperties
 class AuthControllerTest extends ControllerTestSupport {
-
 
     @Test
     @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
@@ -145,6 +148,23 @@ class AuthControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.errorMessage").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validation.password").value("비밀번호를 입력해주세요."))
                 .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
+    @DisplayName("reIssueRefreshToken(): 새로운 액세스 토큰을 발급받아 응답 Header에 담아줘야한다.")
+    void test() throws Exception {
+        //given
+        given(reIssueProvider.validateRefreshToken(anyString())).willReturn("kwon93@naver.com");
+        given(reIssueProvider.reIssueAccessToken(anyString())).willReturn("jwtToken");
+
+        // when
+        mockMvc.perform(patch("/api/reissue")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+        ).andExpect(status().isOk())
+                .andExpect(header().exists("Authorization"))
+                .andDo(print());
+
     }
 
 }
