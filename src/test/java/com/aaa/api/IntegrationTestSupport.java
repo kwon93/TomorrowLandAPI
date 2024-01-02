@@ -11,6 +11,7 @@ import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -45,10 +46,10 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected JwtTokenProvider jwtTokenProvider;
 
-    @AfterEach
+    @BeforeEach
     protected void tearDown() {
-        usersRepository.deleteAllInBatch();
         postsRepository.deleteAllInBatch();
+        usersRepository.deleteAllInBatch();
     }
 
     protected Users createUserInTest(){

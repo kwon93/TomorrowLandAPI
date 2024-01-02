@@ -33,7 +33,6 @@ public class Users extends BaseEntity {
 
     private String name;
 
-
     private Integer point;
 
     @Enumerated(EnumType.STRING)

@@ -32,8 +32,7 @@ import java.util.Collections;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -72,7 +71,6 @@ public class SecurityConfig {
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable) //jwt 활용으로 csrf방어 비활성
-                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();

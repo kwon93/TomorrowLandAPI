@@ -2,6 +2,7 @@ package com.aaa.api.service;
 
 import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Posts;
+import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.dto.request.CreatePostsRequest;
 import com.aaa.api.dto.request.PostSearch;
@@ -31,12 +32,14 @@ class PostsServiceTest extends IntegrationTestSupport {
     @DisplayName("create(): 작성글이 DB에 저장되어야한다.")
     void test1() throws Exception {
         //given
+        Users userInTest = createUserInTest();
+
         CreatePostsRequest request = CreatePostsRequest.builder()
                 .title("제목")
                 .content("안녕하세요.")
                 .build();
         // when
-        postsService.create(request);
+        postsService.create(userInTest.getId(),request);
 
         //then
 
@@ -146,7 +149,6 @@ class PostsServiceTest extends IntegrationTestSupport {
         assertThat(postsList.size()).isEqualTo(0);
 
     }
-
 
     private Posts createPostInTest() {
         Posts posts = Posts.builder()

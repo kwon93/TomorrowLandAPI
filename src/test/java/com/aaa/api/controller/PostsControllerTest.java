@@ -1,6 +1,8 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
+import com.aaa.api.config.CustomMockUser;
+import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.config.security.SecurityConfig;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
@@ -9,11 +11,13 @@ import com.aaa.api.dto.request.PostSearch;
 import com.aaa.api.dto.request.UpdatePostsRequest;
 import com.aaa.api.dto.response.PostsResponse;
 import com.aaa.api.exception.PostNotfound;
+import com.aaa.api.service.PostsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
@@ -32,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostsControllerTest extends ControllerTestSupport {
 
     @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
+    @CustomMockUser
     @DisplayName("createPosts(): 글작성 요청에 성공해 http status code: 201 응답을 받아야 한다.")
     void test() throws Exception {
         //given
@@ -47,8 +51,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(PostsCategory.DEV)
                 .build();
 
-        given(postsService.create(any(CreatePostsRequest.class))).willReturn(response);
-
+        given(postsService.create(any(),any(CreatePostsRequest.class))).willReturn(response);
 
         // expected
         mockMvc.perform(post("/api/posts")
@@ -60,7 +63,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andDo(print());
 
-        verify(postsService, times(1)).create(refEq(request));
+        verify(postsService, times(1)).create(any(),any(CreatePostsRequest.class));
     }
 
     @Test
@@ -203,8 +206,8 @@ class PostsControllerTest extends ControllerTestSupport {
     }
 
     @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("updatePosts(): 게시물 삭제에 성공해 204응답을 받아야한다.")
+    @CustomMockUser
+    @DisplayName("deletePosts(): 게시물을 작성한 사용자가 게시물 삭제에 성공해 204응답을 받아야한다.")
     void test7() throws Exception {
         //given
         final Long id = 1L;
@@ -216,5 +219,54 @@ class PostsControllerTest extends ControllerTestSupport {
 
         verify(postsService, times(1)).delete(id);
     }
+
+    @Test
+    @WithAnonymousUser
+    @DisplayName("deletePosts(): 게시물을 작성한 사용자가 아닐경우 http status 401 응답을 받아야한다.")
+    void test8() throws Exception {
+        //given
+        final Long id = 1L;
+
+        // when then
+        mockMvc.perform(delete("/api/posts/{postId}",id).with(csrf()))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    @WithAnonymousUser
+    @DisplayName("updatePosts(): 게시물 작성자가아닌 다른 사용자의 수정 요청에는 http status 401 응답을 받아야한다.")
+    void test9() throws Exception {
+        //given
+        final String updateTitle = "update";
+        final String updateContent = "complete";
+        final PostsCategory updateCategory = PostsCategory.MEDIA;
+
+        UpdatePostsRequest request = UpdatePostsRequest.builder()
+                .title(updateTitle)
+                .content(updateContent)
+                .postsCategory(updateCategory)
+                .build();
+
+        PostsResponse response = PostsResponse.builder()
+                .id(1L)
+                .title(updateTitle)
+                .content(updateContent)
+                .category(updateCategory)
+                .build();
+
+        given(postsService.update(any(UpdatePostsRequest.class),any(Long.class))).willReturn(response);
+
+        // when then
+        mockMvc.perform(patch("/api/posts/{postId}",response.getId())
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+    }
+
+
 
 }

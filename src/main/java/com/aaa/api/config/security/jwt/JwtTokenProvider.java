@@ -1,5 +1,6 @@
 package com.aaa.api.config.security.jwt;
 
+import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.dto.response.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -38,6 +39,7 @@ public class JwtTokenProvider {
 
     public JwtToken generateToken(Authentication authentication){
         String  authorities = authentication.getAuthorities().toString();
+        log.info("fist auth >>>>> {}",authorities);
 
         long now = new Date().getTime();
 
@@ -70,11 +72,16 @@ public class JwtTokenProvider {
         }
 
         String authorities = claims.get("auth").toString();
+        log.info("authorities >>>>> {}", authorities);
+
+        authorities = authorities.replaceAll("\\[", "").replaceAll("\\]", "");
+        log.info("authorities replace >>>>> {}", authorities);
 
         User user = new User(claims.getSubject(), "", List.of(new SimpleGrantedAuthority(authorities)));
 
         return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(authorities)));
     }
+
 
 
     public boolean validateToken(String token) {

@@ -26,7 +26,7 @@ public class Posts extends BaseEntity{
 
     private int viewCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Users user;
 
@@ -35,7 +35,8 @@ public class Posts extends BaseEntity{
 
 
     @Builder
-    public Posts(String title, String content, PostsCategory postsCategory) {
+    public Posts(Users user, String title, String content, PostsCategory postsCategory) {
+        this.user = user;
         this.title = title;
         this.content = content;
         this.category = postsCategory;
@@ -49,12 +50,16 @@ public class Posts extends BaseEntity{
         return this;
     }
 
-
-    public static Posts of(CreatePostsRequest request){
+    public static Posts of(Users user, CreatePostsRequest request){
         return Posts.builder()
+                .user(user)
                 .postsCategory(request.getCategory())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
+    }
+
+    public Long getUserId(){
+        return this.user.getId();
     }
 }
