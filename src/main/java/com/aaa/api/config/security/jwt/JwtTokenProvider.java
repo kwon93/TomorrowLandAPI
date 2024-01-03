@@ -74,6 +74,7 @@ public class JwtTokenProvider {
         String authorities = claims.get("auth").toString();
         log.info("authorities >>>>> {}", authorities);
 
+        //rePlace() 사용안하는 방향으로 리팩토링 해야함.
         authorities = authorities.replaceAll("\\[", "").replaceAll("\\]", "");
         log.info("authorities replace >>>>> {}", authorities);
 

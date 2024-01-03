@@ -36,7 +36,9 @@ public class JwtTokenReIssueProvider {
         Users users = usersRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("찾을 수 없는 회원입니다."));
 
+
         UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(users);
+
 
         JwtToken jwtToken = jwtTokenProvider.generateToken(authenticationToken);
 
@@ -70,6 +72,6 @@ public class JwtTokenReIssueProvider {
     private static UsernamePasswordAuthenticationToken getAuthentication(Users users) {
         User user = new User(users.getEmail(), "", List.of(new SimpleGrantedAuthority(users.getRoles().value())));
 
-        return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(users.getRoles().value())));
+        return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles().value())));
     }
 }
