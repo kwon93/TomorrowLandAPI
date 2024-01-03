@@ -64,12 +64,7 @@ public class SecurityConfig {
 
         return http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/signup")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/reissue")).permitAll()
-                                .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(request -> request.anyRequest().permitAll())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable) //jwt 활용으로 csrf방어 비활성
                 .httpBasic(AbstractHttpConfigurer::disable)

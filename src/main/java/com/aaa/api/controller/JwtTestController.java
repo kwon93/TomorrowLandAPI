@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class JwtTestController {
 
     @GetMapping("jwt")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     public String jwtTest() {
         return "jwt 인증 성공";
     }
