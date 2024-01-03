@@ -1,4 +1,4 @@
-package com.aaa.api.repository;
+package com.aaa.api.repository.Posts;
 
 import com.aaa.api.domain.Posts;
 import org.springframework.data.jpa.repository.JpaRepository;

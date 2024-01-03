@@ -9,12 +9,8 @@ import com.aaa.api.dto.request.PostSearch;
 import com.aaa.api.dto.request.UpdatePostsRequest;
 import com.aaa.api.dto.response.PostsResponse;
 import com.aaa.api.exception.PostNotfound;
-import com.aaa.api.repository.PostsRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

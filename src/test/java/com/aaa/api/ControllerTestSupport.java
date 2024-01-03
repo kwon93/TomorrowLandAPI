@@ -4,10 +4,12 @@ import com.aaa.api.config.CustomMockSecurityContext;
 import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.config.security.jwt.JwtTokenReIssueProvider;
 import com.aaa.api.controller.AuthController;
+import com.aaa.api.controller.CommentController;
 import com.aaa.api.controller.PostsController;
 import com.aaa.api.controller.UsersController;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.AuthService;
+import com.aaa.api.service.CommentService;
 import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +22,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest( controllers = {PostsController.class, UsersController.class, AuthController.class} )
+@WebMvcTest( controllers = {PostsController.class, UsersController.class, AuthController.class, CommentController.class} )
 @ActiveProfiles("test")
 public abstract class ControllerTestSupport {
 
@@ -34,6 +36,8 @@ public abstract class ControllerTestSupport {
     protected UsersService usersService;
     @MockBean
     protected AuthService authService;
+    @MockBean
+    protected CommentService commentService;
     @MockBean
     protected JwtTokenProvider jwtTokenProvider;
     @MockBean

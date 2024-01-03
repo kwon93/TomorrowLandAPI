@@ -8,10 +8,9 @@ import com.aaa.api.dto.request.UpdatePostsRequest;
 import com.aaa.api.dto.response.PostsResponse;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
-import com.aaa.api.repository.PostsRepository;
+import com.aaa.api.repository.Posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,9 +54,8 @@ public class PostsService {
         Posts posts = findPostsById(id);
 
         Posts updatedPosts = posts.updatePosts(request);
-        Posts updatePosts = postsRepository.save(updatedPosts);
 
-        return PostsResponse.of(updatePosts);
+        return PostsResponse.of(updatedPosts);
     }
 
 

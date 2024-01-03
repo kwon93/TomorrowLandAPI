@@ -1,6 +1,6 @@
 package com.aaa.api.config.security;
 
-import com.aaa.api.repository.PostsRepository;
+import com.aaa.api.repository.Posts.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
