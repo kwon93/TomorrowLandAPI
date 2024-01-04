@@ -22,6 +22,14 @@ public class PostsResponse {
         this.category = category;
     }
 
+    public PostsResponse(Posts entity){
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.category = entity.getCategory();
+    }
+
+
     public static PostsResponse of(Posts entity){
         return PostsResponse.builder()
                 .title(entity.getTitle())

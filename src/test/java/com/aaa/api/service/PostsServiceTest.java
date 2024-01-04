@@ -64,7 +64,7 @@ class PostsServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        List<PostsResponse> pageOne = postsService.getAll(postSearch);
+        List<Posts> pageOne = postsService.getAll(postSearch);
 
         //then
         assertThat(pageOne.size()).isEqualTo(10);

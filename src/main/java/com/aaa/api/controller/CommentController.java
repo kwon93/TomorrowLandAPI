@@ -4,7 +4,7 @@ import com.aaa.api.domain.Comment;
 import com.aaa.api.dto.request.DeleteCommentRequest;
 import com.aaa.api.dto.request.CreateCommentRequest;
 import com.aaa.api.dto.request.UpdateCommentRequest;
-import com.aaa.api.dto.response.CommentResponse;
+import com.aaa.api.dto.response.PostCommentResponse;
 import com.aaa.api.dto.response.CommentResult;
 import com.aaa.api.dto.response.CommentsResponse;
 import com.aaa.api.dto.response.UpdateCommentResponse;
@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -25,11 +26,11 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/posts/{postsId}/comment")
-    public ResponseEntity<?> createComment(@PathVariable("postsId") Long postsId,
-                                        @RequestBody @Validated CreateCommentRequest request){
+    public ResponseEntity<PostCommentResponse> createComment(@PathVariable("postsId") Long postsId,
+                                                             @RequestBody @Validated CreateCommentRequest request){
 
         Comment comment = commentService.create(postsId, request);
-        CommentResponse response = CommentResponse.of(comment);
+        PostCommentResponse response = PostCommentResponse.of(comment);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -45,7 +46,7 @@ public class CommentController {
 
 
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable("commentId")Long commentId,
+    public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable("commentId")Long commentId,
                                            @RequestBody @Validated UpdateCommentRequest request){
 
         Comment updatedComment = commentService.update(commentId, request);
@@ -56,11 +57,11 @@ public class CommentController {
 
     //deleteMapping 요청시 @requestBody 로 값을 받기 불가능해짐. -> Post method로 진행.
     @PostMapping("/comment/{commentId}/delete")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentId")Long commentId,
-                                           @RequestBody @Validated DeleteCommentRequest request){
+    public ResponseEntity<Void> deleteComment(@PathVariable("commentId")Long commentId,
+                                                 @RequestBody @Validated DeleteCommentRequest request){
 
         commentService.delete(commentId,request);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
 }

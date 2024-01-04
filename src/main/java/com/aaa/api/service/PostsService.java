@@ -36,11 +36,8 @@ public class PostsService {
         return PostsResponse.of(posts);
     }
 
-    public List<PostsResponse> getAll(PostSearch postSearch) {
-
-        return postsRepository.getList(postSearch).stream()
-                .map(PostsResponse::of)
-                .toList();
+    public List<Posts> getAll(PostSearch postSearch) {
+         return postsRepository.getList(postSearch);
     }
 
     public PostsResponse getOne(Long id) {

@@ -32,7 +32,7 @@ public class AuthController {
     private final JwtTokenReIssueProvider reIssueProvider;
 
     @PostMapping("login")
-    public ResponseEntity<?> signIn(@RequestBody @Validated LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<JwtToken> signIn(@RequestBody @Validated LoginRequest loginRequest, HttpServletRequest request) {
 
         JwtToken jwtToken = authService.login(loginRequest);
 
@@ -46,7 +46,7 @@ public class AuthController {
     };
 
     @PatchMapping("reissue")
-    public ResponseEntity<?> reIssueRefreshToken(HttpServletRequest request){
+    public ResponseEntity<String> reIssueRefreshToken(HttpServletRequest request){
         String refreshToken = request.getHeader("Refresh-Token");
         String username = reIssueProvider.validateRefreshToken(refreshToken);
         String reIssueAccessToken = reIssueProvider.reIssueAccessToken(username);

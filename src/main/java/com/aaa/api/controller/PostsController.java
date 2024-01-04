@@ -1,10 +1,12 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
+import com.aaa.api.domain.Posts;
 import com.aaa.api.dto.request.CreatePostsRequest;
 import com.aaa.api.dto.request.PostSearch;
 import com.aaa.api.dto.request.UpdatePostsRequest;
 import com.aaa.api.dto.response.PostsResponse;
+import com.aaa.api.dto.response.PostsResult;
 import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,8 +38,11 @@ public class PostsController {
     }
 
     @GetMapping("posts")
-    public List<PostsResponse> getAllPosts(PostSearch postSearch){
-            return postsService.getAll(postSearch);
+    public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(PostSearch postSearch){
+        List<PostsResponse> responses = postsService.getAll(postSearch).stream()
+                .map(PostsResponse::new)
+                .toList();
+        return ResponseEntity.ok(new PostsResult<>(responses));
     }
 
     @GetMapping("posts/{postId}")
@@ -53,7 +58,7 @@ public class PostsController {
 
     @DeleteMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'DELETE')")
-    public ResponseEntity<?> deletePosts(@PathVariable("postId") Long id){
+    public ResponseEntity<Void> deletePosts(@PathVariable("postId") Long id){
         postsService.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
