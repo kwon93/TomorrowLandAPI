@@ -3,7 +3,7 @@
     -> 카테고리 검색등 더 조회 방식을 확장시키고 동적으로 처리하기 위해.
 <h3>2. Presentation, Business Layer 별 DTO 사용 refactoring 예정.</h3>
     -> 각 Layer간 의존성 분리 Controller와 Service가 서로 의존하지 않도록.<p>
-    -> @Valid등 Service에서는 필요한 data만 이용하여 불필요한 데이터를 담지않도록 성능 최적화
+    -> @Valid등 Service에서는 필요한 data만 이용하여 불필요한 데이터를 담지않도록 성능 최적화<p>
     -> 단순 DTO뿐 아니라 Layer별로 의존하지않는 구조를 가지도록 틈틈히 refactoring 하자.
 <h3>3. CQRS Command와 Query의 분리 </h3>
 
