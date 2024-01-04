@@ -4,14 +4,12 @@ import com.aaa.api.dto.request.CreateCommentRequest;
 import com.aaa.api.dto.request.CreatePostsRequest;
 import com.aaa.api.dto.request.UpdateCommentRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(indexes = {@Index(name = "IDX_COMMENT_POST_ID", columnList = "posts_id")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
@@ -25,22 +23,18 @@ public class Comment extends BaseEntity {
 
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private Users user;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "posts_id")
     private Posts posts;
 
     @Builder
-    public Comment(Long id, String username, String password, String content, Users user, Posts posts) {
+    public Comment(Long id, String username, String password, String content, Posts posts, LocalDateTime regDate) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.content = content;
-        this.user = user;
         this.posts = posts;
+        this.regDate = regDate;
     }
 
     public static Comment of(Posts post, CreateCommentRequest request, String encodedPW){

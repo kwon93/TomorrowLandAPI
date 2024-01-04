@@ -2,8 +2,11 @@ package com.aaa.api;
 
 
 import com.aaa.api.config.security.jwt.JwtTokenProvider;
+import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
+import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.Posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.AuthService;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,6 +44,8 @@ public abstract class IntegrationTestSupport {
     //Comment
     @Autowired
     protected CommentService commentService;
+    @Autowired
+    protected CommentRepository commentRepository;
 
     //passwordEncoder
     @Autowired
@@ -48,8 +54,10 @@ public abstract class IntegrationTestSupport {
     protected JwtTokenProvider jwtTokenProvider;
 
 
+
     @BeforeEach
     protected void tearDown() {
+        commentRepository.deleteAllInBatch();
         postsRepository.deleteAllInBatch();
         usersRepository.deleteAllInBatch();
     }
@@ -65,6 +73,16 @@ public abstract class IntegrationTestSupport {
         usersRepository.save(users);
 
         return users;
+    }
+
+    protected Posts createPostInTest() {
+        Posts posts = Posts.builder()
+                .title("제목")
+                .content("내용")
+                .postsCategory(PostsCategory.LIFE)
+                .build();
+
+        return postsRepository.save(posts);
     }
 
 }

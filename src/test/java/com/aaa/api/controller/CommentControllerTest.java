@@ -3,25 +3,31 @@ package com.aaa.api.controller;
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
+import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.dto.request.CreateCommentRequest;
 import com.aaa.api.dto.request.DeleteCommentRequest;
 import com.aaa.api.dto.request.UpdateCommentRequest;
 import com.aaa.api.dto.response.UpdateCommentResponse;
 import com.aaa.api.exception.InvalidCommentPassword;
+import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.service.CommentService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -184,6 +190,7 @@ class CommentControllerTest extends ControllerTestSupport {
 
         UpdateCommentRequest request = UpdateCommentRequest.builder()
                 .content("수정된 댓글 내용")
+                .password("1234")
                 .build();
 
 
@@ -298,5 +305,62 @@ class CommentControllerTest extends ControllerTestSupport {
                 .andDo(print());
 
     }
+
+    @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
+    @DisplayName("getAllComment(): 댓글 전체 조회 요청에 성공해 http status 200을 응답한다.")
+    void test9() throws Exception{
+        //given
+        Posts post = Posts.builder()
+                .id(1L)
+                .content("글 내용")
+                .title("글 제목")
+                .postsCategory(PostsCategory.DEV)
+                .build();
+        List<Comment> comments = IntStream.range(0, 4).mapToObj(i ->
+                Comment.builder()
+                        .posts(post)
+                        .content("댓글" + i)
+                        .password("123456")
+                        .username("kwon")
+                        .build()).toList();
+
+        given(commentService.getAll(anyLong())).willReturn(comments);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
+
+        //then
+        result.andExpect(status().isOk())
+                .andDo(print());
+
+        verify(commentService, times(1)).getAll(anyLong());
+    }
+
+    @Test
+    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
+    @DisplayName("getAllComment(): 댓글 전체 조회 요청시 없는 게시물인 경우 http status 400을 응답한다.")
+    void test10() throws Exception{
+        //given
+        List<Comment> comments = IntStream.range(0, 4).mapToObj(i ->
+                Comment.builder()
+                        .posts(post)
+                        .content("댓글" + i)
+                        .password("123456")
+                        .username("kwon")
+                        .build()).toList();
+
+        doThrow(new PostNotfound()).when(commentService).getAll(anyLong());
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment",999L).with(csrf()));
+
+        //then
+        result.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물입니다."))
+                .andDo(print());
+    }
+
+
 
 }

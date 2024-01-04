@@ -5,6 +5,8 @@ import com.aaa.api.dto.request.DeleteCommentRequest;
 import com.aaa.api.dto.request.CreateCommentRequest;
 import com.aaa.api.dto.request.UpdateCommentRequest;
 import com.aaa.api.dto.response.CommentResponse;
+import com.aaa.api.dto.response.CommentResult;
+import com.aaa.api.dto.response.CommentsResponse;
 import com.aaa.api.dto.response.UpdateCommentResponse;
 import com.aaa.api.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -29,6 +33,16 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @GetMapping("/posts/{postsId}/comment")
+    public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") Long postsId) {
+        List<CommentsResponse> responseList = commentService.getAll(postsId)
+                .stream()
+                .map(CommentsResponse::new)
+                .toList();
+
+        return ResponseEntity.ok(new CommentResult<CommentsResponse>(responseList));
+    }
+
 
     @PatchMapping("/comment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable("commentId")Long commentId,
@@ -48,4 +62,5 @@ public class CommentController {
         commentService.delete(commentId,request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

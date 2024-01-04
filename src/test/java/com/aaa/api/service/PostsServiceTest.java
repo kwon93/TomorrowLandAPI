@@ -146,14 +146,5 @@ class PostsServiceTest extends IntegrationTestSupport {
 
     }
 
-    private Posts createPostInTest() {
-        Posts posts = Posts.builder()
-                .title("제목")
-                .content("내용")
-                .postsCategory(PostsCategory.LIFE)
-                .build();
-
-        return postsRepository.save(posts);
-    }
 
 }

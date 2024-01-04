@@ -8,15 +8,16 @@ import com.aaa.api.dto.request.UpdateCommentRequest;
 import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
-import com.aaa.api.repository.CommentRepository;
+import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.Posts.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentService {
 
@@ -41,6 +42,10 @@ public class CommentService {
     public Comment update(Long commentId, UpdateCommentRequest request) {
         Comment comment = findCommentById(commentId);
 
+        if (!passwordEncoder.matches(request.getPassword(),comment.getPassword())){
+            throw new InvalidCommentPassword();
+        }
+
         return comment.updateComment(request);
     }
 
@@ -59,6 +64,13 @@ public class CommentService {
     private Comment findCommentById(Long commentId) {
         return commentRepository.findById(commentId).
                 orElseThrow(CommentNotFound::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Comment> getAll(Long postsId) {
+        postsRepository.findById(postsId).orElseThrow(PostNotfound::new);
+
+        return commentRepository.getCommentListByQueryDSL(postsId);
     }
 }
 
