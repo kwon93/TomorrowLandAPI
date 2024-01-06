@@ -1,9 +1,9 @@
 package com.aaa.api.service;
 
 import com.aaa.api.domain.Users;
-import com.aaa.api.dto.request.CreateUsersRequest;
 import com.aaa.api.exception.DuplicateEmail;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,20 +20,19 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String  createUser(CreateUsersRequest request) {
-        duplicationEmailValidation(request);
+    public String  createUser(CreateUsersServiceRequest serviceRequest) {
+        duplicationEmailValidation(serviceRequest);
 
-        String encryptPassword = passwordEncoder.encode(request.getPassword());
-
-        Users users = Users.of(request, encryptPassword);
+        String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
+        Users users = serviceRequest.toEntity(encodedPassword);
         usersRepository.save(users);
 
         return users.getRoles().toString();
     }
 
-    private void duplicationEmailValidation(CreateUsersRequest createUsersRequest) {
+    private void duplicationEmailValidation(CreateUsersServiceRequest serviceRequest) {
         Optional<Users> duplicateEmail
-                = usersRepository.findByEmail(createUsersRequest.getEmail());
+                = usersRepository.findByEmail(serviceRequest.getEmail());
         if (duplicateEmail.isPresent()){
             throw new DuplicateEmail();
         }

@@ -1,4 +1,4 @@
-package com.aaa.api.dto.response;
+package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
 import lombok.Builder;
@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class PostCommentResponse {
 
-    private String name;
+    private String username;
     private String password;
     private String content;
 
     @Builder
-    public PostCommentResponse(String name, String password, String content) {
-        this.name = name;
+    public PostCommentResponse(String username, String password, String content) {
+        this.username = username;
         this.password = password;
         this.content = content;
     }
@@ -21,7 +21,7 @@ public class PostCommentResponse {
     public static PostCommentResponse of(Comment entity){
         return PostCommentResponse.builder()
                 .content(entity.getContent())
-                .name(entity.getUsername())
+                .username(entity.getUsername())
                 .build();
     }
 }

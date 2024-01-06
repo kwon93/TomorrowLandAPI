@@ -7,6 +7,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,58 +33,55 @@ class JwtTokenReIssueProviderTest extends IntegrationTestSupport {
 
     @Autowired
     JwtTokenReIssueProvider reIssueProvider;
-    @Value("${jwt.secretKey}")
-    private String secretKey;
-    private SecretKey key;
-
     @BeforeEach
     void setUp() {
         byte[] decodedKey = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-   @Test
-   @DisplayName("reIssueAccessToken(): RefreshToken을 통해 AccessToken 재발급에 성공해야한다.")
-   void test() {
-       //given
-       Users userInTest = createUserInTest();
-       // when
-       String accessToken = reIssueProvider.reIssueAccessToken(userInTest.getEmail());
 
-       //then
-       Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-       assertThat(authentication.isAuthenticated()).isTrue();
-   }
+    @Test
+    @DisplayName("reIssueAccessToken(): RefreshToken을 통해 AccessToken 재발급에 성공해야한다.")
+    void test() {
+        //given
+        Users userInTest = createUserInTest();
+        // when
+        String accessToken = reIssueProvider.reIssueAccessToken(userInTest.getEmail());
 
-
-   @Test
-   @DisplayName("reIssueAccessToken(): DB에 존재하지않는 회원일 경우 AccessToken 발급에 실패해야한다.")
-   void test3() {
-       // expected
-       assertThatThrownBy(()-> reIssueProvider.reIssueAccessToken("invalid@test.com"))
-               .isInstanceOf(UsernameNotFoundException.class)
-               .hasMessage("찾을 수 없는 회원입니다.");
-   }
+        //then
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        assertThat(authentication.isAuthenticated()).isTrue();
+    }
 
 
-   @Test
-   @DisplayName("validateRefreshToken(): RefreshToken 검증에 성공해 사용자 이메일을 반환한다.")
-   void test2() {
-       //given
-       Users userInTest = createUserInTest();
+    @Test
+    @DisplayName("reIssueAccessToken(): DB에 존재하지않는 회원일 경우 AccessToken 발급에 실패해야한다.")
+    void test3() {
+        // expected
+        assertThatThrownBy(() -> reIssueProvider.reIssueAccessToken("invalid@test.com"))
+                .isInstanceOf(UsernameNotFoundException.class)
+                .hasMessage("찾을 수 없는 회원입니다.");
+    }
 
-       String refreshToken = Jwts.builder()
-               .subject(userInTest.getEmail())
-               .expiration(Date.from(Instant.now().plus(Duration.ofDays(14))))
-               .signWith(key)
-               .compact();
 
-       // when
-       String username = reIssueProvider.validateRefreshToken(refreshToken);
+    @Test
+    @DisplayName("validateRefreshToken(): RefreshToken 검증에 성공해 사용자 이메일을 반환한다.")
+    void test2() {
+        //given
+        Users userInTest = createUserInTest();
 
-       //then
-       assertThat(username).isEqualTo(userInTest.getEmail());
-   }
+        String refreshToken = Jwts.builder()
+                .subject(userInTest.getEmail())
+                .expiration(Date.from(Instant.now().plus(Duration.ofDays(14))))
+                .signWith(key)
+                .compact();
+
+        // when
+        String username = reIssueProvider.validateRefreshToken(refreshToken);
+
+        //then
+        assertThat(username).isEqualTo(userInTest.getEmail());
+    }
 
 
     @Test
@@ -99,7 +97,7 @@ class JwtTokenReIssueProviderTest extends IntegrationTestSupport {
                 .compact();
 
         // when
-        assertThatThrownBy(()-> reIssueProvider.validateRefreshToken(refreshToken))
+        assertThatThrownBy(() -> reIssueProvider.validateRefreshToken(refreshToken))
                 .isInstanceOf(ExpiredJwtException.class);
     }
 
@@ -118,7 +116,7 @@ class JwtTokenReIssueProviderTest extends IntegrationTestSupport {
                 .compact();
 
         // when
-        assertThatThrownBy(()-> reIssueProvider.validateRefreshToken(refreshToken))
+        assertThatThrownBy(() -> reIssueProvider.validateRefreshToken(refreshToken))
                 .isInstanceOf(JwtException.class);
     }
 

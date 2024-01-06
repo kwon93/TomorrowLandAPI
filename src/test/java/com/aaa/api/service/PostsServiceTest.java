@@ -4,11 +4,13 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.PostSearch;
-import com.aaa.api.dto.request.UpdatePostsRequest;
-import com.aaa.api.dto.response.PostsResponse;
+import com.aaa.api.controller.dto.request.CreatePostsRequest;
+import com.aaa.api.controller.dto.request.PostSearch;
+import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.exception.PostNotfound;
+import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
+import com.aaa.api.service.dto.request.PostSearchForService;
+import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,15 +32,15 @@ class PostsServiceTest extends IntegrationTestSupport {
         //given
         Users userInTest = createUserInTest();
 
-        CreatePostsRequest request = CreatePostsRequest.builder()
+        CreatePostsServiceRequest request = CreatePostsServiceRequest.builder()
+                .userId(userInTest.getId())
                 .title("제목")
                 .content("안녕하세요.")
                 .build();
         // when
-        postsService.create(userInTest.getId(),request);
+        postsService.create(request);
 
         //then
-
         Posts posts = postsRepository.findAll().get(0);
         assertThat(posts).isNotNull();
         assertThat(posts.getTitle()).isEqualTo("제목");
@@ -59,7 +61,8 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         postsRepository.saveAll(postsList);
 
-        PostSearch postSearch = PostSearch.builder()
+        PostSearchForService postSearch = PostSearchForService.builder()
+                .size(10)
                 .page(1)
                 .build();
 
@@ -112,15 +115,16 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         Posts postInTest = createPostInTest();
 
-        UpdatePostsRequest request = UpdatePostsRequest.builder()
+        UpdatePostsServiceRequest request = UpdatePostsServiceRequest.builder()
+                .postsId(postInTest.getId())
                 .title(updateTitle)
                 .content(updateContent)
-                .postsCategory(updateCategory)
+                .category(updateCategory)
                 .build();
 
 
         // when
-        postsService.update(request, postInTest.getId());
+        postsService.update(request);
 
         //then
         var post = postsRepository.findById(postInTest.getId())

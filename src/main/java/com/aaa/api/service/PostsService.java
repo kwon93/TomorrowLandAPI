@@ -2,14 +2,15 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.PostSearch;
-import com.aaa.api.dto.request.UpdatePostsRequest;
-import com.aaa.api.dto.response.PostsResponse;
+import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
+import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.Posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
+import com.aaa.api.service.dto.request.PostSearchForService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,19 +26,19 @@ public class PostsService {
     private final UsersRepository usersRepository;
 
     @Transactional
-    public PostsResponse create(Long userId, CreatePostsRequest request) {
-        Users user = usersRepository.findById(userId)
+    public PostsResponse create(CreatePostsServiceRequest serviceRequest) {
+        Users user = usersRepository.findById(serviceRequest.getUserId())
                 .orElseThrow(UserNotFound::new);
 
-        Posts posts = Posts.of(user, request);
+        Posts posts = serviceRequest.toEntity(user);
 
         postsRepository.save(posts);
-
         return PostsResponse.of(posts);
     }
 
-    public List<Posts> getAll(PostSearch postSearch) {
-         return postsRepository.getList(postSearch);
+    public List<Posts> getAll(PostSearchForService serviceDto) {
+
+         return postsRepository.getList(serviceDto.toRepository());
     }
 
     public PostsResponse getOne(Long id) {
@@ -47,10 +48,11 @@ public class PostsService {
     }
 
     @Transactional
-    public PostsResponse update(UpdatePostsRequest request, Long id) {
-        Posts posts = findPostsById(id);
+    public PostsResponse update(UpdatePostsServiceRequest serviceRequest) {
+        Posts posts = findPostsById(serviceRequest.getPostsId());
 
-        Posts updatedPosts = posts.updatePosts(request);
+        Posts updatedPosts =
+                postsRepository.save(serviceRequest.updatePosts(posts));
 
         return PostsResponse.of(updatedPosts);
     }

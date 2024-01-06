@@ -17,5 +17,4 @@ public class JwtTestController {
         return "jwt 인증 성공";
     }
 
-
 }

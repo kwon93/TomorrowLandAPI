@@ -2,21 +2,31 @@ package com.aaa.api.service;
 
 import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
-import com.aaa.api.dto.request.LoginRequest;
-import com.aaa.api.dto.response.JwtToken;
+import com.aaa.api.service.dto.request.LoginServiceRequest;
+import com.aaa.api.service.dto.response.JwtToken;
 import com.aaa.api.exception.InvalidSignInInfomation;
-import org.assertj.core.api.Assertions;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.test.context.support.WithMockUser;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthServiceTest extends IntegrationTestSupport {
 
-
+    @BeforeEach
+    void setUp() {
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        key = Keys.hmacShaKeyFor(decodedKey);
+    }
 
     @Test
     @DisplayName("login(): 요청에 맞는 로그인에 성공해 사용자의 JWT Token을 반환한다.")
@@ -24,7 +34,7 @@ class AuthServiceTest extends IntegrationTestSupport {
         //given
         Users userInTest = createUserInTest();
 
-        LoginRequest request = LoginRequest.builder()
+        LoginServiceRequest request = LoginServiceRequest.builder()
                 .email("kwon93@naver.com")
                 .password("kdh1234")
                 .build();
@@ -43,7 +53,7 @@ class AuthServiceTest extends IntegrationTestSupport {
         //given
         Users userInTest = createUserInTest();
 
-        LoginRequest request = LoginRequest.builder()
+        LoginServiceRequest request = LoginServiceRequest.builder()
                 .email("invalid@naver.com")
                 .password("kdh1234")
                 .build();
@@ -62,7 +72,7 @@ class AuthServiceTest extends IntegrationTestSupport {
         //given
         Users userInTest = createUserInTest();
 
-        LoginRequest request = LoginRequest.builder()
+        LoginServiceRequest request = LoginServiceRequest.builder()
                 .email("kwon93@naver.com")
                 .password("invalidPassword")
                 .build();
@@ -73,5 +83,30 @@ class AuthServiceTest extends IntegrationTestSupport {
         });
 
         assertThat(e.getMessage()).isEqualTo("이메일 및 비밀번호가 일치하지않습니다.");
+    }
+
+
+    @Test
+    @DisplayName("reissueAccessToken(): RefreshToken을 활용해 AccessToken 재발급에 성공한다.")
+    void test4() {
+        //given
+
+        Users userInTest = createUserInTest();
+
+        String refreshToken = Jwts.builder()
+                .subject(userInTest.getEmail())
+                .expiration(Date.from(Instant.now().plus(Duration.ofDays(14))))
+                .signWith(key)
+                .compact();
+        // when
+        String accessToken = authService.reissueAccessToken(refreshToken);
+        //then
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload();
+
+        assertThat(claims.getSubject()).isEqualTo(userInTest.getEmail());
     }
 }

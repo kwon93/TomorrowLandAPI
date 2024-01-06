@@ -1,8 +1,7 @@
 package com.aaa.api.domain;
 
-import com.aaa.api.dto.request.CreateCommentRequest;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.UpdateCommentRequest;
+import com.aaa.api.controller.dto.request.CreateCommentRequest;
+import com.aaa.api.controller.dto.request.UpdateCommentRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,18 +36,8 @@ public class Comment extends BaseEntity {
         this.regDate = regDate;
     }
 
-    public static Comment of(Posts post, CreateCommentRequest request, String encodedPW){
-        return Comment.builder()
-                .posts(post)
-                .content(request.getContent())
-                .password(encodedPW)
-                .username(request.getName())
-                .build();
-    }
-
-    public Comment updateComment(UpdateCommentRequest request){
-        this.content = request.getContent();
-
-        return this;
-    }
+//    public Comment updateComment(UpdateCommentRequest request){
+//        this.content = request.getContent();
+//        return this;
+//    }
 }

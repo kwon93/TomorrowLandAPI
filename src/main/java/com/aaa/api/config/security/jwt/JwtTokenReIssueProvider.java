@@ -1,8 +1,7 @@
 package com.aaa.api.config.security.jwt;
 
-import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.Users;
-import com.aaa.api.dto.response.JwtToken;
+import com.aaa.api.service.dto.response.JwtToken;
 import com.aaa.api.repository.UsersRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -10,14 +9,12 @@ import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.server.reactive.HttpHeadResponseDecorator;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.ErrorResponse;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;

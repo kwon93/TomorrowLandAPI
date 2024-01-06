@@ -1,6 +1,6 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.dto.response.ExceptionResponse;
+import com.aaa.api.exception.dto.ExceptionResponse;
 import com.aaa.api.exception.AAAException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,8 @@ public class ExceptionController {
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
-
         return response;
     }
-
 
     @ResponseBody
     @ExceptionHandler(AAAException.class)

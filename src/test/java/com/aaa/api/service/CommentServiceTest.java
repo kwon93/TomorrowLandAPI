@@ -3,26 +3,23 @@ package com.aaa.api.service;
 import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
-import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.dto.request.CreateCommentRequest;
-import com.aaa.api.dto.request.DeleteCommentRequest;
-import com.aaa.api.dto.request.UpdateCommentRequest;
+import com.aaa.api.controller.dto.request.CreateCommentRequest;
+import com.aaa.api.controller.dto.request.DeleteCommentRequest;
+import com.aaa.api.controller.dto.request.UpdateCommentRequest;
 import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
+import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
+import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommentServiceTest extends IntegrationTestSupport {
 
@@ -37,14 +34,15 @@ class CommentServiceTest extends IntegrationTestSupport {
 
         Posts postInTest = createPostInTest();
 
-        CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(name)
+        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder()
+                .postsId(postInTest.getId())
+                .username(name)
                 .content(content)
                 .password(password)
                 .build();
 
         // when
-        commentService.create(postInTest.getId(),request);
+        commentService.create(request);
 
         //then
         List<Comment> comments = commentRepository.findAll();
@@ -67,15 +65,16 @@ class CommentServiceTest extends IntegrationTestSupport {
         final String password = "123455";
         final Long invalidPostId = 99L;
 
-        CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(name)
+        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder()
+                .postsId(invalidPostId)
+                .username(name)
                 .content(content)
                 .password(password)
                 .build();
 
         // when
         assertThatThrownBy(()-> {
-            commentService.create(invalidPostId, request);
+            commentService.create(request);
         }).isInstanceOf(PostNotfound.class).hasMessage("존재하지않는 게시물입니다.");
     }
 
@@ -90,14 +89,14 @@ class CommentServiceTest extends IntegrationTestSupport {
         final String updateContent = "이 댓글 제가 수정합니다.";
         Comment commentInTest = createCommentInTest(name,content,password);
 
-        UpdateCommentRequest request = UpdateCommentRequest.builder()
+        UpdateCommentServiceRequest request = UpdateCommentServiceRequest.builder()
+                .commentId(commentInTest.getId())
                 .content(updateContent)
                 .password(password)
                 .build();
 
-
         // when
-        commentService.update(commentInTest.getId(), request);
+        commentService.update(request);
 
         //then
         Comment updatedComment = commentRepository.findById(commentInTest.getId()).orElseThrow(CommentNotFound::new);
@@ -115,14 +114,15 @@ class CommentServiceTest extends IntegrationTestSupport {
         final String updateContent = "이 댓글 제가 수정합니다.";
         Comment commentInTest = createCommentInTest(name,content,password);
 
-        UpdateCommentRequest request = UpdateCommentRequest.builder()
+        UpdateCommentServiceRequest request = UpdateCommentServiceRequest.builder()
+                .commentId(commentInTest.getId())
                 .content(updateContent)
                 .password(invalidPassword)
                 .build();
 
         // when
         assertThatThrownBy(()->{
-            commentService.update(commentInTest.getId(), request);})
+            commentService.update(request);})
                 .isInstanceOf(InvalidCommentPassword.class)
                 .hasMessage("잘못된 비밀번호 입니다.");
 
@@ -138,13 +138,14 @@ class CommentServiceTest extends IntegrationTestSupport {
         final String password = "123455";
         Comment commentInTest = createCommentInTest(name,content,password);
 
-        DeleteCommentRequest request = DeleteCommentRequest.builder()
+        DeleteCommentServiceRequest request = DeleteCommentServiceRequest.builder()
+                .commentId(commentInTest.getId())
                 .password(password)
                 .build();
 
 
         // when
-        commentService.delete(commentInTest.getId(), request);
+        commentService.delete(request);
 
         //then
         List<Comment> comments = commentRepository.findAll();
@@ -161,13 +162,14 @@ class CommentServiceTest extends IntegrationTestSupport {
 
         Comment commentInTest = createCommentInTest(name,content,password);
 
-        DeleteCommentRequest request = DeleteCommentRequest.builder()
+        DeleteCommentServiceRequest request = DeleteCommentServiceRequest.builder()
+                .commentId(commentInTest.getId())
                 .password(invalidPassword)
                 .build();
 
         // when
         assertThatThrownBy(()->{
-            commentService.delete(commentInTest.getId(), request);})
+            commentService.delete(request);})
                 .isInstanceOf(InvalidCommentPassword.class)
                 .hasMessage("잘못된 비밀번호 입니다.");
 

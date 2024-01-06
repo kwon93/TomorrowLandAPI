@@ -1,6 +1,6 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.dto.request.CreateUsersRequest;
+import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,9 @@ public class UsersController {
     private final UsersService usersService;
 
     @PostMapping("signup")
-    public ResponseEntity<String > signup(@RequestBody @Validated CreateUsersRequest createUsersRequest){
-        String userRole = usersService.createUser(createUsersRequest);
+    public ResponseEntity<String > signup(@RequestBody @Validated CreateUsersRequest request){
+
+        String userRole = usersService.createUser(request.toServiceDto());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
     }

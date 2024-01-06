@@ -1,5 +1,6 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
+import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -17,5 +18,12 @@ public class DeleteCommentRequest {
     @Builder
     public DeleteCommentRequest(String password) {
         this.password = password;
+    }
+
+    public DeleteCommentServiceRequest toServiceDto(Long commentId){
+        return DeleteCommentServiceRequest.builder()
+                .password(this.password)
+                .commentId(commentId)
+                .build();
     }
 }

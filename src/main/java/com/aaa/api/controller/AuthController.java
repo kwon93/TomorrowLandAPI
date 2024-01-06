@@ -1,15 +1,10 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
-import com.aaa.api.config.security.jwt.JwtTokenReIssueProvider;
-import com.aaa.api.dto.request.LoginRequest;
-import com.aaa.api.dto.response.JwtToken;
-import com.aaa.api.dto.response.SessionResponse;
+import com.aaa.api.controller.dto.request.LoginRequest;
+import com.aaa.api.service.dto.response.JwtToken;
 import com.aaa.api.service.AuthService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.aaa.api.service.dto.request.LoginServiceRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -18,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
-import java.util.Base64;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
@@ -28,13 +20,11 @@ import java.util.Base64;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final JwtTokenReIssueProvider reIssueProvider;
 
     @PostMapping("login")
-    public ResponseEntity<JwtToken> signIn(@RequestBody @Validated LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<JwtToken> signIn(@RequestBody @Validated LoginRequest loginRequest) {
 
-        JwtToken jwtToken = authService.login(loginRequest);
+        JwtToken jwtToken = authService.login(loginRequest.toServiceDto());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + jwtToken.getAccessToken());
@@ -48,11 +38,10 @@ public class AuthController {
     @PatchMapping("reissue")
     public ResponseEntity<String> reIssueRefreshToken(HttpServletRequest request){
         String refreshToken = request.getHeader("Refresh-Token");
-        String username = reIssueProvider.validateRefreshToken(refreshToken);
-        String reIssueAccessToken = reIssueProvider.reIssueAccessToken(username);
+
+        String reIssueAccessToken = authService.reissueAccessToken(refreshToken);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-
         httpHeaders.add("Authorization", "Bearer " + reIssueAccessToken);
         httpHeaders.add("Refresh-Token", refreshToken);
 

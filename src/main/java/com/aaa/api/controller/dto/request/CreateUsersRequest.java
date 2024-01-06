@@ -1,7 +1,8 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
 
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -29,5 +30,15 @@ public class CreateUsersRequest {
         this.password = password;
         this.name = name;
         this.role = role;
+    }
+
+    public CreateUsersServiceRequest toServiceDto(){
+        return CreateUsersServiceRequest.builder()
+                .email(this.email)
+                .name(this.name)
+                .password(this.password)
+                .role(this.role)
+                .build();
+
     }
 }

@@ -4,23 +4,23 @@ import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.dto.request.CreateCommentRequest;
-import com.aaa.api.dto.request.DeleteCommentRequest;
-import com.aaa.api.dto.request.UpdateCommentRequest;
-import com.aaa.api.dto.response.UpdateCommentResponse;
+import com.aaa.api.controller.dto.request.CreateCommentRequest;
+import com.aaa.api.controller.dto.request.DeleteCommentRequest;
+import com.aaa.api.controller.dto.request.UpdateCommentRequest;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
-import com.aaa.api.service.CommentService;
+import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
+import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
+import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
+import com.aaa.api.service.dto.response.PostCommentResponse;
+import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -55,18 +55,24 @@ class CommentControllerTest extends ControllerTestSupport {
         final String username = "kwon";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(username)
+                .username(username)
                 .content(content)
                 .password(password)
                 .build();
 
-        Comment response = Comment.builder()
+        CreateCommentServiceRequest serviceRequest = CreateCommentServiceRequest.builder()
+                .username(username)
+                .content(content)
+                .password(password)
+                .build();
+
+        PostCommentResponse response = PostCommentResponse.builder()
                 .username(username)
                 .password(password)
                 .content(content)
                 .build();
 
-        given(commentService.create(anyLong(),any(CreateCommentRequest.class))).willReturn(response);
+        given(commentService.create(any(CreateCommentServiceRequest.class))).willReturn(response);
 
         // when
         mockMvc.perform(post("/api/posts/{postsId}/comment", post.getId())
@@ -75,10 +81,10 @@ class CommentControllerTest extends ControllerTestSupport {
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.content").value(content))
-                .andExpect(jsonPath("$.name").value(username))
+                .andExpect(jsonPath("$.username").value(username))
                 .andDo(print());
 
-        verify(commentService, times(1)).create(anyLong(), refEq(request,"name","password","content"));
+        verify(commentService, times(1)).create(any(CreateCommentServiceRequest.class));
     }
 
     @Test
@@ -93,7 +99,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String username = "kwon";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(username)
+                .username(username)
                 .content(invalidContent)
                 .password(password)
                 .build();
@@ -122,7 +128,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String username = "kwon";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(username)
+                .username(username)
                 .content(content)
                 .password(password)
                 .build();
@@ -151,7 +157,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String username = "황금독수리온세상을놀라게하다";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .name(username)
+                .username(username)
                 .content(content)
                 .password(password)
                 .build();
@@ -162,7 +168,7 @@ class CommentControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validation.name").value("작성자명은 3글자 이상 10글자 이하로 입력해주세요."))
+                .andExpect(jsonPath("$.validation.username").value("작성자명은 3글자 이상 10글자 이하로 입력해주세요."))
                 .andDo(print());
 
     }
@@ -173,28 +179,28 @@ class CommentControllerTest extends ControllerTestSupport {
     @DisplayName("updateComment(): 댓글 수정 요청에 성공해 http status 204를 응답받아야한다.")
     void test5() throws Exception {
         //given
-        Comment comment = Comment.builder()
+         Comment comment = Comment.builder()
                 .id(1L)
                 .content("원본 댓글 내용")
                 .password("1234")
                 .username("kown")
                 .build();
 
-        Comment updatedComment = Comment.builder()
-                .id(1L)
-                .content("수정된 댓글 내용")
-                .password("1234")
-                .username("kown")
-                .build();
-
-
         UpdateCommentRequest request = UpdateCommentRequest.builder()
                 .content("수정된 댓글 내용")
                 .password("1234")
                 .build();
 
+        UpdateCommentServiceRequest serviceRequest = UpdateCommentServiceRequest.builder()
+                .content("수정된 댓글 내용")
+                .password("1234")
+                .build();
 
-        given(commentService.update(anyLong(), any(UpdateCommentRequest.class))).willReturn(updatedComment);
+        UpdateCommentResponse updateComment = UpdateCommentResponse.builder()
+                .content("수정된 댓글 내용")
+                .build();
+
+        given(commentService.update(any(UpdateCommentServiceRequest.class))).willReturn(updateComment);
 
         // when
         mockMvc.perform(patch("/api/comment/{commentId}", comment.getId())
@@ -205,7 +211,7 @@ class CommentControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.content").value("수정된 댓글 내용"));
 
 
-        verify(commentService, times(1)).update(anyLong(), refEq(request));
+        verify(commentService, times(1)).update(any(UpdateCommentServiceRequest.class));
     }
 
     @Test
@@ -217,18 +223,16 @@ class CommentControllerTest extends ControllerTestSupport {
                 .mapToObj(i -> "" + i)
                 .collect(Collectors.joining());
 
-        Comment comment = Comment.builder()
+         Comment comment = Comment.builder()
                 .id(1L)
-                .content(invalidContent)
+                .content("내용입니다.")
                 .password("1234")
                 .username("kown")
                 .build();
 
-        Comment request = Comment.builder()
-                .id(1L)
+         UpdateCommentRequest request = UpdateCommentRequest.builder()
                 .content(invalidContent)
                 .password("1234")
-                .username("kown")
                 .build();
         // when
         mockMvc.perform(patch("/api/comment/{commentId}", comment.getId())
@@ -249,7 +253,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String password = "1234";
         final String username = "kwon";
 
-        Comment comment = Comment.builder()
+         Comment comment = Comment.builder()
                 .id(1L)
                 .content("comment~~~~~~~~~~~~~~~")
                 .password("1234")
@@ -257,6 +261,10 @@ class CommentControllerTest extends ControllerTestSupport {
                 .build();
 
         DeleteCommentRequest request = DeleteCommentRequest.builder()
+                .password("1234")
+                .build();
+
+        DeleteCommentServiceRequest serviceRequest = DeleteCommentServiceRequest.builder()
                 .password("1234")
                 .build();
 
@@ -268,7 +276,7 @@ class CommentControllerTest extends ControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
 
-        verify(commentService, times(1)).delete(anyLong(), refEq(request));
+        verify(commentService, times(1)).delete(any(DeleteCommentServiceRequest.class));
     }
 
 
@@ -281,7 +289,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String password = "1234";
         final String username = "kwon";
 
-        Comment comment = Comment.builder()
+         Comment comment = Comment.builder()
                 .id(1L)
                 .content("comment~~~~~~~~~~~~~~~")
                 .password("123444")
@@ -292,7 +300,7 @@ class CommentControllerTest extends ControllerTestSupport {
                 .password("1234")
                 .build();
 
-        doThrow(new InvalidCommentPassword()).when(commentService).delete(anyLong(),any(DeleteCommentRequest.class));
+        doThrow(new InvalidCommentPassword()).when(commentService).delete(any(DeleteCommentServiceRequest.class));
 
 
         // when

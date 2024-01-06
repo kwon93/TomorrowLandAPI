@@ -1,7 +1,6 @@
-package com.aaa.api.dto.response;
+package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
-import com.aaa.api.dto.request.UpdateCommentRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

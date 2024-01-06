@@ -1,13 +1,12 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.domain.Comment;
-import com.aaa.api.dto.request.DeleteCommentRequest;
-import com.aaa.api.dto.request.CreateCommentRequest;
-import com.aaa.api.dto.request.UpdateCommentRequest;
-import com.aaa.api.dto.response.PostCommentResponse;
-import com.aaa.api.dto.response.CommentResult;
-import com.aaa.api.dto.response.CommentsResponse;
-import com.aaa.api.dto.response.UpdateCommentResponse;
+import com.aaa.api.controller.dto.request.DeleteCommentRequest;
+import com.aaa.api.controller.dto.request.CreateCommentRequest;
+import com.aaa.api.controller.dto.request.UpdateCommentRequest;
+import com.aaa.api.service.dto.response.PostCommentResponse;
+import com.aaa.api.service.dto.response.CommentResult;
+import com.aaa.api.service.dto.response.CommentsResponse;
+import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import com.aaa.api.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -29,13 +27,12 @@ public class CommentController {
     public ResponseEntity<PostCommentResponse> createComment(@PathVariable("postsId") Long postsId,
                                                              @RequestBody @Validated CreateCommentRequest request){
 
-        Comment comment = commentService.create(postsId, request);
-        PostCommentResponse response = PostCommentResponse.of(comment);
-
+        PostCommentResponse response = commentService.create(request.toServiceDto(postsId));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/posts/{postsId}/comment")
     public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") Long postsId) {
+
         List<CommentsResponse> responseList = commentService.getAll(postsId)
                 .stream()
                 .map(CommentsResponse::new)
@@ -49,9 +46,7 @@ public class CommentController {
     public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable("commentId")Long commentId,
                                            @RequestBody @Validated UpdateCommentRequest request){
 
-        Comment updatedComment = commentService.update(commentId, request);
-        UpdateCommentResponse response = UpdateCommentResponse.of(updatedComment);
-
+        UpdateCommentResponse response = commentService.update(request.toServiceDto(commentId));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
@@ -60,7 +55,7 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable("commentId")Long commentId,
                                                  @RequestBody @Validated DeleteCommentRequest request){
 
-        commentService.delete(commentId,request);
+        commentService.delete(request.toServiceDto(commentId));
         return ResponseEntity.noContent().build();
     }
 

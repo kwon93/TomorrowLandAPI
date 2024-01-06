@@ -1,12 +1,11 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.domain.Posts;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.PostSearch;
-import com.aaa.api.dto.request.UpdatePostsRequest;
-import com.aaa.api.dto.response.PostsResponse;
-import com.aaa.api.dto.response.PostsResult;
+import com.aaa.api.controller.dto.request.CreatePostsRequest;
+import com.aaa.api.controller.dto.request.PostSearch;
+import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+import com.aaa.api.service.dto.response.PostsResponse;
+import com.aaa.api.service.dto.response.PostsResult;
 import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 
 @RestController
@@ -32,14 +30,13 @@ public class PostsController {
     public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
                                                      @RequestBody @Validated CreatePostsRequest request){
 
-        PostsResponse posts = postsService.create(userPrincipal.getUserId(), request);
-
+        PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
 
     @GetMapping("posts")
     public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(PostSearch postSearch){
-        List<PostsResponse> responses = postsService.getAll(postSearch).stream()
+        List<PostsResponse> responses = postsService.getAll(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
         return ResponseEntity.ok(new PostsResult<>(responses));
@@ -52,15 +49,16 @@ public class PostsController {
 
     @PatchMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'PATCH')")
-    public PostsResponse updatePosts(@RequestBody UpdatePostsRequest request, @PathVariable("postId") Long id){
-        return postsService.update(request,id);
+    public PostsResponse updatePosts(@RequestBody UpdatePostsRequest request,
+                                     @PathVariable("postId") Long postsId){
+
+        return postsService.update(request.toServiceDto(postsId));
     }
 
     @DeleteMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'DELETE')")
     public ResponseEntity<Void> deletePosts(@PathVariable("postId") Long id){
         postsService.delete(id);
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

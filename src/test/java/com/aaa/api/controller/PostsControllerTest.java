@@ -2,31 +2,26 @@ package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.config.CustomMockUser;
-import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.config.security.SecurityConfig;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.PostSearch;
-import com.aaa.api.dto.request.UpdatePostsRequest;
-import com.aaa.api.dto.response.PostsResponse;
-import com.aaa.api.exception.PostNotfound;
-import com.aaa.api.service.PostsService;
+import com.aaa.api.controller.dto.request.CreatePostsRequest;
+import com.aaa.api.controller.dto.request.PostSearch;
+import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
+import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import com.aaa.api.service.dto.request.PostSearchForService;
+import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
+import com.aaa.api.service.dto.response.PostsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -51,7 +46,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(PostsCategory.DEV)
                 .build();
 
-        given(postsService.create(any(),any(CreatePostsRequest.class))).willReturn(response);
+        given(postsService.create(any(CreatePostsServiceRequest.class))).willReturn(response);
 
         // expected
         mockMvc.perform(post("/api/posts")
@@ -63,7 +58,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andDo(print());
 
-        verify(postsService, times(1)).create(any(),any(CreatePostsRequest.class));
+        verify(postsService, times(1)).create(any(CreatePostsServiceRequest.class));
     }
 
     @Test
@@ -103,7 +98,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .toList();
 
 
-        PostSearch postSearch = PostSearch.builder()
+        PostSearchForService postSearch = PostSearchForService.builder()
                 .page(1)
                 .build();
 
@@ -112,7 +107,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(postsService, times(1)).getAll(refEq(postSearch));
+        verify(postsService, times(1)).getAll(any(PostSearchForService.class));
 
     }
 
@@ -128,7 +123,7 @@ class PostsControllerTest extends ControllerTestSupport {
                         .build())
                 .toList();
 
-        PostSearch postSearch = PostSearch.builder()
+        PostSearchForService postSearch = PostSearchForService.builder()
                 .page(0)
                 .build();
 
@@ -137,7 +132,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(postsService, times(1)).getAll(refEq(postSearch));
+        verify(postsService, times(1)).getAll(any(PostSearchForService.class));
 
     }
 
@@ -189,7 +184,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(updateCategory)
                 .build();
 
-        given(postsService.update(any(UpdatePostsRequest.class),any(Long.class))).willReturn(response);
+        given(postsService.update(any(UpdatePostsServiceRequest.class))).willReturn(response);
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())
@@ -202,7 +197,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andDo(print());
 
         verify(postsService, times(1))
-                .update(refEq(request,"fieldToIgnore"),eq(response.getId()));
+                .update(any(UpdatePostsServiceRequest.class));
     }
 
     @Test
@@ -255,7 +250,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(updateCategory)
                 .build();
 
-        given(postsService.update(any(UpdatePostsRequest.class),any(Long.class))).willReturn(response);
+        given(postsService.update(any(UpdatePostsServiceRequest.class))).willReturn(response);
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())

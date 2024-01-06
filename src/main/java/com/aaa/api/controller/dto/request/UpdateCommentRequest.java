@@ -1,5 +1,6 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
+import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -23,5 +24,13 @@ public class UpdateCommentRequest {
     public UpdateCommentRequest(String content, String password) {
         this.password = password;
         this.content = content;
+    }
+
+    public UpdateCommentServiceRequest toServiceDto(Long commentId){
+        return UpdateCommentServiceRequest.builder()
+                .content(this.content)
+                .password(this.password)
+                .commentId(commentId)
+                .build();
     }
 }

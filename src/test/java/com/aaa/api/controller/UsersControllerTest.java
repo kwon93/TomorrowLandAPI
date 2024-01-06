@@ -1,20 +1,15 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
-import com.aaa.api.dto.request.CreatePostsRequest;
-import com.aaa.api.dto.request.CreateUsersRequest;
+import com.aaa.api.controller.dto.request.CreateUsersRequest;
+import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -39,7 +34,7 @@ class UsersControllerTest extends ControllerTestSupport {
                 .name(name)
                 .build();
 
-        given(usersService.createUser(any(CreateUsersRequest.class))).willReturn("ADMIN");
+        given(usersService.createUser(any(CreateUsersServiceRequest.class))).willReturn("ADMIN");
 
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
@@ -49,7 +44,7 @@ class UsersControllerTest extends ControllerTestSupport {
                 .andExpect(status().isCreated())
                 .andDo(print());
 
-        verify(usersService, times(1)).createUser(any(CreateUsersRequest.class));
+        verify(usersService, times(1)).createUser(any(CreateUsersServiceRequest.class));
     }
 
 

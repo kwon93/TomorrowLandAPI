@@ -1,11 +1,11 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
-import com.aaa.api.dto.request.LoginRequest;
-import com.aaa.api.dto.response.JwtToken;
+import com.aaa.api.controller.dto.request.LoginRequest;
+import com.aaa.api.service.dto.request.LoginServiceRequest;
+import com.aaa.api.service.dto.response.JwtToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -31,7 +31,7 @@ class AuthControllerTest extends ControllerTestSupport {
                 .password("kdh1234")
                 .build();
 
-        given(authService.login(any(LoginRequest.class))).willReturn(JwtToken.builder().build());
+        given(authService.login(any(LoginServiceRequest.class))).willReturn(JwtToken.builder().build());
 
         // when then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")

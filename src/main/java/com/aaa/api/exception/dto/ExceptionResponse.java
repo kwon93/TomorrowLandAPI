@@ -1,4 +1,4 @@
-package com.aaa.api.dto.response;
+package com.aaa.api.exception.dto;
 
 import lombok.Builder;
 import lombok.Getter;

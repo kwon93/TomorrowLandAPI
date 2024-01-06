@@ -1,5 +1,6 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
+import com.aaa.api.service.dto.request.LoginServiceRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -22,5 +23,12 @@ public class LoginRequest {
     public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public LoginServiceRequest toServiceDto(){
+        return LoginServiceRequest.builder()
+                .email(this.email)
+                .password(this.password)
+                .build();
     }
 }

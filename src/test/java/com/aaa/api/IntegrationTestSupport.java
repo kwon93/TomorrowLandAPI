@@ -15,10 +15,13 @@ import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.crypto.SecretKey;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -53,6 +56,10 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected JwtTokenProvider jwtTokenProvider;
 
+    //JwtKey
+    @Value("${jwt.secretKey}")
+    protected String secretKey;
+    protected SecretKey key;
 
 
     @BeforeEach

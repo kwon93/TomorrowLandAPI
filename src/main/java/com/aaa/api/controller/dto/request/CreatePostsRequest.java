@@ -1,6 +1,8 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
+import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.enumType.PostsCategory;
+import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,5 +22,14 @@ public class CreatePostsRequest {
     public CreatePostsRequest(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public CreatePostsServiceRequest toServiceDto(CustomUserPrincipal userPrincipal){
+        return CreatePostsServiceRequest.builder()
+                .userId(userPrincipal.getUserId())
+                .title(this.title)
+                .content(this.content)
+                .category(this.category)
+                .build();
     }
 }

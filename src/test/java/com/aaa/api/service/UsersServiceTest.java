@@ -4,10 +4,9 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
-import com.aaa.api.dto.request.CreateUsersRequest;
+import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.exception.DuplicateEmail;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +29,7 @@ class UsersServiceTest extends IntegrationTestSupport {
         final String password = "kdh1234";
         final String name = "kwon";
 
-        CreateUsersRequest request = CreateUsersRequest.builder()
+        CreateUsersServiceRequest request = CreateUsersServiceRequest.builder()
                 .email(email)
                 .password(password)
                 .name(name)
@@ -62,7 +61,7 @@ class UsersServiceTest extends IntegrationTestSupport {
         final String password = "kdh1234";
         final String name = "kwon";
 
-        CreateUsersRequest request = CreateUsersRequest.builder()
+        CreateUsersServiceRequest request = CreateUsersServiceRequest.builder()
                 .email(email)
                 .password(password)
                 .name(name)

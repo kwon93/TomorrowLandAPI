@@ -2,18 +2,9 @@ package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
-import com.aaa.api.dto.request.CreateUsersRequest;
+import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Getter

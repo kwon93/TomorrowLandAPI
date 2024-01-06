@@ -2,14 +2,17 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
-import com.aaa.api.dto.request.CreateCommentRequest;
-import com.aaa.api.dto.request.DeleteCommentRequest;
-import com.aaa.api.dto.request.UpdateCommentRequest;
+import com.aaa.api.controller.dto.request.DeleteCommentRequest;
+import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
+import com.aaa.api.service.dto.response.PostCommentResponse;
+import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.Posts.PostsRepository;
+import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
+import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,44 +29,42 @@ public class CommentService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Comment create(Long postsId, CreateCommentRequest request) {
+    public PostCommentResponse create(CreateCommentServiceRequest serviceRequest) {
         Posts posts =
-                postsRepository.findById(postsId).orElseThrow(PostNotfound::new);
+                postsRepository.findById(serviceRequest.getPostsId()).orElseThrow(PostNotfound::new);
+        String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
 
-        String encodedPW = passwordEncoder.encode(request.getPassword());
+        Comment comment = serviceRequest.toEntity(posts, encodedPassword);
+        Comment savedComment = commentRepository.save(comment);
 
-        Comment comment = Comment.of(posts,request,encodedPW);
-        commentRepository.save(comment);
+        return PostCommentResponse.of(savedComment);
 
-        return comment;
     }
 
     @Transactional
-    public Comment update(Long commentId, UpdateCommentRequest request) {
-        Comment comment = findCommentById(commentId);
+    public UpdateCommentResponse update(UpdateCommentServiceRequest serviceRequest) {
+        Comment comment = findCommentById(serviceRequest.getCommentId());
 
-        if (!passwordEncoder.matches(request.getPassword(),comment.getPassword())){
+        if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
             throw new InvalidCommentPassword();
         }
 
-        return comment.updateComment(request);
+        Comment updatedComment =
+                commentRepository.save(serviceRequest.updateComment(comment));
+
+        return UpdateCommentResponse.of(updatedComment);
     }
 
 
     @Transactional
-    public void delete(Long commentId, DeleteCommentRequest request) {
-        Comment comment = findCommentById(commentId);
+    public void delete(DeleteCommentServiceRequest serviceRequest) {
+        Comment comment = findCommentById(serviceRequest.getCommentId());
 
-        if (!passwordEncoder.matches(request.getPassword(),comment.getPassword())){
+        if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
             throw new InvalidCommentPassword();
         }
 
         commentRepository.delete(comment);
-    }
-
-    private Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId).
-                orElseThrow(CommentNotFound::new);
     }
 
     @Transactional(readOnly = true)
@@ -71,6 +72,11 @@ public class CommentService {
         postsRepository.findById(postsId).orElseThrow(PostNotfound::new);
 
         return commentRepository.getCommentListByQueryDSL(postsId);
+    }
+
+    private Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId).
+                orElseThrow(CommentNotFound::new);
     }
 }
 

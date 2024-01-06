@@ -1,4 +1,4 @@
-package com.aaa.api.dto.response;
+package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
 import lombok.Builder;
@@ -18,10 +18,12 @@ public class CommentsResponse {
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
+    @Builder
     public CommentsResponse(Comment entity) {
         this.content = entity.getContent();
         this.username = entity.getUsername();
         this.regDate = entity.getRegDate();
         this.modDate = entity.getModDate();
     }
+
 }

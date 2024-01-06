@@ -1,6 +1,7 @@
-package com.aaa.api.dto.request;
+package com.aaa.api.controller.dto.request;
 
 
+import com.aaa.api.service.dto.request.PostSearchForService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,16 @@ public class PostSearch {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
     }
-
     public long getOffset(){
         return (long) (Math.max(1, page) - 1) * size;
     }
+
+    public PostSearchForService toServiceDto(){
+        return PostSearchForService.builder()
+                .page(this.page)
+                .size(this.size)
+                .offset(this.getOffset())
+                .build();
+    }
+
 }
