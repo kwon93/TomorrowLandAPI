@@ -33,7 +33,6 @@ public class Posts extends BaseEntity{
     @Enumerated
     private PostsCategory category;
 
-
     @Builder
     public Posts(Long id, Users user, String title, String content, PostsCategory postsCategory) {
         this.id = id;
@@ -42,25 +41,13 @@ public class Posts extends BaseEntity{
         this.content = content;
         this.category = postsCategory;
     }
-
-    public Posts updatePosts(UpdatePostsRequest request){
-        this.title = request.getTitle();
-        this.content = request.getContent();
-        this.category = request.getPostsCategory();
-
-        return this;
-    }
-
-    public static Posts of(Users user, CreatePostsRequest request){
-        return Posts.builder()
-                .user(user)
-                .postsCategory(request.getCategory())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-    }
-
     public Long getUserId(){
         return this.user.getId();
     }
+
+    public void increaseViewCount(){
+        this.viewCount++;
+    }
+
+
 }

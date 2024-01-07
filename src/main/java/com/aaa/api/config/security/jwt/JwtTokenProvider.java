@@ -1,5 +1,6 @@
 package com.aaa.api.config.security.jwt;
 
+import com.aaa.api.service.CustomUserDetailsService;
 import com.aaa.api.service.dto.response.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -9,7 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -23,10 +25,14 @@ import java.util.List;
 @Slf4j
 public class JwtTokenProvider {
 
-    private static final long EXPIRATION_DATE = 300000L;
-    private final SecretKey key;
 
-    public JwtTokenProvider(@Value("${jwt.secretKey}") final String secretKey) {
+    private static final long EXPIRATION_DATE = 5 * 60 * 1000;
+    private final SecretKey key;
+    private final CustomUserDetailsService userDetailsSerivce;
+
+
+    public JwtTokenProvider(@Value("${jwt.secretKey}") final String secretKey, UserDetailsService userDetailsService, CustomUserDetailsService userDetailsSerivce) {
+        this.userDetailsSerivce = userDetailsSerivce;
         byte[] decodedKey = Base64.getDecoder().decode(secretKey);
         this.key = Keys.hmacShaKeyFor(decodedKey);
     }
@@ -35,7 +41,7 @@ public class JwtTokenProvider {
         final String  authorities = authentication.getAuthorities().toString();
         log.info("fist auth >>>>> {}",authorities);
 
-        final long now = new Date().getTime();
+        long now = new Date().getTime();
 
         final String accessToken = Jwts.builder()
                 .subject(authentication.getName())
@@ -71,9 +77,9 @@ public class JwtTokenProvider {
         authorities = authorities.replaceAll("\\[", "").replaceAll("\\]", "");
         log.info("authorities replace >>>>> {}", authorities);
 
-        final User user = new User(claims.getSubject(), "", List.of(new SimpleGrantedAuthority(authorities)));
+        UserDetails userDetails = userDetailsSerivce.loadUserByUsername(claims.getSubject());
 
-        return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(authorities)));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", List.of(new SimpleGrantedAuthority(authorities)));
     }
 
 

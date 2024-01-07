@@ -4,9 +4,11 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.QPosts;
 import com.aaa.api.repository.Posts.dto.PostSearchForRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
@@ -19,5 +21,14 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
                 .offset(postSearch.getOffset())
                 .orderBy(QPosts.posts.id.desc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<Posts> getOneByPessimistLock(Long postsId) {
+        Posts posts = jpaQueryFactory.selectFrom(QPosts.posts)
+                .where(QPosts.posts.id.eq(postsId))
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                .fetchOne();
+        return Optional.ofNullable(posts);
     }
 }

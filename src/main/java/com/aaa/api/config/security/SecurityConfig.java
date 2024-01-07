@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,13 +43,14 @@ public class SecurityConfig {
     private final UsersRepository usersRepository;
     private final ObjectMapper objectMapper;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
 
     @Bean
     public AuthenticationManager configure() throws Exception {
         ProviderManager manager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
         manager.getProviders().add(new CustomAuthenticationProvider());
         return authenticationConfiguration.getAuthenticationManager();
-
     }
 
     @Bean
@@ -73,15 +77,12 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return username -> {
-                   Users users = usersRepository.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("찾을 수 없는 이메일입니다."));
-
-                    return new CustomUserPrincipal(users);
-        };
-    }
+//    @Bean public UserDetailsService userDetailsService(UsersRepository usersRepository){ return username -> {
+//                   Users users = usersRepository.findByEmail(username)
+//                    .orElseThrow(() -> new UsernameNotFoundException("찾을 수 없는 이메일입니다."));
+//                    return new CustomUserPrincipal(users);
+//        };
+//    }
 
 
     @Bean

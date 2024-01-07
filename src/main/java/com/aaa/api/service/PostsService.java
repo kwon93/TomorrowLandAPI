@@ -39,8 +39,11 @@ public class PostsService {
          return postsRepository.getList(serviceDto.toRepository());
     }
 
-    public PostsResponse getOne(final Long id) {
-        Posts posts = findPostsById(id);
+    @Transactional
+    public PostsResponse getOne(final Long postsId) {
+        Posts posts = postsRepository.getOneByPessimistLock(postsId)
+                .orElseThrow(PostNotfound::new);
+        posts.increaseViewCount();
 
         return PostsResponse.of(posts);
     }
