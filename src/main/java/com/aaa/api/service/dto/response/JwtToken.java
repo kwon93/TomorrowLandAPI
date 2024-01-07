@@ -1,6 +1,5 @@
 package com.aaa.api.service.dto.response;
 
-import jakarta.persistence.GeneratedValue;
 import lombok.Builder;
 import lombok.Getter;
 

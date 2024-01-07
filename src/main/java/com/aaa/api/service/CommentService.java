@@ -29,20 +29,20 @@ public class CommentService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public PostCommentResponse create(CreateCommentServiceRequest serviceRequest) {
-        Posts posts =
+    public PostCommentResponse create(final CreateCommentServiceRequest serviceRequest) {
+        final Posts posts =
                 postsRepository.findById(serviceRequest.getPostsId()).orElseThrow(PostNotfound::new);
-        String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
+        final String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
 
-        Comment comment = serviceRequest.toEntity(posts, encodedPassword);
-        Comment savedComment = commentRepository.save(comment);
+        final Comment comment = serviceRequest.toEntity(posts, encodedPassword);
+        final Comment savedComment = commentRepository.save(comment);
 
         return PostCommentResponse.of(savedComment);
 
     }
 
     @Transactional
-    public UpdateCommentResponse update(UpdateCommentServiceRequest serviceRequest) {
+    public UpdateCommentResponse update(final UpdateCommentServiceRequest serviceRequest) {
         Comment comment = findCommentById(serviceRequest.getCommentId());
 
         if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
@@ -57,7 +57,7 @@ public class CommentService {
 
 
     @Transactional
-    public void delete(DeleteCommentServiceRequest serviceRequest) {
+    public void delete(final DeleteCommentServiceRequest serviceRequest) {
         Comment comment = findCommentById(serviceRequest.getCommentId());
 
         if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
@@ -68,13 +68,12 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Comment> getAll(Long postsId) {
+    public List<Comment> getAll(final Long postsId) {
         postsRepository.findById(postsId).orElseThrow(PostNotfound::new);
-
         return commentRepository.getCommentListByQueryDSL(postsId);
     }
 
-    private Comment findCommentById(Long commentId) {
+    private Comment findCommentById(final Long commentId) {
         return commentRepository.findById(commentId).
                 orElseThrow(CommentNotFound::new);
     }

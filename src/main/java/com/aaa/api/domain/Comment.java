@@ -35,9 +35,4 @@ public class Comment extends BaseEntity {
         this.posts = posts;
         this.regDate = regDate;
     }
-
-//    public Comment updateComment(UpdateCommentRequest request){
-//        this.content = request.getContent();
-//        return this;
-//    }
 }

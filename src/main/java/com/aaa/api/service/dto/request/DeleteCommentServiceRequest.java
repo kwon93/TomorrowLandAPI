@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class DeleteCommentServiceRequest {
 
-    private String password;
-    private Long commentId;
+    private final String password;
+    private final Long commentId;
 
     @Builder
-    public DeleteCommentServiceRequest(String password, Long commentId) {
+    public DeleteCommentServiceRequest(final String password, final Long commentId) {
         this.password = password;
         this.commentId = commentId;
     }

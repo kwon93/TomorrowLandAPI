@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
        try {
             return super.authenticate(authentication);
        }catch (BadCredentialsException | InternalAuthenticationServiceException e){

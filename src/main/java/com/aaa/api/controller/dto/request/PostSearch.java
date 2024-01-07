@@ -2,6 +2,7 @@ package com.aaa.api.controller.dto.request;
 
 
 import com.aaa.api.service.dto.request.PostSearchForService;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +10,14 @@ import lombok.NoArgsConstructor;
 import static java.lang.Math.min;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostSearch {
 
-    private  Integer page = 1;
-    private  Integer size = 10;
+    private Integer page = 1;
+    private Integer size = 10;
 
     @Builder
-    public PostSearch(Integer page, Integer size) {
+    public PostSearch(final Integer page, final Integer size) {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
     }

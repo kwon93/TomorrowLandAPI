@@ -24,40 +24,39 @@ public class PostsController {
 
     private final PostsService postsService;
 
-
     @PostMapping("posts")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
-                                                     @RequestBody @Validated CreatePostsRequest request){
+    public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
+                                                     @RequestBody @Validated final CreatePostsRequest request){
 
-        PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
+        final PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
 
     @GetMapping("posts")
-    public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(PostSearch postSearch){
-        List<PostsResponse> responses = postsService.getAll(postSearch.toServiceDto()).stream()
+    public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(final PostSearch postSearch){
+        final List<PostsResponse> responses = postsService.getAll(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
         return ResponseEntity.ok(new PostsResult<>(responses));
     }
 
     @GetMapping("posts/{postId}")
-    public PostsResponse getOnePosts(@PathVariable("postId") Long id){
+    public PostsResponse getOnePosts(@PathVariable("postId") final Long id){
         return postsService.getOne(id);
     }
 
     @PatchMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'PATCH')")
-    public PostsResponse updatePosts(@RequestBody UpdatePostsRequest request,
-                                     @PathVariable("postId") Long postsId){
+    public PostsResponse updatePosts(@RequestBody final UpdatePostsRequest request,
+                                     @PathVariable("postId") final Long postsId){
 
         return postsService.update(request.toServiceDto(postsId));
     }
 
     @DeleteMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'DELETE')")
-    public ResponseEntity<Void> deletePosts(@PathVariable("postId") Long id){
+    public ResponseEntity<Void> deletePosts(@PathVariable("postId") final Long id){
         postsService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -4,11 +4,15 @@ import com.aaa.api.service.dto.request.LoginServiceRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginRequest {
 
     @Email(message = "올바른 E-Mail 형식을 입력해주세요. ex) abc123@gmail.com ")
@@ -20,7 +24,7 @@ public class LoginRequest {
     private String password;
 
     @Builder
-    public LoginRequest(String email, String password) {
+    public LoginRequest(final String email, final String password) {
         this.email = email;
         this.password = password;
     }

@@ -1,12 +1,13 @@
 package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateCommentResponse {
 
     private String content;
@@ -16,7 +17,7 @@ public class UpdateCommentResponse {
         this.content = content;
     }
 
-    public static UpdateCommentResponse of(Comment entity){
+    public static UpdateCommentResponse of(final Comment entity){
         return UpdateCommentResponse.builder()
                 .content(entity.getContent())
                 .build();

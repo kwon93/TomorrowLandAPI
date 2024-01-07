@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class LoginServiceRequest {
 
-    private String email;
-    private String password;
+    private final String email;
+    private final String password;
 
     @Builder
-    public LoginServiceRequest(String email, String password) {
+    public LoginServiceRequest(final String email, final String password) {
         this.email = email;
         this.password = password;
     }

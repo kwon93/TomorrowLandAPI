@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class PostSearchForRepository {
 
-    private int page;
-    private int size;
-    private long offset;
+    private final int page;
+    private final int size;
+    private final long offset;
     @Builder
-    public PostSearchForRepository(int page, int size, long offset) {
+    public PostSearchForRepository(final int page, final int size, final long offset) {
         this.page = page;
         this.size = size;
         this.offset = offset;

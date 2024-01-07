@@ -2,15 +2,14 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
-import com.aaa.api.controller.dto.request.UpdatePostsRequest;
-import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
-import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.Posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
+import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
+import com.aaa.api.service.dto.response.PostsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,29 +25,28 @@ public class PostsService {
     private final UsersRepository usersRepository;
 
     @Transactional
-    public PostsResponse create(CreatePostsServiceRequest serviceRequest) {
-        Users user = usersRepository.findById(serviceRequest.getUserId())
+    public PostsResponse create(final CreatePostsServiceRequest serviceRequest) {
+        final Users user = usersRepository.findById(serviceRequest.getUserId())
                 .orElseThrow(UserNotFound::new);
 
-        Posts posts = serviceRequest.toEntity(user);
+        final Posts posts = serviceRequest.toEntity(user);
 
         postsRepository.save(posts);
         return PostsResponse.of(posts);
     }
 
-    public List<Posts> getAll(PostSearchForService serviceDto) {
-
+    public List<Posts> getAll(final PostSearchForService serviceDto) {
          return postsRepository.getList(serviceDto.toRepository());
     }
 
-    public PostsResponse getOne(Long id) {
+    public PostsResponse getOne(final Long id) {
         Posts posts = findPostsById(id);
 
         return PostsResponse.of(posts);
     }
 
     @Transactional
-    public PostsResponse update(UpdatePostsServiceRequest serviceRequest) {
+    public PostsResponse update(final UpdatePostsServiceRequest serviceRequest) {
         Posts posts = findPostsById(serviceRequest.getPostsId());
 
         Posts updatedPosts =
@@ -59,13 +57,13 @@ public class PostsService {
 
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         Posts posts = findPostsById(id);
         postsRepository.delete(posts);
     }
 
 
-    private Posts findPostsById(Long id) {
+    private Posts findPostsById(final Long id) {
         return postsRepository.findById(id)
                 .orElseThrow(PostNotfound::new);
     }

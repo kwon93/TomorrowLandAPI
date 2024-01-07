@@ -23,28 +23,28 @@ import java.util.List;
 @Slf4j
 public class JwtTokenProvider {
 
-    private SecretKey key;
+    private static final long EXPIRATION_DATE = 300000L;
+    private final SecretKey key;
 
-    public JwtTokenProvider(@Value("${jwt.secretKey}") String key) {
-        byte[] decodedKey = Base64.getDecoder().decode(key);
+    public JwtTokenProvider(@Value("${jwt.secretKey}") final String secretKey) {
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
         this.key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    public JwtToken generateToken(Authentication authentication){
-        String  authorities = authentication.getAuthorities().toString();
+    public JwtToken generateToken(final Authentication authentication){
+        final String  authorities = authentication.getAuthorities().toString();
         log.info("fist auth >>>>> {}",authorities);
 
-        long now = new Date().getTime();
+        final long now = new Date().getTime();
 
-        long expirationDate = 300000L;
-        String accessToken = Jwts.builder()
+        final String accessToken = Jwts.builder()
                 .subject(authentication.getName())
                 .claim("auth", authorities)
-                .expiration(new Date(now + expirationDate))
+                .expiration(new Date(now + EXPIRATION_DATE))
                 .signWith(key)
                 .compact();
 
-        String refreshToken = Jwts.builder()
+        final String refreshToken = Jwts.builder()
                 .subject(authentication.getName())
                 .expiration(Date.from(Instant.now().plus(Duration.ofDays(14))))
                 .signWith(key)
@@ -57,34 +57,35 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    public Authentication getAuthentication(String accessToken){
-        Claims claims = parseClaims(accessToken);
+    public Authentication getAuthentication(final String accessToken){
+        final Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null){
+            //CustomException TODO
             throw new RuntimeException("권한 정보가 없는 토큰");
         }
 
         String authorities = claims.get("auth").toString();
         log.info("authorities >>>>> {}", authorities);
-
-        //rePlace() 사용안하는 방향으로 리팩토링 해야함.
+        //rePlace() 사용안하는 방향으로 리팩토링 해야함. TODO
         authorities = authorities.replaceAll("\\[", "").replaceAll("\\]", "");
         log.info("authorities replace >>>>> {}", authorities);
 
-        User user = new User(claims.getSubject(), "", List.of(new SimpleGrantedAuthority(authorities)));
+        final User user = new User(claims.getSubject(), "", List.of(new SimpleGrantedAuthority(authorities)));
 
         return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(authorities)));
     }
 
 
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(final String token) {
         try {
             Jwts.parser()
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(token);
             return true;
+            //CustomException TODO
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {

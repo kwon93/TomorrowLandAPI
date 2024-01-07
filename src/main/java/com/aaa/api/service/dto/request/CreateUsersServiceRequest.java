@@ -9,20 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Getter
 public class CreateUsersServiceRequest {
 
-    private String email;
-    private String password;
-    private String name;
-    private Role role;
+    private final String email;
+    private final String password;
+    private final String name;
+    private final Role role;
 
     @Builder
-    public CreateUsersServiceRequest(String email, String password, String name, Role role) {
+    public CreateUsersServiceRequest(final String email, final String password, final String name, final Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
     }
 
-    public Users toEntity(String encodedPassword){
+    public Users toEntity(final String encodedPassword){
         return Users.builder()
                 .email(this.email)
                 .password(encodedPassword)

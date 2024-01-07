@@ -8,20 +8,20 @@ import lombok.Getter;
 @Getter
 public class CreateCommentServiceRequest {
 
-    private String username;
-    private String password;
-    private String content;
-    private Long postsId;
+    private final String username;
+    private final String password;
+    private final String content;
+    private final Long postsId;
 
     @Builder
-    public CreateCommentServiceRequest(String username, String password, String content, Long postsId) {
+    public CreateCommentServiceRequest(final String username, final String password, final String content, final Long postsId) {
         this.username = username;
         this.password = password;
         this.content = content;
         this.postsId = postsId;
     }
 
-    public Comment toEntity(Posts posts, String encodedPassword){
+    public Comment toEntity(final Posts posts, final String encodedPassword){
         return Comment.builder()
                 .posts(posts)
                 .username(this.username)

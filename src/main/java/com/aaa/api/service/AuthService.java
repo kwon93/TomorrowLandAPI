@@ -21,18 +21,18 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtTokenReIssueProvider reIssueProvider;
 
-    public JwtToken login(LoginServiceRequest serviceRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken
+    public JwtToken login(final LoginServiceRequest serviceRequest) {
+        final UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(serviceRequest.getEmail(), serviceRequest.getPassword());
 
-            Authentication authenticate
+            final Authentication authenticate
                 = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         return jwtTokenProvider.generateToken(authenticate);
     }
 
-    public String reissueAccessToken(String refreshToken) {
-        String username = reIssueProvider.validateRefreshToken(refreshToken);
+    public String reissueAccessToken(final String refreshToken) {
+        final String username = reIssueProvider.validateRefreshToken(refreshToken);
         return reIssueProvider.reIssueAccessToken(username);
     }
 }

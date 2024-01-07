@@ -1,6 +1,7 @@
 package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentsResponse {
 
     private String content;
@@ -19,7 +20,7 @@ public class CommentsResponse {
     private LocalDateTime modDate;
 
     @Builder
-    public CommentsResponse(Comment entity) {
+    public CommentsResponse(final Comment entity) {
         this.content = entity.getContent();
         this.username = entity.getUsername();
         this.regDate = entity.getRegDate();

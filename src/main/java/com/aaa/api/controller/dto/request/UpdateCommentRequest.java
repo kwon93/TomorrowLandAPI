@@ -3,12 +3,13 @@ package com.aaa.api.controller.dto.request;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateCommentRequest {
 
 
@@ -21,12 +22,12 @@ public class UpdateCommentRequest {
 
 
     @Builder
-    public UpdateCommentRequest(String content, String password) {
+    public UpdateCommentRequest(final String content, final String password) {
         this.password = password;
         this.content = content;
     }
 
-    public UpdateCommentServiceRequest toServiceDto(Long commentId){
+    public UpdateCommentServiceRequest toServiceDto(final Long commentId){
         return UpdateCommentServiceRequest.builder()
                 .content(this.content)
                 .password(this.password)

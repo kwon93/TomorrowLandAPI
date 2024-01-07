@@ -21,9 +21,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
-        CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
+        final CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
 
-        Posts posts = postsRepository.findById((Long) targetId)
+        final Posts posts = postsRepository.findById((Long) targetId)
                 .orElseThrow(PostNotfound::new);
 
         if (!posts.getUserId().equals(principal.getUserId())){

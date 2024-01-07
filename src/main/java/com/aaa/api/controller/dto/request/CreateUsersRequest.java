@@ -7,12 +7,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateUsersRequest {
 
     @Email(message = "올바른 E-Mail 형식을 작성해주세요. ex) abc123@gmail.com ")
@@ -25,7 +26,7 @@ public class CreateUsersRequest {
     private Role role;
 
     @Builder
-    public CreateUsersRequest(String email, String password, String name, Role role) {
+    public CreateUsersRequest(final String email, final String password, final String name, final Role role) {
         this.email = email;
         this.password = password;
         this.name = name;

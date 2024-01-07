@@ -24,16 +24,17 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/posts/{postsId}/comment")
-    public ResponseEntity<PostCommentResponse> createComment(@PathVariable("postsId") Long postsId,
-                                                             @RequestBody @Validated CreateCommentRequest request){
+    public ResponseEntity<PostCommentResponse> createComment(@PathVariable("postsId") final Long postsId,
+                                                             @RequestBody @Validated final CreateCommentRequest request){
 
-        PostCommentResponse response = commentService.create(request.toServiceDto(postsId));
+        final PostCommentResponse response = commentService.create(request.toServiceDto(postsId));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @GetMapping("/posts/{postsId}/comment")
-    public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") Long postsId) {
 
-        List<CommentsResponse> responseList = commentService.getAll(postsId)
+    @GetMapping("/posts/{postsId}/comment")
+    public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") final Long postsId) {
+
+        final List<CommentsResponse> responseList = commentService.getAll(postsId)
                 .stream()
                 .map(CommentsResponse::new)
                 .toList();
@@ -43,10 +44,10 @@ public class CommentController {
 
 
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable("commentId")Long commentId,
-                                           @RequestBody @Validated UpdateCommentRequest request){
+    public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable("commentId")final Long commentId,
+                                           @RequestBody @Validated final UpdateCommentRequest request){
 
-        UpdateCommentResponse response = commentService.update(request.toServiceDto(commentId));
+        final UpdateCommentResponse response = commentService.update(request.toServiceDto(commentId));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 

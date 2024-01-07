@@ -19,11 +19,11 @@ public class UsersController {
     private final UsersService usersService;
 
     @PostMapping("signup")
-    public ResponseEntity<String > signup(@RequestBody @Validated CreateUsersRequest request){
+    public ResponseEntity<String > signup(@RequestBody @Validated final CreateUsersRequest request){
 
         String userRole = usersService.createUser(request.toServiceDto());
-
         return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
     }
 
 }
+

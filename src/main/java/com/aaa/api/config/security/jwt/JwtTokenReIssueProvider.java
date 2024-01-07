@@ -6,7 +6,6 @@ import com.aaa.api.repository.UsersRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,30 +21,34 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtTokenReIssueProvider {
-    @Value("${jwt.secretKey}")
-    private String secretKey;
 
+    private final SecretKey key;
     private final UsersRepository usersRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    public String reIssueAccessToken(String username) {
-        Users users = usersRepository.findByEmail(username)
+
+    public JwtTokenReIssueProvider(@Value("${jwt.secretKey}")final String secretKey,
+                                   final UsersRepository usersRepository,
+                                   final JwtTokenProvider jwtTokenProvider) {
+
+        this.usersRepository = usersRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(decodedKey);
+    }
+
+    public String reIssueAccessToken(final String username) {
+        final Users users = usersRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("찾을 수 없는 회원입니다."));
 
-
-        UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(users);
-
-
-        JwtToken jwtToken = jwtTokenProvider.generateToken(authenticationToken);
+        final UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(users);
+        final JwtToken jwtToken = jwtTokenProvider.generateToken(authenticationToken);
 
         return jwtToken.getAccessToken();
     }
 
-    public String validateRefreshToken(String refreshToken){
-        byte[] decodeKey = Base64.getDecoder().decode(secretKey);
-        SecretKey key = Keys.hmacShaKeyFor(decodeKey);
-        
+    public String validateRefreshToken(final String refreshToken){
+
         if (StringUtils.hasText(refreshToken)){
             try {
                 Claims claims = Jwts.parser()
@@ -66,9 +69,15 @@ public class JwtTokenReIssueProvider {
         throw new JwtException("Invalid RefreshToken");
     }
 
-    private static UsernamePasswordAuthenticationToken getAuthentication(Users users) {
-        User user = new User(users.getEmail(), "", List.of(new SimpleGrantedAuthority(users.getRoles().value())));
+    private static UsernamePasswordAuthenticationToken getAuthentication(final Users users) {
+        User user = new User(
+                users.getEmail(),
+                "",
+                List.of(new SimpleGrantedAuthority(users.getRoles().value())));
 
-        return new UsernamePasswordAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles().value())));
+        return new UsernamePasswordAuthenticationToken(
+                user,
+                "",
+                List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles().value())));
     }
 }

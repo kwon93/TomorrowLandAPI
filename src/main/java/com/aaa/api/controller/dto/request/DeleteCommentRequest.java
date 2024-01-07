@@ -3,12 +3,13 @@ package com.aaa.api.controller.dto.request;
 import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeleteCommentRequest {
 
     @NotBlank
@@ -16,11 +17,11 @@ public class DeleteCommentRequest {
     private String password;
 
     @Builder
-    public DeleteCommentRequest(String password) {
+    public DeleteCommentRequest(final String password) {
         this.password = password;
     }
 
-    public DeleteCommentServiceRequest toServiceDto(Long commentId){
+    public DeleteCommentServiceRequest toServiceDto(final Long commentId){
         return DeleteCommentServiceRequest.builder()
                 .password(this.password)
                 .commentId(commentId)

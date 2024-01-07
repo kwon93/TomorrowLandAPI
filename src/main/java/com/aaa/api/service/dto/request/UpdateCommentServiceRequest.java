@@ -7,18 +7,18 @@ import lombok.Getter;
 @Getter
 public class UpdateCommentServiceRequest {
 
-    private String content;
-    private String password;
-    private Long commentId;
+    private final String content;
+    private final String password;
+    private final Long commentId;
 
     @Builder
-    public UpdateCommentServiceRequest(String content, String password, Long commentId) {
+    public UpdateCommentServiceRequest(final String content, final String password, final Long commentId) {
         this.content = content;
         this.password = password;
         this.commentId = commentId;
     }
 
-    public Comment updateComment(Comment comment){
+    public Comment updateComment(final Comment comment){
         return Comment.builder()
                 .id(comment.getId())
                 .content(this.content)

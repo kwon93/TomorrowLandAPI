@@ -12,7 +12,7 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Comment> getCommentListByQueryDSL(long postsId) {
+    public List<Comment> getCommentListByQueryDSL(final long postsId) {
         return jpaQueryFactory.selectFrom(QComment.comment)
                 .where(QComment.comment.posts.id.eq(postsId))
                 .orderBy(QComment.comment.regDate.asc())

@@ -1,5 +1,6 @@
 package com.aaa.api.exception.dto;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionResponse {
 
     private String code;

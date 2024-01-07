@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class PostSearchForService {
 
-    private int page;
-    private int size;
-    private long offset;
+    private final int page;
+    private final int size;
+    private final long offset;
 
     @Builder
-    public PostSearchForService(int page, int size, long offset) {
+    public PostSearchForService(final int page, final int size, final long offset) {
         this.page = page;
         this.size = size;
         this.offset = offset;

@@ -9,20 +9,20 @@ import lombok.Getter;
 @Getter
 public class CreatePostsServiceRequest {
 
-    private String title;
-    private String content;
-    private PostsCategory category;
-    private Long userId;
+    private final String title;
+    private final String content;
+    private final PostsCategory category;
+    private final Long userId;
 
     @Builder
-    public CreatePostsServiceRequest(String title, String content, PostsCategory category, Long userId) {
+    public CreatePostsServiceRequest(final String title, final String content, final PostsCategory category, final Long userId) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.userId = userId;
     }
 
-    public Posts toEntity(Users user){
+    public Posts toEntity(final Users user){
        return Posts.builder()
                .title(this.title)
                .user(user)

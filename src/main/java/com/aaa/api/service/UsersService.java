@@ -20,17 +20,18 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String  createUser(CreateUsersServiceRequest serviceRequest) {
+    public String  createUser(final CreateUsersServiceRequest serviceRequest) {
         duplicationEmailValidation(serviceRequest);
 
-        String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
-        Users users = serviceRequest.toEntity(encodedPassword);
+        final String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
+        final Users users = serviceRequest.toEntity(encodedPassword);
         usersRepository.save(users);
 
         return users.getRoles().toString();
     }
 
-    private void duplicationEmailValidation(CreateUsersServiceRequest serviceRequest) {
+    //Optional return 안하는 방향으로 TODO
+    private void duplicationEmailValidation(final CreateUsersServiceRequest serviceRequest) {
         Optional<Users> duplicateEmail
                 = usersRepository.findByEmail(serviceRequest.getEmail());
         if (duplicateEmail.isPresent()){
