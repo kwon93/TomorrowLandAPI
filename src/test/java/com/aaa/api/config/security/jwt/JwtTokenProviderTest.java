@@ -1,6 +1,7 @@
 package com.aaa.api.config.security.jwt;
 
 import com.aaa.api.IntegrationTestSupport;
+import com.aaa.api.domain.Users;
 import com.aaa.api.service.dto.response.JwtToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -51,8 +52,10 @@ class JwtTokenProviderTest extends IntegrationTestSupport {
     @DisplayName("getAuthentication(): Token에서 Authentication 객체를 얻어야한다.")
     void test2() throws Exception {
         //given
+        Users userInTest = createUserInTest();
+
         String accessToken = Jwts.builder()
-                .subject("username")
+                .subject(userInTest.getEmail())
                 .claim("auth", new SimpleGrantedAuthority("ROLE_ADMIN"))
                 .expiration(new Date(new Date().getTime() + 300000L))
                 .signWith(key)

@@ -77,6 +77,7 @@ public class JwtTokenProvider {
         authorities = authorities.replaceAll("\\[", "").replaceAll("\\]", "");
         log.info("authorities replace >>>>> {}", authorities);
 
+        //loadUserByUsername으로 DB의 유저를 조회해야 @AuthenticationPrincipal NPE 발생안함.
         UserDetails userDetails = userDetailsSerivce.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", List.of(new SimpleGrantedAuthority(authorities)));

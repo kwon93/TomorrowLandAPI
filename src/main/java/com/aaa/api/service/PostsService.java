@@ -43,8 +43,8 @@ public class PostsService {
     public PostsResponse getOne(final Long postsId) {
         Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
-        posts.increaseViewCount();
 
+        posts.increaseViewCount();
         return PostsResponse.of(posts);
     }
 

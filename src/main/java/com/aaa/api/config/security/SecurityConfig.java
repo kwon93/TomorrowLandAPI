@@ -35,7 +35,7 @@ import java.util.Collections;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -75,15 +75,6 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
-//    @Bean public UserDetailsService userDetailsService(UsersRepository usersRepository){ return username -> {
-//                   Users users = usersRepository.findByEmail(username)
-//                    .orElseThrow(() -> new UsernameNotFoundException("찾을 수 없는 이메일입니다."));
-//                    return new CustomUserPrincipal(users);
-//        };
-//    }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){
