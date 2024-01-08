@@ -17,10 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UsersServiceTest extends IntegrationTestSupport {
 
-
-
-
-
     @Test
     @DisplayName("createUser(): 요청에따른 회원가입에 성공해야한다.")
     void test1() throws Exception {
