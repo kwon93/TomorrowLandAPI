@@ -59,6 +59,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	//AWS S3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
+
 }
 
 tasks.named('test') {
