@@ -38,6 +38,7 @@ class PostsControllerTest extends ControllerTestSupport {
         CreatePostsRequest request = CreatePostsRequest.builder()
                 .title("제목")
                 .content("안녕하세요.")
+                .category(PostsCategory.DEV)
                 .build();
 
         PostsResponse response = PostsResponse.builder()
@@ -69,6 +70,7 @@ class PostsControllerTest extends ControllerTestSupport {
         CreatePostsRequest request = CreatePostsRequest.builder()
                 .title("")
                 .content("")
+                .category(PostsCategory.DEV)
                 .build();
 
 

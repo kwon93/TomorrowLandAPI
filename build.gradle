@@ -61,6 +61,8 @@ dependencies {
 
 	//AWS S3
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
+	//S3 Mock
+	testImplementation 'io.findify:s3mock_2.12:0.2.4'
 
 }
 

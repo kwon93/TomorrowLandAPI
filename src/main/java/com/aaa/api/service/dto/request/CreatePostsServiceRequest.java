@@ -13,13 +13,15 @@ public class CreatePostsServiceRequest {
     private final String content;
     private final PostsCategory category;
     private final Long userId;
+    private final String imagePath;
 
     @Builder
-    public CreatePostsServiceRequest(final String title, final String content, final PostsCategory category, final Long userId) {
+    public CreatePostsServiceRequest(final String title, final String content, final PostsCategory category, final Long userId, String imagePath) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.userId = userId;
+        this.imagePath = imagePath;
     }
 
     public Posts toEntity(final Users user){
@@ -28,6 +30,7 @@ public class CreatePostsServiceRequest {
                .user(user)
                .content(this.content)
                .postsCategory(this.category)
+               .imagePath(this.imagePath)
                .build();
     }
 }

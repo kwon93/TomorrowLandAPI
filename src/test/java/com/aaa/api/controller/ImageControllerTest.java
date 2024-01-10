@@ -23,17 +23,23 @@ class ImageControllerTest extends ControllerTestSupport {
     void test1() throws Exception {
         //given
         ImageResponse response = ImageResponse.builder()
-                .imageName("http://S3/testImage.com/images/123")
+                .imagepath("image/test.png")
                 .build();
-        given(imageService.upload(any(ImageInfo.class))).willReturn(response);
-        // when
-        ResultActions result = mockMvc.perform(post("/api/image").with(csrf()));
+
+        given(imageService.imageProcessing(any(ImageInfo.class))).willReturn("testUUID");
+        given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
+
+        ResultActions result = mockMvc.perform(post("/api/image")
+                .with(csrf())
+                .header("originalName","test.png")
+        );
         //then
         result.andExpect(status().isCreated())
-                .andExpect(header().stringValues("S3URL",response.getImageName()))
+                .andExpect(header().stringValues("ImagePath",response.getImagePath()))
                 .andDo(print());
 
-        verify(imageService, times(1)).upload(any(ImageInfo.class));
+        verify(imageService, times(1)).imageProcessing(any(ImageInfo.class));
+        verify(imageUploader, times(1)).uploadToS3(anyString(), any(ImageInfo.class));
     }
 
 }

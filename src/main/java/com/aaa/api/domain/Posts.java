@@ -30,15 +30,18 @@ public class Posts extends BaseEntity{
     @JoinColumn(name = "user_id")
     private Users user;
 
+    private String imagePath;
+
     @Enumerated
     private PostsCategory category;
 
     @Builder
-    public Posts(Long id, Users user, String title, String content, PostsCategory postsCategory) {
+    public Posts(Long id, Users user, String title, String content, String imagePath, PostsCategory postsCategory) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
+        this.imagePath = imagePath;
         this.category = postsCategory;
     }
     public Long getUserId(){

@@ -84,7 +84,6 @@ public class JwtTokenProvider {
     }
 
 
-
     public boolean validateToken(final String token) {
         try {
             Jwts.parser()

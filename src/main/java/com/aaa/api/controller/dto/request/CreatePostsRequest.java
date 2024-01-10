@@ -4,6 +4,7 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,12 +18,16 @@ public class CreatePostsRequest {
     private String title;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    private PostsCategory category = PostsCategory.DEV;
+    @NotNull(message = "카테고리를 선택해주세요.")
+    private PostsCategory category;
+    private String imagePath;
 
     @Builder
-    public CreatePostsRequest(final String title, final String content) {
+    public CreatePostsRequest(final PostsCategory category,final String title, final String content, String imagePath) {
         this.title = title;
         this.content = content;
+        this.imagePath = imagePath;
+        this.category = category;
     }
 
     public CreatePostsServiceRequest toServiceDto(final CustomUserPrincipal userPrincipal){
@@ -30,6 +35,8 @@ public class CreatePostsRequest {
                 .userId(userPrincipal.getUserId())
                 .title(this.title)
                 .content(this.content)
+                .category(this.category)
+                .imagePath(imagePath)
                 .category(this.category)
                 .build();
     }

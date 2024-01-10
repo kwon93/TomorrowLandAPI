@@ -6,20 +6,21 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.Posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.AuthService;
 import com.aaa.api.service.CommentService;
 import com.aaa.api.service.PostsService;
 import com.aaa.api.service.UsersService;
+import com.aaa.api.service.image.ImageService;
+import com.aaa.api.service.image.S3ImageUploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 
@@ -32,7 +33,6 @@ public abstract class IntegrationTestSupport {
     protected PostsService postsService;
     @Autowired
     protected PostsRepository postsRepository;
-
 
     //Users
     @Autowired
@@ -56,10 +56,18 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected JwtTokenProvider jwtTokenProvider;
 
+    //ImageService
+    @Autowired
+    protected ImageService imageService;
+    @Autowired
+    protected S3ImageUploader imageUploader;
+
     //JwtKey
     @Value("${jwt.secretKey}")
     protected String secretKey;
     protected SecretKey key;
+
+
 
 
     @BeforeEach
