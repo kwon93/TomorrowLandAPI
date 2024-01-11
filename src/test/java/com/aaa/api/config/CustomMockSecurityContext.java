@@ -20,6 +20,7 @@ public class CustomMockSecurityContext implements WithSecurityContextFactory<Cus
     @Override
     public SecurityContext createSecurityContext(CustomMockUser annotation) {
         Users user = Users.builder()
+                .id(annotation.id())
                 .email(annotation.email())
                 .name(annotation.name())
                 .password(annotation.password())

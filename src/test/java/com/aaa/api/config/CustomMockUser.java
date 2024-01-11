@@ -14,4 +14,5 @@ public @interface CustomMockUser {
     String name() default "권동혁";
     String password() default "kdh1234";
     Role role() default Role.ADMIN;
+    long id() default 1L;
 }

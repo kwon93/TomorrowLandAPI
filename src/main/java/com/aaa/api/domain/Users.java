@@ -36,7 +36,8 @@ public class Users extends BaseEntity {
 
 
     @Builder
-    public Users(String email, String password, String name, Integer point, UserLevel userLevel, Role role) {
+    public Users(long id,String email, String password, String name, Integer point, UserLevel userLevel, Role role) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;

@@ -35,14 +35,17 @@ public class Posts extends BaseEntity{
     @Enumerated
     private PostsCategory category;
 
+    private int likeCount;
+
     @Builder
-    public Posts(Long id, Users user, String title, String content, String imagePath, PostsCategory postsCategory) {
+    public Posts(Long id, Users user, String title, String content, String imagePath, PostsCategory postsCategory, int likeCount) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
         this.category = postsCategory;
+        this.likeCount = likeCount;
     }
     public Long getUserId(){
         return this.user.getId();
@@ -51,6 +54,8 @@ public class Posts extends BaseEntity{
     public void increaseViewCount(){
         this.viewCount++;
     }
+
+    public void increaseLikeCount(){this.likeCount++;}
 
 
 }

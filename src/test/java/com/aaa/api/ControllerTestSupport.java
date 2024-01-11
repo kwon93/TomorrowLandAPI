@@ -16,7 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest( controllers = {PostsController.class, UsersController.class, AuthController.class, CommentController.class, ImageController.class} )
+@WebMvcTest( controllers = {
+        PostsController.class,
+        UsersController.class,
+        AuthController.class,
+        CommentController.class,
+        ImageController.class,
+        PostsLikeController.class
+} )
 @ActiveProfiles("test")
 public abstract class ControllerTestSupport {
 
@@ -40,6 +47,8 @@ public abstract class ControllerTestSupport {
     protected ImageService imageService;
     @MockBean
     protected S3ImageUploader imageUploader;
+    @MockBean
+    protected PostsLikeService likeService;
 
 
     //통합테스트환경에서 뺄지 고민중..

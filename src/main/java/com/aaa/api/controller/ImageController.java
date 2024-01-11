@@ -23,6 +23,8 @@ public class ImageController {
 
     private final ImageService imageService;
     private final S3ImageUploader imageUploader;
+
+    //REST API Resource image로 통일해야함.. 실수 TODO
     @PostMapping("image/upload")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ImageResponse> uploadImage(@RequestHeader("originalName")final String originalFileName,
