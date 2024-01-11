@@ -46,7 +46,7 @@ public class S3ImageUploader {
     }
 
     public ImagePath getPreSignedUrl(String imagePath){
-        Date expiration = generateExpirationTime(EXPIRATION_DATE);
+        Date expiration = generateExpirationTime();
         GeneratePresignedUrlRequest presignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket,imagePath)
                 .withExpiration(expiration);
@@ -57,8 +57,8 @@ public class S3ImageUploader {
                 .build();
     }
 
-    private Date generateExpirationTime(long expirationTime){
+    private Date generateExpirationTime(){
         long now = new Date().getTime();
-        return new Date(now + expirationTime);
+        return new Date(now + S3ImageUploader.EXPIRATION_DATE);
     }
 }

@@ -29,7 +29,7 @@ class ImageControllerTest extends ControllerTestSupport {
         given(imageService.imageProcessing(any(ImageInfo.class))).willReturn("testUUID");
         given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
 
-        ResultActions result = mockMvc.perform(post("/api/image")
+        ResultActions result = mockMvc.perform(post("/api/image/upload")
                 .with(csrf())
                 .header("originalName","test.png")
         );
@@ -41,5 +41,18 @@ class ImageControllerTest extends ControllerTestSupport {
         verify(imageService, times(1)).imageProcessing(any(ImageInfo.class));
         verify(imageUploader, times(1)).uploadToS3(anyString(), any(ImageInfo.class));
     }
+
+
+    @Test
+    @DisplayName("")
+    void test() {
+        //given
+
+        // when
+
+        //then
+
+    }
+
 
 }
