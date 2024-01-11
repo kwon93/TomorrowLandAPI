@@ -1,7 +1,7 @@
 package com.aaa.api.service.image;
 
 import com.aaa.api.service.dto.request.ImageInfo;
-import com.aaa.api.service.dto.response.ImagePath;
+import com.aaa.api.service.dto.response.ImageUrl;
 import com.aaa.api.service.dto.response.ImageResponse;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
@@ -45,15 +45,15 @@ public class S3ImageUploader {
                 .build();
     }
 
-    public ImagePath getPreSignedUrl(String imagePath){
+    public ImageUrl getPreSignedUrl(String imagePath){
         Date expiration = generateExpirationTime();
         GeneratePresignedUrlRequest presignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket,imagePath)
                 .withExpiration(expiration);
 
         URL url = amazonS3.generatePresignedUrl(presignedUrlRequest);
-        return ImagePath.builder()
-                .imagePath(url.toString())
+        return ImageUrl.builder()
+                .imageUrl(url.toString())
                 .build();
     }
 

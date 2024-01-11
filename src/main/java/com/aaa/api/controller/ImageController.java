@@ -1,6 +1,6 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.service.dto.response.ImagePath;
+import com.aaa.api.service.dto.response.ImageUrl;
 import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.dto.request.ImageInfo;
 import com.aaa.api.service.dto.response.ImageResponse;
@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URL;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -39,9 +38,9 @@ public class ImageController {
         return ResponseEntity.status(CREATED).headers(httpHeaders).body(imageResponse);
     }
 
-    @GetMapping("image/get")
-    public ResponseEntity<ImagePath> getImage(@RequestHeader("imagePath")final String imagePath){
-        ImagePath imageUrl = imageUploader.getPreSignedUrl(imagePath);
+    @GetMapping("image/url")
+    public ResponseEntity<ImageUrl> getImage(@RequestHeader("imagePath")final String imagePath){
+        ImageUrl imageUrl = imageUploader.getPreSignedUrl(imagePath);
         return ResponseEntity.ok(imageUrl);
     }
 }
