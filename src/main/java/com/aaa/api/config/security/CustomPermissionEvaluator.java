@@ -2,7 +2,7 @@ package com.aaa.api.config.security;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.exception.PostNotfound;
-import com.aaa.api.repository.Posts.PostsRepository;
+import com.aaa.api.repository.posts.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.PermissionEvaluator;

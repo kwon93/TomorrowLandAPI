@@ -4,6 +4,7 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.PostsLike;
 import com.aaa.api.domain.Users;
+import com.aaa.api.exception.DuplicateLike;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
 import org.assertj.core.api.Assertions;
@@ -62,6 +63,35 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(()-> likeService.increase(postInTest.getId() ,invalidUserId))
                 .isInstanceOf(UserNotFound.class)
                 .hasMessage("찾을 수 없는 회원입니다.");
+    }
+
+
+    @Test
+    @DisplayName("decrease(): 좋아요 취소 요청으로 Posts likeCount가 0이여야한다.")
+    void test4() {
+        //given
+        Posts postInTest = createPostInTest();
+        Users userInTest = createUserInTest();
+        // when
+        likeService.decrease(postInTest.getId(), userInTest.getId());
+
+        //then
+        Posts posts = postsRepository.findById(postInTest.getId()).orElseThrow(PostNotfound::new);
+        assertThat(posts.getLikeCount()).isZero();
+    }
+    @Test
+    @Transactional
+    @DisplayName("increase(): 이미 좋아요한 게시물일 경우 DuplicateLikeException을 반환한다.")
+    void test5() {
+        //given
+        Posts postInTest = createPostInTest();
+        Users userInTest = createUserInTest();
+        // when
+        likeService.increase(postInTest.getId(), userInTest.getId());
+
+        assertThatThrownBy(()-> likeService.increase(postInTest.getId(), userInTest.getId()))
+                .isInstanceOf(DuplicateLike.class)
+                .hasMessage("이미 추천한 게시물입니다.");
     }
 
 }

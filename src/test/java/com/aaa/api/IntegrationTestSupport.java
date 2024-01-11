@@ -6,14 +6,14 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.repository.Posts.PostsRepository;
-import com.aaa.api.repository.PostsLikeRepository;
+import com.aaa.api.repository.posts.PostsRepository;
+import com.aaa.api.repository.like.PostsLikeRepository;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +75,8 @@ public abstract class IntegrationTestSupport {
 
 
 
-    @BeforeEach
+
+    @AfterEach
     protected void tearDown() {
         commentRepository.deleteAllInBatch();
         likeRepository.deleteAllInBatch();

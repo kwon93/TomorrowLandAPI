@@ -16,15 +16,17 @@ public class PostsResponse {
     private String content;
     private PostsCategory category;
     private int viewCount;
+    private long likeCount;
 
 
     @Builder
-    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, int viewCount) {
+    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, int viewCount, long likeCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.category = category;
         this.viewCount = viewCount;
+        this.likeCount = likeCount;
     }
 
     public PostsResponse(final Posts entity){
@@ -43,6 +45,7 @@ public class PostsResponse {
                 .content(entity.getContent())
                 .category(entity.getCategory())
                 .viewCount(entity.getViewCount())
+                .likeCount(entity.getLikeCount())
                 .build();
     }
 }

@@ -44,7 +44,7 @@ public class PostsController {
     }
 
     @GetMapping("posts/{postId}")
-    public PostsResponse getOnePosts(@PathVariable("postId") final Long id){
+    public PostsResponse getOnePosts(@PathVariable("postId") final Long id ){
         return postsService.getOne(id);
     }
 

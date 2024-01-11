@@ -1,8 +1,8 @@
-package com.aaa.api.repository.Posts;
+package com.aaa.api.repository.posts;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.QPosts;
-import com.aaa.api.repository.Posts.dto.PostSearchForRepository;
+import com.aaa.api.repository.posts.dto.PostSearchForRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;

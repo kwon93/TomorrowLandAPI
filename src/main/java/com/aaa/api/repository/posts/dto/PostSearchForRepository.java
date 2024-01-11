@@ -1,4 +1,4 @@
-package com.aaa.api.repository.Posts.dto;
+package com.aaa.api.repository.posts.dto;
 
 import lombok.Builder;
 import lombok.Getter;

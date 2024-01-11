@@ -13,14 +13,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PostsLikeController {
 
-    private final PostsLikeService PostsLikeService;
+    private final PostsLikeService likeService;
     @PostMapping("like/{postsId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<Void> increaseLike(@PathVariable("postsId") Long postsId,
                                           @AuthenticationPrincipal CustomUserPrincipal userPrincipal
                                           ){
 
-        PostsLikeService.increase(postsId,userPrincipal.getUserId());
+        likeService.increase(postsId,userPrincipal.getUserId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("like/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<Void> decreaseLike(@PathVariable("postsId") Long postsId,
+                                             @AuthenticationPrincipal CustomUserPrincipal userPrincipal
+                                             ){
+        likeService.decrease(postsId, userPrincipal.getUserId());
         return ResponseEntity.noContent().build();
     }
 }

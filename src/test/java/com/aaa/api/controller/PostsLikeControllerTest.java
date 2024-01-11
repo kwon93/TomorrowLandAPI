@@ -75,5 +75,26 @@ class PostsLikeControllerTest extends ControllerTestSupport {
 
     }
 
+    @Test
+    @CustomMockUser
+    @DisplayName("decreaseLike(): 좋아요 취소 요청에 http status 201을 반환한다. ")
+    void test4() throws Exception {
+        //given
+        final long testId = 1L;
+
+        doNothing().when(likeService).decrease(anyLong(),anyLong());
+
+        // when
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/like/{postsId}",
+                        testId)
+                .with(csrf()));
+        //then
+        result.andExpect(status().isNoContent())
+                .andDo(print());
+
+        verify(likeService, times(1)).decrease(anyLong(),anyLong());
+
+    }
+
 
 }

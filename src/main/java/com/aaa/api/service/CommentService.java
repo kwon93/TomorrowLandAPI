@@ -2,7 +2,6 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
-import com.aaa.api.controller.dto.request.DeleteCommentRequest;
 import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
@@ -10,7 +9,7 @@ import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.repository.comment.CommentRepository;
-import com.aaa.api.repository.Posts.PostsRepository;
+import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import lombok.RequiredArgsConstructor;

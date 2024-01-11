@@ -1,6 +1,6 @@
 package com.aaa.api.service.dto.request;
 
-import com.aaa.api.repository.Posts.dto.PostSearchForRepository;
+import com.aaa.api.repository.posts.dto.PostSearchForRepository;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -27,18 +27,6 @@ public class ExceptionController {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ExceptionResponse illegalArgHandler(IllegalArgumentException e){
-        ExceptionResponse response = ExceptionResponse.builder()
-                .code("400")
-                .errorMessage("올바른 데이터를 입력하여 전송해주세요. IllegalArgumentException")
-                .build();
-
-            response.addValidation("Args",e.getMessage());
-        return response;
-    }
 
     @ResponseBody
     @ExceptionHandler(AAAException.class)

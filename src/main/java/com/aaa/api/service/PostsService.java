@@ -4,7 +4,7 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
-import com.aaa.api.repository.Posts.PostsRepository;
+import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;

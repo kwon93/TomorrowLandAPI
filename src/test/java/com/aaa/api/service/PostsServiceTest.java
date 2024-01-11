@@ -150,6 +150,20 @@ class PostsServiceTest extends IntegrationTestSupport {
         assertThat(postsList.size()).isEqualTo(0);
 
     }
+    @Test
+    @DisplayName("getOne(): 좋아요가 눌린 글이 조회되야 한다.")
+    void test7() throws Exception {
+        //given
+        Posts savedPosts = createPostInTest();
+        Users userInTest = createUserInTest();
+        likeService.increase(savedPosts.getId(), userInTest.getId());
 
+        // when
+        postsService.getOne(savedPosts.getId());
+
+        //then
+        Posts post = postsRepository.findById(savedPosts.getId()).orElseThrow(PostNotfound::new);
+        assertThat(post.getLikeCount()).isOne();
+    }
 
 }
