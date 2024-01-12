@@ -16,8 +16,8 @@ public class PostsLikeController {
     private final PostsLikeService likeService;
     @PostMapping("like/{postsId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<Void> increaseLike(@PathVariable("postsId") Long postsId,
-                                          @AuthenticationPrincipal CustomUserPrincipal userPrincipal
+    public ResponseEntity<Void> increaseLike(@PathVariable("postsId") final Long postsId,
+                                          @AuthenticationPrincipal final CustomUserPrincipal userPrincipal
                                           ){
 
         likeService.increase(postsId,userPrincipal.getUserId());
@@ -26,8 +26,8 @@ public class PostsLikeController {
 
     @DeleteMapping("like/{postsId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<Void> decreaseLike(@PathVariable("postsId") Long postsId,
-                                             @AuthenticationPrincipal CustomUserPrincipal userPrincipal
+    public ResponseEntity<Void> decreaseLike(@PathVariable("postsId") final Long postsId,
+                                             @AuthenticationPrincipal final CustomUserPrincipal userPrincipal
                                              ){
         likeService.decrease(postsId, userPrincipal.getUserId());
         return ResponseEntity.noContent().build();

@@ -24,10 +24,10 @@ public class PostsLikeService {
     private final UsersRepository usersRepository;
 
     @Transactional
-    public void increase(long postsId, long userId) {
-        Posts posts = postsRepository.getOneByPessimistLock(postsId)
+    public void increase(final long postsId, final long userId) {
+        final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
-        Users users = usersRepository.findById(userId)
+        final Users users = usersRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
         if (likeRepository.findByUserAndPosts(users, posts).isPresent()){
@@ -36,7 +36,7 @@ public class PostsLikeService {
 
         posts.increaseLikeCount();
 
-        PostsLike like = PostsLike.builder()
+        final PostsLike like = PostsLike.builder()
                 .user(users)
                 .posts(posts)
                 .build();
@@ -44,10 +44,10 @@ public class PostsLikeService {
         likeRepository.save(like);
     }
 
-    public void decrease(Long postsId, Long userId) {
-        Posts posts = postsRepository.getOneByPessimistLock(postsId)
+    public void decrease(final Long postsId, final Long userId) {
+        final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
-        Users users = usersRepository.findById(userId)
+        final Users users = usersRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
         posts.decreaseLikeCount();

@@ -1,8 +1,6 @@
 package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.controller.dto.request.CreatePostsRequest;
-import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

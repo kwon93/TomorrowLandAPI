@@ -2,7 +2,6 @@ package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
-import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,9 +31,6 @@ public class Users extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
-
-
-
     @Builder
     public Users(long id,String email, String password, String name, Integer point, UserLevel userLevel, Role role) {
         this.id = id;
@@ -44,17 +40,6 @@ public class Users extends BaseEntity {
         this.point = 100;
         this.userLevel = UserLevel.Beginner;
         this.roles = role;
-    }
-
-    public static Users of(CreateUsersRequest request, String password){
-        return Users.builder()
-                .email(request.getEmail())
-                .password(password)
-                .name(request.getName())
-                .role(request.getRole())
-                .point(100)
-                .userLevel(UserLevel.Beginner)
-                .build();
     }
 
 
