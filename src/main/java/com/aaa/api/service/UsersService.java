@@ -1,9 +1,12 @@
 package com.aaa.api.service;
 
+import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Users;
+import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.DuplicateEmail;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public String  createUser(final CreateUsersServiceRequest serviceRequest) {
@@ -33,7 +37,7 @@ public class UsersService {
     }
 
     @Transactional
-    public void reward(Long questionUserId, Long rewardUserId) {
+    public void reward(Long questionUserId, Long rewardUserId, Long commentId) {
         final Users questionUser = usersRepository.findById(questionUserId)
                 .orElseThrow(UserNotFound::new);
         questionUser.decreasePoint();
@@ -41,6 +45,10 @@ public class UsersService {
         final Users rewardUser = usersRepository.findById(rewardUserId)
                 .orElseThrow(UserNotFound::new);
         rewardUser.increasePoint();
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFound::new);
+        comment.updateRewardState();
     }
 
 

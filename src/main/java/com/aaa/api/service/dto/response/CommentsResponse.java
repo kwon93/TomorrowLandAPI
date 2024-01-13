@@ -1,6 +1,7 @@
 package com.aaa.api.service.dto.response;
 
 import com.aaa.api.domain.Comment;
+import com.aaa.api.domain.enumType.IsRewarded;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class CommentsResponse {
 
     private String content;
     private String username;
+    private IsRewarded isRewarded;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
@@ -25,6 +27,6 @@ public class CommentsResponse {
         this.username = entity.getUsername();
         this.regDate = entity.getRegDate();
         this.modDate = entity.getModDate();
+        this.isRewarded = entity.getIsRewarded();
     }
-
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,13 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
     }
 
-    @PatchMapping("reward/{rewardUserId}/posts/{postsId}")
+    @PatchMapping("reward/{rewardUserId}/posts/{postsId}/comment/{commentId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'PATCH')")
     public ResponseEntity<?> rewardPoint(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
-                                         @PathVariable("rewardUserId") final Long rewardUserId){
-        usersService.reward(userPrincipal.getUserId(), rewardUserId);
+                                         @PathVariable("rewardUserId") final Long rewardUserId,
+                                         @PathVariable("commentId") final Long commentId
+                                         ){
+        usersService.reward(userPrincipal.getUserId(), rewardUserId, commentId);
         return ResponseEntity.noContent().build();
     }
 

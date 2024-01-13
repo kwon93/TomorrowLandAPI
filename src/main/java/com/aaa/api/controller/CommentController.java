@@ -33,7 +33,6 @@ public class CommentController {
 
     @GetMapping("/posts/{postsId}/comment")
     public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") final Long postsId) {
-
         final List<CommentsResponse> responseList = commentService.getAll(postsId)
                 .stream()
                 .map(CommentsResponse::new)

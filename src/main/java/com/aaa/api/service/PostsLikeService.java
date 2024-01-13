@@ -44,6 +44,7 @@ public class PostsLikeService {
         likeRepository.save(like);
     }
 
+    @Transactional
     public void decrease(final Long postsId, final Long userId) {
         final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);

@@ -1,7 +1,10 @@
 package com.aaa.api.service;
 
 import com.aaa.api.IntegrationTestSupport;
+import com.aaa.api.domain.Comment;
+import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
+import com.aaa.api.domain.enumType.IsRewarded;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.exception.DuplicateEmail;
@@ -83,8 +86,16 @@ class UsersServiceTest extends IntegrationTestSupport {
         //given
         Users questionUser = createUserInTest(220);
         Users answerUser = createUserInTest(151);
+        Posts postInTest = createPostInTest();
+        Comment commentInTest = Comment.builder()
+                .posts(postInTest)
+                .username(answerUser.getName())
+                .password("123456")
+                .isRewarded(IsRewarded.False)
+                .build();
+        Comment comment = commentRepository.save(commentInTest);
         // when
-        usersService.reward(questionUser.getId(), answerUser.getId());
+        usersService.reward(questionUser.getId(), answerUser.getId(), comment.getId());
 
         //then
         Users decreasedUser = usersRepository.findById(questionUser.getId())
@@ -98,6 +109,7 @@ class UsersServiceTest extends IntegrationTestSupport {
         assertThat(increasedUser)
                 .extracting("point","userLevel")
                 .containsExactlyInAnyOrder(201,UserLevel.Intermediate);
+        assertThat(comment.getIsRewarded()).isEqualTo(IsRewarded.True);
     }
 
 

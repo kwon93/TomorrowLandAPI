@@ -157,16 +157,19 @@ class UsersControllerTest extends ControllerTestSupport {
         //given
         final long postsId = 1L;
         final long testId = 2L;
-        doNothing().when(usersService).reward(anyLong(),anyLong());
+        final long commentId = 3L;
+        doNothing().when(usersService).reward(anyLong(),anyLong(),anyLong());
 
         // when
-        ResultActions result = mockMvc.perform(patch("/api/reward/{rewardUserId}/posts/{postsId}", testId,postsId)
+        ResultActions result = mockMvc.perform(
+                patch("/api/reward/{rewardUserId}/posts/{postsId}/comment/{commentId}",
+                testId,postsId, commentId)
                 .with(csrf()));
 
         //then
         result.andExpect(status().isNoContent())
                 .andDo(print());
-        verify(usersService, times(1)).reward(anyLong(),anyLong());
+        verify(usersService, times(1)).reward(anyLong(),anyLong(),anyLong());
     }
 
 
