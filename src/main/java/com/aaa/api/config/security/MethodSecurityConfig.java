@@ -19,7 +19,6 @@ public class MethodSecurityConfig {
     public MethodSecurityExpressionHandler methodSecurityExpressionHandler(){
         DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
         handler.setPermissionEvaluator(new CustomPermissionEvaluator(postsRepository));
-
         return handler;
     }
 }

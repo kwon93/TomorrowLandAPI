@@ -155,11 +155,12 @@ class UsersControllerTest extends ControllerTestSupport {
     @DisplayName("rewardPoint(): 답변자 점수 보상에 성공해 http status 201을 응답받는다.")
     void test6() throws Exception {
         //given
+        final long postsId = 1L;
         final long testId = 2L;
         doNothing().when(usersService).reward(anyLong(),anyLong());
 
         // when
-        ResultActions result = mockMvc.perform(patch("/api/reward/{rewardUserId}", testId)
+        ResultActions result = mockMvc.perform(patch("/api/reward/{rewardUserId}/posts/{postsId}", testId,postsId)
                 .with(csrf()));
 
         //then

@@ -6,6 +6,7 @@ import com.aaa.api.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,12 @@ public class UsersController {
 
     @PostMapping("signup")
     public ResponseEntity<String> signup(@RequestBody @Validated final CreateUsersRequest request){
-
         String userRole = usersService.createUser(request.toServiceDto());
         return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
     }
 
-
-    @PatchMapping("reward/{rewardUserId}")
+    @PatchMapping("reward/{rewardUserId}/posts/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'PATCH')")
     public ResponseEntity<?> rewardPoint(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                          @PathVariable("rewardUserId") final Long rewardUserId){
         usersService.reward(userPrincipal.getUserId(), rewardUserId);

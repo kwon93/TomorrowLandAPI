@@ -27,10 +27,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
                 .orElseThrow(PostNotfound::new);
 
         if (!posts.getUserId().equals(principal.getUserId())){
-            log.error("권한이 허용되지 않은 사용자입니다. postId = {}",targetId);
+            log.error("권한이 허용되지 않은 사용자입니다. 403 postId: {}",targetId);
            return false;
         }
-
         return true;
     }
 }
