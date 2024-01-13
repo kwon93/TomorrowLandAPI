@@ -4,17 +4,20 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
-import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.exception.DuplicateEmail;
+import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 class UsersServiceTest extends IntegrationTestSupport {
 
     @Test
@@ -69,7 +72,33 @@ class UsersServiceTest extends IntegrationTestSupport {
         });
 
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 이메일 입니다.");
-
-
     }
+
+
+
+    @Test
+    @Transactional
+    @DisplayName("reward(): 질문자와 답변자의 점수 주고받기에 성공해야한다.")
+    void test3() {
+        //given
+        Users questionUser = createUserInTest(220);
+        Users answerUser = createUserInTest(151);
+        // when
+        usersService.reward(questionUser.getId(), answerUser.getId());
+
+        //then
+        Users decreasedUser = usersRepository.findById(questionUser.getId())
+                .orElseThrow(UserNotFound::new);
+        Users increasedUser = usersRepository.findById(answerUser.getId())
+                .orElseThrow(UserNotFound::new);
+
+        assertThat(decreasedUser)
+                .extracting("point","userLevel")
+                .containsExactlyInAnyOrder(200,UserLevel.Beginner);
+        assertThat(increasedUser)
+                .extracting("point","userLevel")
+                .containsExactlyInAnyOrder(201,UserLevel.Intermediate);
+    }
+
+
 }

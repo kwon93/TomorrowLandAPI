@@ -2,9 +2,11 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.DuplicateEmail;
+import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,18 @@ public class UsersService {
         return users.getRoles().toString();
     }
 
-    //Optional return 안하는 방향으로 TODO
+    @Transactional
+    public void reward(Long questionUserId, Long rewardUserId) {
+        final Users questionUser = usersRepository.findById(questionUserId)
+                .orElseThrow(UserNotFound::new);
+        questionUser.decreasePoint();
+
+        final Users rewardUser = usersRepository.findById(rewardUserId)
+                .orElseThrow(UserNotFound::new);
+        rewardUser.increasePoint();
+    }
+
+
     private void duplicationEmailValidation(final CreateUsersServiceRequest serviceRequest) {
         Optional<Users> duplicateEmail
                 = usersRepository.findByEmail(serviceRequest.getEmail());
@@ -38,4 +51,5 @@ public class UsersService {
             throw new DuplicateEmail();
         }
     }
+
 }

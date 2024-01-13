@@ -1,16 +1,19 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
+import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,7 +41,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -61,7 +64,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -85,7 +88,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -109,7 +112,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -134,7 +137,7 @@ class UsersControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/signup")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -144,6 +147,25 @@ class UsersControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.validation.name")
                         .value("당신이 '황금독수리 온 세상을 놀라게하다' 님이 아니시라면 이름은 10글자 미만으로 입력해주세요."))
                 .andDo(print());
+    }
+
+
+    @Test
+    @CustomMockUser
+    @DisplayName("rewardPoint(): 답변자 점수 보상에 성공해 http status 201을 응답받는다.")
+    void test6() throws Exception {
+        //given
+        final long testId = 2L;
+        doNothing().when(usersService).reward(anyLong(),anyLong());
+
+        // when
+        ResultActions result = mockMvc.perform(patch("/api/reward/{rewardUserId}", testId)
+                .with(csrf()));
+
+        //then
+        result.andExpect(status().isNoContent())
+                .andDo(print());
+        verify(usersService, times(1)).reward(anyLong(),anyLong());
     }
 
 

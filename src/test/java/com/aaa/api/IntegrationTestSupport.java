@@ -96,6 +96,19 @@ public abstract class IntegrationTestSupport {
 
         return users;
     }
+    protected Users createUserInTest(Integer point){
+        Users users = Users.builder()
+                .email("kwon93@naver.com")
+                .password(passwordEncoder.encode("kdh1234"))
+                .name("kwon")
+                .point(point)
+                .role(Role.ADMIN)
+                .build();
+
+        usersRepository.save(users);
+
+        return users;
+    }
 
     protected Posts createPostInTest() {
         Posts posts = Posts.builder()

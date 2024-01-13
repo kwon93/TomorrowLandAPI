@@ -42,13 +42,13 @@ public class CommentService {
 
     @Transactional
     public UpdateCommentResponse update(final UpdateCommentServiceRequest serviceRequest) {
-        Comment comment = findCommentById(serviceRequest.getCommentId());
+        final Comment comment = findCommentById(serviceRequest.getCommentId());
 
         if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
             throw new InvalidCommentPassword();
         }
 
-        Comment updatedComment =
+        final Comment updatedComment =
                 commentRepository.save(serviceRequest.updateComment(comment));
 
         return UpdateCommentResponse.of(updatedComment);
@@ -57,7 +57,7 @@ public class CommentService {
 
     @Transactional
     public void delete(final DeleteCommentServiceRequest serviceRequest) {
-        Comment comment = findCommentById(serviceRequest.getCommentId());
+        final Comment comment = findCommentById(serviceRequest.getCommentId());
 
         if (!passwordEncoder.matches(serviceRequest.getPassword(),comment.getPassword())){
             throw new InvalidCommentPassword();

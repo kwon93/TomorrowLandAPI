@@ -41,7 +41,7 @@ public class PostsService {
 
     @Transactional
     public PostsResponse getOne(final Long postsId) {
-        Posts posts = postsRepository.getOneByPessimistLock(postsId)
+        final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
 
         posts.increaseViewCount();
@@ -50,9 +50,9 @@ public class PostsService {
 
     @Transactional
     public PostsResponse update(final UpdatePostsServiceRequest serviceRequest) {
-        Posts posts = findPostsById(serviceRequest.getPostsId());
+        final Posts posts = findPostsById(serviceRequest.getPostsId());
 
-        Posts updatedPosts =
+        final Posts updatedPosts =
                 postsRepository.save(serviceRequest.updatePosts(posts));
 
         return PostsResponse.of(updatedPosts);
@@ -61,7 +61,7 @@ public class PostsService {
 
     @Transactional
     public void delete(final Long id) {
-        Posts posts = findPostsById(id);
+        final Posts posts = findPostsById(id);
         postsRepository.delete(posts);
     }
 

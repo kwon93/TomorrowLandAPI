@@ -2,8 +2,11 @@ package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
+import com.aaa.api.exception.NotEnoughPoint;
 import jakarta.persistence.*;
 import lombok.*;
+
+import static com.aaa.api.domain.enumType.UserLevel.*;
 
 @Entity
 @Getter
@@ -37,10 +40,22 @@ public class Users extends BaseEntity {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.point = 100;
-        this.userLevel = UserLevel.Beginner;
+        this.point = point == null ? 200 : point;
+        this.userLevel = Beginner;
         this.roles = role;
     }
 
+    public void decreasePoint() {
+        if (this.point >= 20){
+            this.point -= 20;
+            this.userLevel = measurementLevel(this.point);
+        }else {
+            throw new NotEnoughPoint();
+        }
+    }
 
+    public void increasePoint(){
+        this.point += 50;
+        this.userLevel = measurementLevel(this.point);
+    }
 }
