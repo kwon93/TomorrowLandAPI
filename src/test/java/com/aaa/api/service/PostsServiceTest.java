@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PostsServiceTest extends IntegrationTestSupport {
 
-
-
     @Test
     @DisplayName("create(): 작성글이 DB에 저장되어야한다.")
     void test1() throws Exception {

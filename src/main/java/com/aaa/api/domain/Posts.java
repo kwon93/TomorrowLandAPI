@@ -1,6 +1,7 @@
 package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.PostsCategory;
+import com.aaa.api.exception.NegativeScoreException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,7 +57,11 @@ public class Posts extends BaseEntity{
     public void increaseLikeCount(){this.likeCount++;}
 
     public void decreaseLikeCount(){
-        this.likeCount--;
+        if (this.likeCount > 0){
+            this.likeCount--;
+        }else {
+            throw new NegativeScoreException();
+        }
     }
 
 

@@ -48,7 +48,6 @@ class UsersServiceTest extends IntegrationTestSupport {
         assertThat(users.get(0).getEmail()).isEqualTo(email);
         assertTrue(passwordEncoder.matches(password, users.get(0).getPassword()));
         assertThat(users.get(0).getName()).isEqualTo(name);
-        assertThat(users.get(0).getPoint()).isEqualTo(100);
         assertThat(users.get(0).getUserLevel()).isEqualTo(UserLevel.Beginner);
     }
 

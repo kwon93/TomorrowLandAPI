@@ -5,6 +5,7 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.PostsLike;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.DuplicateLike;
+import com.aaa.api.exception.NegativeScoreException;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
 import org.assertj.core.api.Assertions;
@@ -73,6 +74,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
         // when
+        likeService.increase(postInTest.getId(), userInTest.getId());
         likeService.decrease(postInTest.getId(), userInTest.getId());
 
         //then
@@ -92,6 +94,19 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(()-> likeService.increase(postInTest.getId(), userInTest.getId()))
                 .isInstanceOf(DuplicateLike.class)
                 .hasMessage("이미 추천한 게시물입니다.");
+    }
+
+    @Test
+    @DisplayName("decrease(): 좋아요는 0이하로 내려 갈 수 없다.")
+    void test6() {
+        //given
+        Posts postInTest = createPostInTest();
+        Users userInTest = createUserInTest();
+        // when then
+        assertThatThrownBy(()-> likeService.decrease(postInTest.getId(), userInTest.getId()))
+                .isInstanceOf(NegativeScoreException.class)
+                .hasMessage("추천수를 0 이하로 내릴 수 없습니다.");
+
     }
 
 }
