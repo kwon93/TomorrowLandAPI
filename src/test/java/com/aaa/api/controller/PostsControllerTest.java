@@ -2,13 +2,11 @@ package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.config.CustomMockUser;
+import com.aaa.api.controller.dto.request.CreatePostsRequest;
+import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.controller.dto.request.CreatePostsRequest;
-import com.aaa.api.controller.dto.request.PostSearch;
-import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
-import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
 import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import com.aaa.api.service.dto.response.PostsResponse;
@@ -22,10 +20,11 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class PostsControllerTest extends ControllerTestSupport {

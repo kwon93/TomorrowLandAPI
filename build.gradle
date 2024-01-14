@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
+	//asciidoctor
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com.aaa'
@@ -15,6 +17,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	asciidoctorExt
 }
 
 repositories {
@@ -61,11 +64,33 @@ dependencies {
 
 	//AWS S3
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
-	//S3 Mock
-	testImplementation 'io.findify:s3mock_2.12:0.2.4'
+
+	//REST Docs
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
 }
 
-tasks.named('test') {
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+test {
 	useJUnitPlatform()
+	outputs.dir snippetsDir
+}
+
+asciidoctor{
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+
+	dependsOn test
+}
+
+bootJar{
+	dependsOn asciidoctor
+	from("${asciidoctor.outputDir}"){
+		into 'static/docs'
+	}
 }

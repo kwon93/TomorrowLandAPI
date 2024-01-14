@@ -3,9 +3,6 @@ package com.aaa.api.service;
 import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
-import com.aaa.api.controller.dto.request.CreateCommentRequest;
-import com.aaa.api.controller.dto.request.DeleteCommentRequest;
-import com.aaa.api.controller.dto.request.UpdateCommentRequest;
 import com.aaa.api.exception.CommentNotFound;
 import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
@@ -19,7 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CommentServiceTest extends IntegrationTestSupport {
 
