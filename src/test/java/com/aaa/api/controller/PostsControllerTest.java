@@ -13,13 +13,19 @@ import com.aaa.api.service.dto.response.PostsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,7 +55,7 @@ class PostsControllerTest extends ControllerTestSupport {
         given(postsService.create(any(CreatePostsServiceRequest.class))).willReturn(response);
 
         // expected
-        mockMvc.perform(post("/api/posts")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/posts")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
@@ -57,6 +63,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andDo(print());
+
 
         verify(postsService, times(1)).create(any(CreatePostsServiceRequest.class));
     }
@@ -175,7 +182,7 @@ class PostsControllerTest extends ControllerTestSupport {
         UpdatePostsRequest request = UpdatePostsRequest.builder()
                 .title(updateTitle)
                 .content(updateContent)
-                .postsCategory(updateCategory)
+                .category(updateCategory)
                 .build();
 
         PostsResponse response = PostsResponse.builder()
@@ -241,7 +248,7 @@ class PostsControllerTest extends ControllerTestSupport {
         UpdatePostsRequest request = UpdatePostsRequest.builder()
                 .title(updateTitle)
                 .content(updateContent)
-                .postsCategory(updateCategory)
+                .category(updateCategory)
                 .build();
 
         PostsResponse response = PostsResponse.builder()
@@ -260,7 +267,6 @@ class PostsControllerTest extends ControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
-
     }
 
 

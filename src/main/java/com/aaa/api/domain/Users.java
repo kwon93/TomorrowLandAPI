@@ -6,6 +6,8 @@ import com.aaa.api.exception.NotEnoughPoint;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 import static com.aaa.api.domain.enumType.UserLevel.*;
 
 @Entity
@@ -34,6 +36,8 @@ public class Users extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
+
+
     @Builder
     public Users(long id,String email, String password, String name, Integer point, UserLevel userLevel, Role role) {
         this.id = id;
@@ -42,7 +46,7 @@ public class Users extends BaseEntity {
         this.name = name;
         this.point = point == null ? 200 : point;
         this.userLevel = Beginner;
-        this.roles = role;
+        this.roles = role == null ? Role.USER : role;
     }
 
     public void decreasePoint() {

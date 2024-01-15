@@ -13,13 +13,13 @@ public class UpdatePostsRequest {
 
     private String title;
     private String content;
-    private PostsCategory postsCategory;
+    private PostsCategory category;
 
     @Builder
-    public UpdatePostsRequest(final String title, final String content, final PostsCategory postsCategory) {
+    public UpdatePostsRequest(final String title, final String content, final PostsCategory category) {
         this.title = title;
         this.content = content;
-        this.postsCategory = postsCategory;
+        this.category = category;
     }
 
     public UpdatePostsServiceRequest toServiceDto(final Long postsId){

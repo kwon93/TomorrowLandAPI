@@ -72,10 +72,6 @@ public abstract class IntegrationTestSupport {
     protected String secretKey;
     protected SecretKey key;
 
-
-
-
-
     @AfterEach
     protected void tearDown() {
         commentRepository.deleteAllInBatch();

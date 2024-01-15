@@ -8,10 +8,10 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PostsResult<T> {
+public class PostsResult<PostsResponse> {
 
-    private List<T> postsResponses;
-    public PostsResult(List<T> postsResponses) {
+    private List<PostsResponse> postsResponses;
+    public PostsResult(List<PostsResponse> postsResponses) {
         this.postsResponses = postsResponses;
     }
 }

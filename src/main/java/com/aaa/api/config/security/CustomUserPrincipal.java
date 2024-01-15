@@ -15,7 +15,7 @@ public class CustomUserPrincipal extends User {
     @Getter
     private final Long userId;
     public CustomUserPrincipal(final Users users) {
-        super(users.getEmail(), users.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles().value())));
+        super(users.getEmail(), users.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles())));
         userId = users.getId();
     }
 

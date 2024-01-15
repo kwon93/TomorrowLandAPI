@@ -30,12 +30,13 @@ public class CustomMockSecurityContext implements WithSecurityContextFactory<Cus
 
         CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.of(user);
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserPrincipal,
-                user.getPassword(),
-                List.of(new SimpleGrantedAuthority(user.getRoles().value()))
-        );
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserPrincipal,
+                "password",
+                List.of(new SimpleGrantedAuthority(customUserPrincipal.getAuthorities().toString())));
+
+
+        SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(authenticationToken);
 
         return context;
