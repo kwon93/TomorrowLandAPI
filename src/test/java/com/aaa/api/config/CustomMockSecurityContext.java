@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomMockSecurityContext implements WithSecurityContextFactory<CustomMockUser> {
 
-    private final UsersRepository usersRepository;
 
     @Override
     public SecurityContext createSecurityContext(CustomMockUser annotation) {
@@ -26,7 +25,6 @@ public class CustomMockSecurityContext implements WithSecurityContextFactory<Cus
                 .password(annotation.password())
                 .role(annotation.role())
                 .build();
-        usersRepository.save(user);
 
         CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.of(user);
 

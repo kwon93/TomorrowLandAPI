@@ -1,0 +1,17 @@
+=== 로그인
+
+==== HttpRequest
+include::{snippets}/auth-login/http-request.adoc[]
+include::{snippets}/auth-login/request-fields.adoc[]
+
+==== HttpResponse
+include::{snippets}/auth-login/http-response.adoc[]
+include::{snippets}/auth-login/response-fields.adoc[]
+
+=== JWT RefreshToken 요청
+
+==== HttpRequest
+include::{snippets}/auth-refresh/http-request.adoc[]
+
+==== HttpResponse
+include::{snippets}/auth-refresh/http-response.adoc[]

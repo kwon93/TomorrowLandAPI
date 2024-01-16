@@ -15,26 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestDocMockSecurityContext implements WithSecurityContextFactory<RestDocMockUser> {
 
-//    private final UsersRepository usersRepository;
-
     @Override
     public SecurityContext createSecurityContext(RestDocMockUser annotation) {
-//        Users user = Users.builder()
-//                .id(annotation.id())
-//                .email(annotation.email())
-//                .name(annotation.name())
-//                .password(annotation.password())
-//                .role(annotation.role())
-//                .build();
-//        usersRepository.save(user);
-
-//        CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.of(user);
-
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(annotation.email(),
                 "password",
                 List.of(new SimpleGrantedAuthority(annotation.role().toString())));
-
 
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(authenticationToken);

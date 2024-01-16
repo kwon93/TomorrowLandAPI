@@ -13,52 +13,13 @@ endif::[]
 [[Post-API]]
 == Posts API
 
-[[Posts-create]]
-=== 게시물 등록
+include::api/posts.adoc[]
 
-==== HttpRequest
-include::{snippets}/posts-create/http-request.adoc[]
-include::{snippets}/posts-create/request-fields.adoc[]
+[[Auth-API]]
+== Auth Api
 
+include::api/auth.adoc[]
 
-==== HttpResponse
-include::{snippets}/posts-create/http-response.adoc[]
-include::{snippets}/posts-create/response-fields.adoc[]
-
-=== 게시물 페이지 단위 조회
-
-==== HttpRequest
-include::{snippets}/Posts-getPage/http-request.adoc[]
-include::{snippets}/Posts-getPage/request-fields.adoc[]
-
-==== HttpResponse
-include::{snippets}/Posts-getPage/http-response.adoc[]
-include::{snippets}/Posts-getPage/response-fields.adoc[]
-
-
-=== 게시물 단건 조회
-
-==== HttpRequest
-include::{snippets}/Posts-getPosts/http-request.adoc[]
-
-==== HttpResponse
-include::{snippets}/Posts-getPosts/http-response.adoc[]
-include::{snippets}/Posts-getPosts/response-fields.adoc[]
-
-=== 게시물 수정
-
-==== HttpRequest
-include::{snippets}/posts-update/http-request.adoc[]
-include::{snippets}/posts-update/request-fields.adoc[]
-
-==== HttpResponse
-include::{snippets}/posts-update/http-response.adoc[]
-include::{snippets}/posts-update/response-fields.adoc[]
-
-=== 게시물 삭제
-
-==== HttpRequest
-include::{snippets}/posts-delete/http-request.adoc[]
-
-==== HttpResponse
-include::{snippets}/posts-delete/http-response.adoc[]
+[[Comment-API]]
+== Comment API
+include::api/comment.adoc[]

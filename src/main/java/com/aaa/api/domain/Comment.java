@@ -31,7 +31,7 @@ public class Comment extends BaseEntity {
     private IsRewarded isRewarded;
 
     @Builder
-    public Comment(Long id, String username, String password, String content, Posts posts, LocalDateTime regDate, IsRewarded isRewarded) {
+    public Comment(Long id, String username, String password, String content, Posts posts, LocalDateTime regDate,LocalDateTime modDate, IsRewarded isRewarded) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -39,6 +39,7 @@ public class Comment extends BaseEntity {
         this.posts = posts;
         this.isRewarded = isRewarded == null ? IsRewarded.False : isRewarded;
         this.regDate = regDate;
+        this.modDate = modDate;
     }
 
     public void updateRewardState(){

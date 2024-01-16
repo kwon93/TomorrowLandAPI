@@ -1,57 +1,37 @@
 package com.aaa.api.docs.posts;
 
-import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.config.RestDocMockUser;
-import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.controller.PostsController;
 import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.domain.Posts;
-import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.service.PostsService;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
 import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import com.aaa.api.service.dto.response.PostsResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -60,13 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PostsControllerDocsTest extends RestDocsSupport {
 
-
-
-
-
     @Test
     @RestDocMockUser
-    @DisplayName("RestDocs: 신규 게시물을 등록하는 API")
+    @DisplayName("RestDocs: 신규 게시물을 등록 요청 API")
     void createPosts() throws Exception{
         //when
         CreatePostsRequest request = CreatePostsRequest.builder()
@@ -140,7 +116,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
     @Test
     @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("RestDocs: 게시물 페이지 목록을 가져오는 API")
+    @DisplayName("RestDocs: 게시물 페이지 목록 요청 API")
     void test3() throws Exception {
         //given
         List<Posts> postsList = LongStream.range(1, 11)
@@ -168,7 +144,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(MockMvcRestDocumentation.document("Posts-getPage",
+                .andDo(MockMvcRestDocumentation.document("posts-getPage",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -192,7 +168,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
     @Test
     @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("RestDocs: 게시물 단건 조회를 하는 API")
+    @DisplayName("RestDocs: 게시물 단건 조회 요청 API")
     void test5() throws Exception {
         //given
         PostsResponse response = PostsResponse.builder()
@@ -212,7 +188,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.content").value("안녕하세요."))
                 .andExpect(jsonPath("$.category").value(PostsCategory.DEV.toString()))
                 .andDo(print())
-                        .andDo(document("Posts-getPosts",
+                        .andDo(document("posts-getPosts",
                                 preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -247,7 +223,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
     @Test
     @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("RestDocs: 게시물 수정을 하는 API")
+    @DisplayName("RestDocs: 게시물 수정 요청 API")
     void test6() throws Exception {
         //given
         final String updateTitle = "update";
@@ -323,10 +299,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
         final Long postId = 1L;
 
         // when then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/posts/{postId}",postId)
-                        .with(csrf().asHeader())
-                        .with(user(userPrincipal))
-                )
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/posts/{postId}",postId).with(csrf().asHeader()))
                 .andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(document("posts-delete",

@@ -85,6 +85,11 @@ test {
 asciidoctor {
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
+
+	sources{ //특정 파일만 html로 만들기.
+		include("**/index.adoc")
+	}
+	baseDirFollowsSourceDir() //다른 adoc include 경로 baseDir
 	dependsOn test
 }
 
