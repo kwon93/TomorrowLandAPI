@@ -1,0 +1,17 @@
+=== 회원가입 API
+
+==== HttpRequest
+include::{snippets}/users-signup/http-request.adoc[]
+include::{snippets}/users-signup/request-fields.adoc[]
+
+==== HttpResponse
+include::{snippets}/users-signup/http-response.adoc[]
+
+=== 점수 주기 API
+
+==== HttpRequest
+include::{snippets}/users-reward/http-request.adoc[]
+include::{snippets}/users-reward/path-parameters.adoc[]
+
+==== HttpResponse
+include::{snippets}/users-reward/http-response.adoc[]

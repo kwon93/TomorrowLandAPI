@@ -1,0 +1,17 @@
+=== 좋아요 추천 기능
+
+==== HttpRequest
+include::{snippets}/Like-increase/http-request.adoc[]
+include::{snippets}/Like-increase/path-parameters.adoc[]
+
+==== HttpResponse
+include::{snippets}/Like-increase/http-response.adoc[]
+
+=== 좋아요 차감 기능
+
+==== HttpRequest
+include::{snippets}/like-decrease/http-request.adoc[]
+include::{snippets}/like-decrease/path-parameters.adoc[]
+
+==== HttpResponse
+include::{snippets}/like-decrease/http-response.adoc[]

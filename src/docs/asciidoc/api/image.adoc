@@ -1,0 +1,19 @@
+=== 이미지 업로드
+
+==== HttpRequest
+include::{snippets}/Image-upload/http-request.adoc[]
+include::{snippets}/Image-upload/request-headers.adoc[]
+
+==== HttpResponse
+include::{snippets}/Image-upload/http-response.adoc[]
+include::{snippets}/Image-upload/response-fields.adoc[]
+
+=== 이미지 다운로드
+
+==== HttpRequest
+include::{snippets}/image-download/http-request.adoc[]
+include::{snippets}/image-download/request-headers.adoc[]
+
+==== HttpResponse
+include::{snippets}/image-download/http-response.adoc[]
+include::{snippets}/image-download/response-fields.adoc[]

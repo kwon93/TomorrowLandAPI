@@ -23,3 +23,15 @@ include::api/auth.adoc[]
 [[Comment-API]]
 == Comment API
 include::api/comment.adoc[]
+
+[[Image-API]]
+== Image API
+include::api/image.adoc[]
+
+[[Like-API]]
+== Like API
+include::api/like.adoc[]
+
+[[Users-API]]
+== Users API
+include::api/users.adoc[]
