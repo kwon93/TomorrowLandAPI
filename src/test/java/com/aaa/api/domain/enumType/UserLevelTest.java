@@ -10,7 +10,7 @@ class UserLevelTest {
 
 
     @Test
-    @DisplayName("meditateLevel(): 점수가 0점일 경우 Beginner 등급을 반환한다.")
+    @DisplayName("meditateLevel():점수가 0점일 경우 Beginner 등급을 반환한다.")
     void test1() {
         //given
         final Integer testPoint = 0;

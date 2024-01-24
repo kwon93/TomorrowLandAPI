@@ -22,7 +22,6 @@ public class CreateCommentRequest {
     @Size(max = 500, message = "답변은 500자 이하로 작성해주세요.")
     private String content;
 
-
     @Builder
     public CreateCommentRequest(final String username, final String password, final String content) {
         this.username = username;
