@@ -23,14 +23,12 @@ public class CreateUsersRequest {
     private String password;
     @Size(max = 10, message = "당신이 '황금독수리 온 세상을 놀라게하다' 님이 아니시라면 이름은 10글자 미만으로 입력해주세요.")
     private String name;
-    private Role role;
 
     @Builder
     public CreateUsersRequest(final String email, final String password, final String name, final Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.role = role;
     }
 
     public CreateUsersServiceRequest toServiceDto(){
@@ -38,7 +36,6 @@ public class CreateUsersRequest {
                 .email(this.email)
                 .name(this.name)
                 .password(this.password)
-                .role(this.role)
                 .build();
 
     }

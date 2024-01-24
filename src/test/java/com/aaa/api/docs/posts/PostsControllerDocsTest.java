@@ -84,7 +84,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                                 .description("게시물 내용"),
                                         fieldWithPath("category")
                                                 .type(JsonFieldType.STRING)
-                                                .description("게시물 카테고리"),
+                                                .description("게시물 카테고리 [DEV, MEDIA, LIFE, ETC]"),
                                         fieldWithPath("imagePath")
                                                 .type(JsonFieldType.STRING)
                                                 .description("S3 이미지 경로")

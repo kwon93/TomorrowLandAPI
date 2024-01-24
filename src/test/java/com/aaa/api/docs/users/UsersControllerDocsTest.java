@@ -60,8 +60,7 @@ public class UsersControllerDocsTest extends RestDocsSupport {
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("사용자의 이메일"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 비밀번호"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
-                                        fieldWithPath("role").type(JsonFieldType.STRING).description("사용자 권한")
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름")
                                 )
                                 ));
     }
