@@ -1,7 +1,7 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.exception.dto.ExceptionResponse;
-import com.aaa.api.exception.AAAException;
+import com.aaa.api.exception.TomorrowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -29,8 +29,8 @@ public class ExceptionController {
 
 
     @ResponseBody
-    @ExceptionHandler(AAAException.class)
-    public ResponseEntity<ExceptionResponse> exceptionHandler(AAAException e){
+    @ExceptionHandler(TomorrowException.class)
+    public ResponseEntity<ExceptionResponse> exceptionHandler(TomorrowException e){
 
         ExceptionResponse response = ExceptionResponse.builder()
                 .code(String.valueOf(e.statusCode()))

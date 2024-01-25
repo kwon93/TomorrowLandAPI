@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class InvalidRequest extends AAAException{
+public class InvalidRequest extends TomorrowException {
 
     private static final String MESSAGE = "잘못된 요청입니다.";
 
@@ -10,7 +10,6 @@ public class InvalidRequest extends AAAException{
 
     public InvalidRequest(String fieldName, String message) {
         super(MESSAGE);
-        addValidation(fieldName, message);
     }
 
     @Override

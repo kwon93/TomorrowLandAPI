@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class InvalidImageExtension extends AAAException {
+public class InvalidImageExtension extends TomorrowException {
 
     private final static String MESSAGE = "지원하지 않는 확장자명입니다.";
     public InvalidImageExtension() {

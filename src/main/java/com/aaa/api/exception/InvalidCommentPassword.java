@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class InvalidCommentPassword extends AAAException {
+public class InvalidCommentPassword extends TomorrowException {
 
     private static final String MESSAGE = "잘못된 비밀번호 입니다.";
 

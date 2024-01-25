@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class InvalidSignInInfomation extends AAAException{
+public class InvalidSignInInfomation extends TomorrowException {
 
     private final static String MESSAGE = "이메일 및 비밀번호가 일치하지않습니다.";
 

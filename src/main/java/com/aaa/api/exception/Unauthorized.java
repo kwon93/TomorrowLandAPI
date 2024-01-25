@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class Unauthorized extends AAAException {
+public class Unauthorized extends TomorrowException {
 
     private final static String MESSAGE = "인증에 실패했습니다.";
 

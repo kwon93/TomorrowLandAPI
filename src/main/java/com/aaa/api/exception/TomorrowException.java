@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public abstract class AAAException extends RuntimeException{
+public abstract class TomorrowException extends RuntimeException{
 
     private final Map<String ,String > validation = new HashMap<>();
 
-    public AAAException(String message) {
+    public TomorrowException(String message) {
         super(message);
     }
 
-    public AAAException(String message, Throwable cause) {
+    public TomorrowException(String message, Throwable cause) {
         super(message, cause);
     }
 

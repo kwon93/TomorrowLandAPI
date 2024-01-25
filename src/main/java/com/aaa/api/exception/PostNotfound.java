@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class PostNotfound extends AAAException{
+public class PostNotfound extends TomorrowException {
 
     private final static String MESSAGE = "존재하지않는 게시물입니다.";
 

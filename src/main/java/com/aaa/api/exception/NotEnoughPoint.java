@@ -1,6 +1,6 @@
 package com.aaa.api.exception;
 
-public class NotEnoughPoint extends AAAException {
+public class NotEnoughPoint extends TomorrowException {
 
     private static final String  MESSAGE = "점수가 부족합니다!";
 

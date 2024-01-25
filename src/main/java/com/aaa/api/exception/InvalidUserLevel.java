@@ -1,8 +1,6 @@
 package com.aaa.api.exception;
 
-import javax.swing.*;
-
-public class InvalidUserLevel extends AAAException{
+public class InvalidUserLevel extends TomorrowException {
 
     private static final String MESSAGE = "사용자의 등급 연산에 문제가 발생했습니다.";
 
