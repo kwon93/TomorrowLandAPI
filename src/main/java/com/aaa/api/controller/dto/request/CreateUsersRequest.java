@@ -22,6 +22,7 @@ public class CreateUsersRequest {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{6,12}$", message = "비밀번호는 영어 소문자와 숫자의 조합으로 6글자 이상 12글자 미만이어야 합니다.")
     private String password;
     @Size(max = 10, message = "당신이 '황금독수리 온 세상을 놀라게하다' 님이 아니시라면 이름은 10글자 미만으로 입력해주세요.")
+    @NotBlank(message = "이름을 입력해주세요.")
     private String name;
 
     @Builder

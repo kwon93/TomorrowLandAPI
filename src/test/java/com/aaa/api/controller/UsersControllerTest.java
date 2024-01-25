@@ -37,7 +37,7 @@ class UsersControllerTest extends ControllerTestSupport {
                 .name(name)
                 .build();
 
-        given(usersService.createUser(any(CreateUsersServiceRequest.class))).willReturn("ADMIN");
+        given(usersService.createUser(any(CreateUsersServiceRequest.class))).willReturn("kwon");
 
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
@@ -170,6 +170,29 @@ class UsersControllerTest extends ControllerTestSupport {
         result.andExpect(status().isNoContent())
                 .andDo(print());
         verify(usersService, times(1)).reward(anyLong(),anyLong(),anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("createUser(): 이름을 작성하지않은 요청에는 ErrorMessage를 반환해야한다.")
+    void test7() throws Exception {
+        //given
+        CreateUsersRequest request = CreateUsersRequest.builder()
+                .email("test@naver.com")
+                .password("kdh12345")
+                .build();
+
+        // expected
+        mockMvc.perform(post("/api/signup")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.errorMessage").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.name").value("이름을 입력해주세요."))
+                .andDo(print());
     }
 
 

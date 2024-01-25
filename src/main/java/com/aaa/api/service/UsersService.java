@@ -33,7 +33,7 @@ public class UsersService {
         final Users users = serviceRequest.toEntity(encodedPassword);
         usersRepository.save(users);
 
-        return users.getRoles().toString();
+        return users.getName();
     }
 
     @Transactional

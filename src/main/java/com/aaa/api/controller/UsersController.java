@@ -22,8 +22,8 @@ public class UsersController {
 
     @PostMapping("signup")
     public ResponseEntity<String> signup(@RequestBody @Validated final CreateUsersRequest request){
-        String userRole = usersService.createUser(request.toServiceDto());
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRole);
+        String userName = usersService.createUser(request.toServiceDto());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userName);
     }
 
     @PatchMapping("reward/{rewardUserId}/posts/{postsId}/comment/{commentId}")
