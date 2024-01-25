@@ -9,13 +9,16 @@ import java.util.Map;
 public abstract class TomorrowException extends RuntimeException{
 
     private final Map<String ,String > validation = new HashMap<>();
+    private final String userMessage;
 
-    public TomorrowException(String message) {
+    public TomorrowException(String message, String userMessage) {
         super(message);
+        this.userMessage = userMessage;
     }
 
-    public TomorrowException(String message, Throwable cause) {
+    public TomorrowException(String message, String userMessage, Throwable cause) {
         super(message, cause);
+        this.userMessage = userMessage;
     }
 
     public abstract int statusCode();

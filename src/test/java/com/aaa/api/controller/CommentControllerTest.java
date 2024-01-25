@@ -309,7 +309,7 @@ class CommentControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorMessage").value("잘못된 비밀번호 입니다."))
+                .andExpect(jsonPath("$.errorMessage").value("비밀번호 입력 실패"))
                 .andDo(print());
 
     }
@@ -365,7 +365,7 @@ class CommentControllerTest extends ControllerTestSupport {
 
         //then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물입니다."))
+                .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물 참조"))
                 .andDo(print());
     }
 

@@ -52,7 +52,7 @@ class ImageServiceTest extends IntegrationTestSupport {
         // when
         assertThatThrownBy(() -> imageService.imageProcessing(imageInfo))
                 .isInstanceOf(InvalidImageExtension.class)
-                .hasMessage("지원하지 않는 확장자명입니다.");
+                .hasMessage("png,jpg,jpeg,webp 외의 확장자명 오류");
 
     }
 }

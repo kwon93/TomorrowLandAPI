@@ -99,7 +99,7 @@ class PostsServiceTest extends IntegrationTestSupport {
             postsService.getOne(777L);
         });
         //then
-        assertThat(e.getMessage()).isEqualTo("존재하지않는 게시물입니다.");
+        assertThat(e.getMessage()).isEqualTo("존재하지않는 게시물 참조");
     }
 
 

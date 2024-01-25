@@ -73,7 +73,7 @@ class CommentServiceTest extends IntegrationTestSupport {
         // when
         assertThatThrownBy(()-> {
             commentService.create(request);
-        }).isInstanceOf(PostNotfound.class).hasMessage("존재하지않는 게시물입니다.");
+        }).isInstanceOf(PostNotfound.class).hasMessage("존재하지않는 게시물 참조");
     }
 
 
@@ -122,7 +122,7 @@ class CommentServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(()->{
             commentService.update(request);})
                 .isInstanceOf(InvalidCommentPassword.class)
-                .hasMessage("잘못된 비밀번호 입니다.");
+                .hasMessage("비밀번호 입력 실패");
 
     }
 
@@ -169,7 +169,7 @@ class CommentServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(()->{
             commentService.delete(request);})
                 .isInstanceOf(InvalidCommentPassword.class)
-                .hasMessage("잘못된 비밀번호 입니다.");
+                .hasMessage("비밀번호 입력 실패");
 
     }
 

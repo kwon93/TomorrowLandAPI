@@ -17,10 +17,12 @@ public class ExceptionResponse {
     private LocalDateTime timeStamp;
     private String code;
     private String errorMessage;
+    private String userMessage;
     private Map<String , String > validation = new HashMap<>();
 
     @Builder
-    public ExceptionResponse(String code, String errorMessage, Map<String ,String > validation) {
+    public ExceptionResponse(String code, String errorMessage, String userMessage, Map<String ,String > validation) {
+        this.userMessage = userMessage;
         this.timeStamp =  LocalDateTime.now();
         this.validation = validation != null ? validation : new HashMap<>();
         this.code = code;

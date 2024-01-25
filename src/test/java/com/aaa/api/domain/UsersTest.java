@@ -31,7 +31,7 @@ class UsersTest extends IntegrationTestSupport {
         // when then
         assertThatThrownBy(userInTest::decreasePoint)
                 .isInstanceOf(NotEnoughPoint.class)
-                .hasMessage("점수가 부족합니다!");
+                .hasMessage("사용자의 점수 부족");
     }
 
 

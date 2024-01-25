@@ -73,7 +73,7 @@ class UsersServiceTest extends IntegrationTestSupport {
             usersService.createUser(request);
         });
 
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이메일 입니다.");
+        assertThat(e.getMessage()).isEqualTo("DB에 이미 중복되는 이메일이 존재");
     }
 
 

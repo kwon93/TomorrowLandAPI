@@ -52,7 +52,7 @@ class PostsLikeControllerTest extends ControllerTestSupport {
                 .with(csrf()));
         //then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물입니다."))
+                .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물 참조"))
                 .andDo(print());
 
         verify(likeService, times(1)).increase(anyLong(), anyLong());

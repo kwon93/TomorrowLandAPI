@@ -63,7 +63,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         // when
         assertThatThrownBy(()-> likeService.increase(postInTest.getId() ,invalidUserId))
                 .isInstanceOf(UserNotFound.class)
-                .hasMessage("찾을 수 없는 회원입니다.");
+                .hasMessage("DB에서 찾을 수 없는 사용자 정보");
     }
 
 
@@ -93,7 +93,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
 
         assertThatThrownBy(()-> likeService.increase(postInTest.getId(), userInTest.getId()))
                 .isInstanceOf(DuplicateLike.class)
-                .hasMessage("이미 추천한 게시물입니다.");
+                .hasMessage("사용자의 중복 추천 게시물");
     }
 
     @Test
@@ -105,7 +105,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         // when then
         assertThatThrownBy(()-> likeService.decrease(postInTest.getId(), userInTest.getId()))
                 .isInstanceOf(NegativeScoreException.class)
-                .hasMessage("추천수를 0 이하로 내릴 수 없습니다.");
+                .hasMessage("최소 추천수 0 미만 오류");
 
     }
 

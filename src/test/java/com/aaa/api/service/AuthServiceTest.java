@@ -63,7 +63,7 @@ class AuthServiceTest extends IntegrationTestSupport {
             authService.login(request);
         });
 
-        assertThat(e.getMessage()).isEqualTo("이메일 및 비밀번호가 일치하지않습니다.");
+        assertThat(e.getMessage()).isEqualTo("이메일 또는 비밀번호 인증 실패");
     }
 
     @Test
@@ -82,7 +82,7 @@ class AuthServiceTest extends IntegrationTestSupport {
             authService.login(request);
         });
 
-        assertThat(e.getMessage()).isEqualTo("이메일 및 비밀번호가 일치하지않습니다.");
+        assertThat(e.getMessage()).isEqualTo("이메일 또는 비밀번호 인증 실패");
     }
 
 
