@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,17 +31,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<JwtToken> signIn(@RequestBody @Validated final LoginRequest loginRequest,
-                                           final HttpServletResponse response
-                                           ) {
+    public ResponseEntity<JwtToken> signIn(@RequestBody @Validated final LoginRequest loginRequest) {
         final JwtToken jwtToken = authService.login(loginRequest.toServiceDto());
 
         final HttpHeaders httpHeaders = new HttpHeaders();
+        ResponseCookie refreshCookie = getRefreshCookie(jwtToken.getRefreshToken());
         httpHeaders.add(JWT_AUTH_HEADER, GRANT_TYPE + jwtToken.getAccessToken());
-        httpHeaders.add(JWT_REFRESH, jwtToken.getRefreshToken());
-
-        Cookie refreshCookie = getRefreshCookie(jwtToken.getRefreshToken());
-        response.addCookie(refreshCookie);
+        httpHeaders.add("Set-Cookie", refreshCookie.toString());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(httpHeaders)
@@ -48,9 +45,7 @@ public class AuthController {
     }
 
     @PatchMapping("reissue")
-    public ResponseEntity<String> reIssueRefreshToken(final HttpServletRequest request,
-                                                      final HttpServletResponse response
-                                                      ){
+    public ResponseEntity<String> reIssueRefreshToken(final HttpServletRequest request){
         String refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(JWT_REFRESH))
                 .findFirst()
@@ -58,21 +53,24 @@ public class AuthController {
                 .getValue();
         final String reIssueAccessToken = authService.reissueAccessToken(refreshToken);
 
+        ResponseCookie refreshCookie = getRefreshCookie(refreshToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWT_AUTH_HEADER, GRANT_TYPE + reIssueAccessToken);
-        Cookie refreshCookie = getRefreshCookie(refreshToken);
-        response.addCookie(refreshCookie);
+        httpHeaders.add("Set-Cookie",refreshCookie.toString());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(httpHeaders)
                 .body("refresh");
     }
 
-    private static Cookie getRefreshCookie(String refreshToken) {
-        Cookie refreshCookie = new Cookie(JWT_REFRESH, refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setMaxAge(60 * 60 * 24 * 14);
-        refreshCookie.setPath("/");
-        return refreshCookie;
+
+    private static ResponseCookie getRefreshCookie(String refreshToken) {
+        return ResponseCookie.from(JWT_REFRESH, refreshToken)
+                .httpOnly(true)
+                .maxAge(60 * 60 * 24 * 14)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .build();
     }
 }

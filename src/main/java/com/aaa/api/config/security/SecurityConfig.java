@@ -33,6 +33,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -81,7 +82,7 @@ public class SecurityConfig {
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setExposedHeaders(Arrays.asList("Authorization","Refresh-Token"));
+                    config.setExposedHeaders(List.of("Authorization"));
                     config.setMaxAge(3600L);
                     return config;
                         }
