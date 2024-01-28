@@ -1,6 +1,7 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.controller.dto.request.LoginRequest;
+import com.aaa.api.exception.NoRefreshTokenCookie;
 import com.aaa.api.service.dto.response.JwtToken;
 import com.aaa.api.service.AuthService;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
@@ -28,6 +29,7 @@ public class AuthController {
     private static final String JWT_AUTH_HEADER = "Authorization";
     private static final String JWT_REFRESH = "RefreshToken";
     private static final String  GRANT_TYPE = "Bearer ";
+    private static final String SET_COOKIE = "Set-Cookie";
     private final AuthService authService;
 
     @PostMapping("login")
@@ -37,7 +39,7 @@ public class AuthController {
         final HttpHeaders httpHeaders = new HttpHeaders();
         ResponseCookie refreshCookie = getRefreshCookie(jwtToken.getRefreshToken());
         httpHeaders.add(JWT_AUTH_HEADER, GRANT_TYPE + jwtToken.getAccessToken());
-        httpHeaders.add("Set-Cookie", refreshCookie.toString());
+        httpHeaders.add(SET_COOKIE, refreshCookie.toString());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(httpHeaders)
@@ -49,19 +51,40 @@ public class AuthController {
         String refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(JWT_REFRESH))
                 .findFirst()
-                .get()
+                .orElseThrow(NoRefreshTokenCookie::new)
                 .getValue();
         final String reIssueAccessToken = authService.reissueAccessToken(refreshToken);
 
         ResponseCookie refreshCookie = getRefreshCookie(refreshToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWT_AUTH_HEADER, GRANT_TYPE + reIssueAccessToken);
-        httpHeaders.add("Set-Cookie",refreshCookie.toString());
+        httpHeaders.add(SET_COOKIE,refreshCookie.toString());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(httpHeaders)
                 .body("refresh");
     }
+
+
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout(final HttpServletRequest request, final HttpServletResponse response){
+        Cookie refreshCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(JWT_REFRESH))
+                .findFirst()
+                .orElseThrow(NoRefreshTokenCookie::new);
+
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.noContent()
+                .build();
+
+
+    }
+
 
 
     private static ResponseCookie getRefreshCookie(String refreshToken) {

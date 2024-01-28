@@ -1,5 +1,7 @@
 package com.aaa.api.docs.auth;
 
+import com.aaa.api.config.CustomMockUser;
+import com.aaa.api.config.RestDocMockUser;
 import com.aaa.api.controller.dto.request.LoginRequest;
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
@@ -14,6 +16,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -28,6 +31,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -106,5 +110,37 @@ public class AuthControllerDocsTest extends RestDocsSupport {
                         )
                         )
                 );
+    }
+
+
+    @Test
+    @RestDocMockUser
+    @DisplayName("RestDocs: 로그아웃 요청 API")
+    void test7() throws Exception {
+        //given
+        Cookie cookie = new Cookie("RefreshToken", "refreshTokenCookie");
+        cookie.setMaxAge(10000000);
+        cookie.setPath("/");
+
+        //when
+        ResultActions result = mockMvc.perform(post("/api/logout")
+                .with(csrf().asHeader())
+                .cookie(cookie)
+        );
+        //then
+        result.andExpect(status().isNoContent())
+                .andExpect(cookie().maxAge("RefreshToken", 0))
+                .andDo(print())
+                .andDo(document("auth-logout",
+                        preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
+                        preprocessResponse(prettyPrint()),
+                        requestCookies(
+                                cookieWithName("RefreshToken").description("JWT RefreshToken Cookie")
+                        ),
+                        responseCookies(
+                                cookieWithName("RefreshToken").description("Expired JWT RefreshToken Cookie")
+                        )
+                )
+        );
     }
 }

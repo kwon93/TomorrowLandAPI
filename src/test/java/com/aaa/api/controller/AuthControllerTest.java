@@ -1,6 +1,7 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
+import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.controller.dto.request.LoginRequest;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
 import com.aaa.api.service.dto.response.JwtToken;
@@ -10,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,7 +39,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // when then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer")
                         .content(objectMapper.writeValueAsString(request)))
@@ -62,7 +65,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -84,7 +87,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -107,7 +110,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -129,7 +132,7 @@ class AuthControllerTest extends ControllerTestSupport {
 
         // expected
         mockMvc.perform(post("/api/login")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(request))
                 )
@@ -143,19 +146,37 @@ class AuthControllerTest extends ControllerTestSupport {
     @Test
     @WithMockUser(username = "kwon93@naver.com", password = "kdh1234", roles = {"ADMIN"})
     @DisplayName("reIssueRefreshToken(): 새로운 액세스 토큰을 발급받아 응답 Header에 담아줘야한다.")
-    void test() throws Exception {
+    void test6() throws Exception {
         //given
         given(reIssueProvider.validateRefreshToken(anyString())).willReturn("kwon93@naver.com");
         given(reIssueProvider.reIssueAccessToken(anyString())).willReturn("jwtToken");
 
         // when
         mockMvc.perform(patch("/api/reissue")
-                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(csrf())
                         .cookie(new Cookie("RefreshToken","mockRefreshToken"))
         ).andExpect(status().isOk())
                 .andExpect(header().exists("Authorization"))
                 .andDo(print());
-
     }
 
+    @Test
+    @CustomMockUser
+    @DisplayName("logout(): 로그아웃요청에 쿠키를 만료후 응답해줘야한다.")
+    void test7() throws Exception {
+        //given
+        Cookie cookie = new Cookie("RefreshToken", "refreshTokenCookie");
+        cookie.setMaxAge(10000000);
+        cookie.setPath("/");
+
+        //when
+        ResultActions result = mockMvc.perform(post("/api/logout")
+                .with(csrf().asHeader())
+                .cookie(cookie)
+        );
+        //then
+        result.andExpect(status().isNoContent())
+                .andExpect(cookie().maxAge("RefreshToken", 0))
+                .andDo(print());
+    }
 }
