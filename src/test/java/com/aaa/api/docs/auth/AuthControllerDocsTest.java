@@ -4,10 +4,12 @@ import com.aaa.api.controller.dto.request.LoginRequest;
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
 import com.aaa.api.service.dto.response.JwtToken;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.cookies.CookieDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,17 +17,19 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class AuthControllerDocsTest extends RestDocsSupport {
     @Test
@@ -64,7 +68,6 @@ public class AuthControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("grantType").type(JsonFieldType.STRING).description("Token GrantType"),
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING).description("JWT AccessToken"),
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("JWT RefreshToken")
-
                         )
                 ));
     }
@@ -79,20 +82,29 @@ public class AuthControllerDocsTest extends RestDocsSupport {
         given(reIssueProvider.validateRefreshToken(anyString())).willReturn("kwon93@naver.com");
         given(reIssueProvider.reIssueAccessToken(anyString())).willReturn("jwtToken");
 
+        Cookie cookie = new Cookie("RefreshToken", "refreshToken");
+
+
         // when
         mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/reissue")
                         .with(SecurityMockMvcRequestPostProcessors.csrf().asHeader())
-                        .header("Refresh-Token","refreshToken")
+                        .cookie(cookie)
                 ).andExpect(status().isOk())
                 .andExpect(header().exists("Authorization"))
                 .andDo(print())
                 .andDo(document("auth-refresh",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(headerWithName("Refresh-Token").description("JWT RefreshToken")),
+                        requestCookies(
+                                cookieWithName("RefreshToken").description("JWT RefreshToken")
+                        ),
                         responseHeaders(
-                                headerWithName("Authorization").description("JWT AccessToken"),
-                                headerWithName("Refresh-Token").description("JWT RefreshToken"))
-                        ));
+                                headerWithName("Authorization").description("JWT AccessToken")
+                        ),
+                        responseCookies(
+                                cookieWithName("RefreshToken").description("JWT RefreshToken")
+                        )
+                        )
+                );
     }
 }

@@ -4,6 +4,7 @@ import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.controller.dto.request.LoginRequest;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
 import com.aaa.api.service.dto.response.JwtToken;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -40,6 +41,7 @@ class AuthControllerTest extends ControllerTestSupport {
                         .header("Authorization", "Bearer")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(cookie().httpOnly("RefreshToken", true))
                 .andDo(MockMvcResultHandlers.print());
 
         verify(authService, times(1))
@@ -149,6 +151,7 @@ class AuthControllerTest extends ControllerTestSupport {
         // when
         mockMvc.perform(patch("/api/reissue")
                 .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .cookie(new Cookie("RefreshToken","mockRefreshToken"))
         ).andExpect(status().isOk())
                 .andExpect(header().exists("Authorization"))
                 .andDo(print());
