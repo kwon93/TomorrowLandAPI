@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreatePostsRequest {
@@ -18,12 +20,12 @@ public class CreatePostsRequest {
     private String title;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @NotNull(message = "카테고리를 선택해주세요.")
-    private PostsCategory category;
+    @NotBlank(message = "카테고리를 선택해주세요.")
+    private String  category;
     private String imagePath;
 
     @Builder
-    public CreatePostsRequest(final PostsCategory category,final String title, final String content, String imagePath) {
+    public CreatePostsRequest(final String  category,final String title, final String content, String imagePath) {
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
@@ -35,9 +37,15 @@ public class CreatePostsRequest {
                 .userId(userPrincipal.getUserId())
                 .title(this.title)
                 .content(this.content)
-                .category(this.category)
+                .category(enumChecker(this.category))
                 .imagePath(imagePath)
-                .category(this.category)
                 .build();
+    }
+
+    public PostsCategory enumChecker(String stringToEnum){
+        return Arrays.stream(PostsCategory.values())
+                .filter(category1 -> category1.value().equals(stringToEnum))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
     }
 }

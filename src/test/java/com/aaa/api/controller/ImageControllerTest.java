@@ -32,7 +32,7 @@ class ImageControllerTest extends ControllerTestSupport {
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
                 .with(csrf())
-                .header("originalName","test.png")
+                .header("originalFileName","test.png")
         );
         //then
         result.andExpect(status().isCreated())

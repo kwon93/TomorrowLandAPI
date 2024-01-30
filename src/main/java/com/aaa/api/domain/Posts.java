@@ -31,7 +31,7 @@ public class Posts extends BaseEntity{
 
     private String imagePath;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PostsCategory category;
 
     private int likeCount;

@@ -44,7 +44,7 @@ public class ImageControllerDocsTest extends RestDocsSupport {
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
                 .with(csrf().asHeader())
-                .header("originalName","test.png")
+                .header("originalFileName","test.png")
         );
         //then
         result.andExpect(status().isCreated())
@@ -54,7 +54,7 @@ public class ImageControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("originalName").description("업로드 이미지 원본 이름")
+                                headerWithName("originalFileName").description("업로드 이미지 원본 이름")
                         ),
                         responseFields(
                                 fieldWithPath("imagePath").type(JsonFieldType.STRING).description("S3 이미지 저장 경로")

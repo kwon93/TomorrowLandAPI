@@ -34,6 +34,7 @@ class PostsServiceTest extends IntegrationTestSupport {
                 .userId(userInTest.getId())
                 .title("제목")
                 .content("안녕하세요.")
+                .category(PostsCategory.DEV)
                 .build();
         // when
         postsService.create(request);
@@ -43,6 +44,7 @@ class PostsServiceTest extends IntegrationTestSupport {
         assertThat(posts).isNotNull();
         assertThat(posts.getTitle()).isEqualTo("제목");
         assertThat(posts.getContent()).isEqualTo("안녕하세요.");
+        assertThat(posts.getCategory()).isEqualTo(PostsCategory.DEV);
     }
 
 

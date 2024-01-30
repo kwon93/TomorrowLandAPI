@@ -85,8 +85,6 @@ public class AuthController {
 
     }
 
-
-
     private static ResponseCookie getRefreshCookie(String refreshToken) {
         return ResponseCookie.from(JWT_REFRESH, refreshToken)
                 .httpOnly(true)

@@ -27,7 +27,7 @@ public class ImageController {
     //REST API Resource image로 통일해야함.. 실수 TODO
     @PostMapping("image/upload")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<ImageResponse> uploadImage(@RequestHeader("originalName")final String originalFileName,
+    public ResponseEntity<ImageResponse> uploadImage(@RequestHeader("originalFileName")final String originalFileName,
                                                      final HttpServletRequest request) throws IOException {
 
         final ImageInfo imageInfo = new ImageInfo(request, originalFileName);

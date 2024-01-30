@@ -18,7 +18,6 @@ public enum UserLevel {
         this.minPoint = minPoint;
         this.maxPoint = maxPoint;
     }
-
     public static UserLevel measurementLevel(Integer userPoint){
         return Arrays.stream(UserLevel.values())
                 .filter(userLevel -> userPoint >= userLevel.getMinPoint() && userPoint <= userLevel.getMaxPoint())

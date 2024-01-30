@@ -48,7 +48,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
         CreatePostsRequest request = CreatePostsRequest.builder()
                 .title("제목")
                 .content("안녕하세요.")
-                .category(PostsCategory.DEV)
+                .category("DEV")
                 .imagePath("image/test.png")
                 .build();
 
