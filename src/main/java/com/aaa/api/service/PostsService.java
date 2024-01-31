@@ -35,8 +35,12 @@ public class PostsService {
         return PostsResponse.of(posts);
     }
 
-    public List<Posts> getAll(final PostSearchForService serviceDto) {
+    public List<Posts> getPage(final PostSearchForService serviceDto) {
          return postsRepository.getList(serviceDto.toRepository());
+    }
+
+    public List<Posts> getAll(){
+        return postsRepository.findAll();
     }
 
     @Transactional

@@ -29,8 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -141,24 +140,25 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .size(10)
                 .build();
 
-        given(postsService.getAll(any(PostSearchForService.class))).willReturn(postsList);
+        given(postsService.getPage(any(PostSearchForService.class))).willReturn(postsList);
 
         // when
         mockMvc.perform(get("/api/posts?page=1&size=10")
                         .with(csrf().asHeader())
-                        .content(objectMapper.writeValueAsString(postSearch))
+                        .param("page","1")
+                        .param("size","10")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentation.document("posts-getPage",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호"),
-                                fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 전체 글 개수"),
-                                fieldWithPath("offset").type(JsonFieldType.NUMBER).description("페이지 시작 위치")
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("한 페이지당 보여질 글 개수")
                         ),
                         responseFields(
+                                fieldWithPath("totalPosts").type(JsonFieldType.NUMBER).description("DB에 존재하는 모든 게시물 개수"),
                                 fieldWithPath("postsResponses").type(JsonFieldType.ARRAY).description("게시글 응답 목록"),
                                 fieldWithPath("postsResponses[].id").type(JsonFieldType.NUMBER).description("게시물 번호"),
                                 fieldWithPath("postsResponses[].userName").type(JsonFieldType.STRING).description("게시물 작성한 유저 이름"),

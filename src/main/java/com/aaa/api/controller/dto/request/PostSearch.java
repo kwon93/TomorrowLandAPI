@@ -21,8 +21,8 @@ public class PostSearch {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
     }
-    public long getOffset(){
-        return (long) (Math.max(1, page) - 1) * size;
+    public int getOffset(){
+        return (Math.max(1, page) - 1) * size;
     }
 
     public PostSearchForService toServiceDto(){

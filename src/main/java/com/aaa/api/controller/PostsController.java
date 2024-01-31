@@ -4,16 +4,15 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.PostSearch;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+import com.aaa.api.domain.Posts;
 import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.service.dto.response.PostsResult;
 import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +36,10 @@ public class PostsController {
 
     @GetMapping("posts")
     public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(final PostSearch postSearch){
-        final List<PostsResponse> responses = postsService.getAll(postSearch.toServiceDto()).stream()
+        final List<PostsResponse> responses = postsService.getPage(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
-        return ResponseEntity.ok(new PostsResult<>(responses));
+        return ResponseEntity.ok(new PostsResult<>(responses, postsService.getAll()));
     }
 
     @GetMapping("posts/{postId}")

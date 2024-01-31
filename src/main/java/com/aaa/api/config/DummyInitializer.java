@@ -44,7 +44,6 @@ public class DummyInitializer {
         List<Posts> posts = LongStream.range(0, 30)
                 .mapToObj(i ->
                 Posts.builder()
-                        .id(i)
                         .user(dummyUser)
                         .title("DummyPosts " + i)
                         .content("DummyContent " + i)

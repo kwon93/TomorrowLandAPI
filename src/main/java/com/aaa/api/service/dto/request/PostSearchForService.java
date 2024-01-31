@@ -9,10 +9,10 @@ public class PostSearchForService {
 
     private final int page;
     private final int size;
-    private final long offset;
+    private final int offset;
 
     @Builder
-    public PostSearchForService(final int page, final int size, final long offset) {
+    public PostSearchForService(final int page, final int size, final int offset) {
         this.page = page;
         this.size = size;
         this.offset = offset;
@@ -22,6 +22,7 @@ public class PostSearchForService {
         return PostSearchForRepository.builder()
                 .page(this.page)
                 .size(this.size)
+                .offset(this.offset)
                 .build();
     }
 }

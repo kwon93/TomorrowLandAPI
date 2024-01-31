@@ -4,9 +4,7 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
-import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.PostSearch;
-import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
@@ -49,7 +47,7 @@ class PostsServiceTest extends IntegrationTestSupport {
 
 
     @Test
-    @DisplayName("getAll(): 1페이지 조회(내림차순 정렬)에 성공해야한다.")
+    @DisplayName("getAll(): 3페이지 조회(내림차순 정렬)에 성공해야한다.")
     void test2() throws Exception {
         //given
         List<Posts> postsList = IntStream.range(1, 31)
@@ -61,17 +59,20 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         postsRepository.saveAll(postsList);
 
-        PostSearchForService postSearch = PostSearchForService.builder()
+        PostSearch postSearch = PostSearch.builder()
+                .page(3)
                 .size(10)
-                .page(1)
                 .build();
 
+        PostSearchForService serviceDto = postSearch.toServiceDto();
+
+
         // when
-        List<Posts> pageOne = postsService.getAll(postSearch);
+        List<Posts> pageOne = postsService.getPage(serviceDto);
 
         //then
         assertThat(pageOne.size()).isEqualTo(10);
-        assertThat(pageOne.get(0).getTitle()).isEqualTo("제목30");
+        assertThat(pageOne.get(0).getTitle()).isEqualTo("제목10");
     }
 
 

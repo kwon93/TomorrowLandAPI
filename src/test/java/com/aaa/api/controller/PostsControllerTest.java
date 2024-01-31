@@ -13,9 +13,6 @@ import com.aaa.api.service.dto.response.PostsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,8 +21,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -115,7 +110,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(postsService, times(1)).getAll(any(PostSearchForService.class));
+        verify(postsService, times(1)).getPage(any(PostSearchForService.class));
 
     }
 
@@ -140,7 +135,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(postsService, times(1)).getAll(any(PostSearchForService.class));
+        verify(postsService, times(1)).getPage(any(PostSearchForService.class));
 
     }
 
