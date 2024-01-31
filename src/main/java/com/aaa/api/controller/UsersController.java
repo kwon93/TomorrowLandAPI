@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class UsersController {
 
     private final UsersService usersService;
-
     @PostMapping("signup")
     public ResponseEntity<String> signup(@RequestBody @Validated final CreateUsersRequest request){
         String userName = usersService.createUser(request.toServiceDto());
@@ -35,7 +34,6 @@ public class UsersController {
         usersService.reward(userPrincipal.getUserId(), rewardUserId, commentId);
         return ResponseEntity.noContent().build();
     }
-
 
 }
 
