@@ -106,8 +106,21 @@ public abstract class IntegrationTestSupport {
         return users;
     }
 
+
     protected Posts createPostInTest() {
+        Users users = Users.builder()
+                .id(99L)
+                .email("test@naver.com")
+                .password(passwordEncoder.encode("kdh1234"))
+                .name("kwon")
+                .point(200)
+                .role(Role.ADMIN)
+                .build();
+
+        usersRepository.save(users);
+
         Posts posts = Posts.builder()
+                .user(users)
                 .title("제목")
                 .content("내용")
                 .postsCategory(PostsCategory.LIFE)

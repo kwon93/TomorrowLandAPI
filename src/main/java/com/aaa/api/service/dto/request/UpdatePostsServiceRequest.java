@@ -30,6 +30,7 @@ public class UpdatePostsServiceRequest {
                 .title(this.title)
                 .content(this.content)
                 .postsCategory(this.category)
+                .user(entity.getUser())
                 .build();
     }
 }

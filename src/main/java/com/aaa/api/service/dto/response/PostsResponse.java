@@ -16,12 +16,13 @@ public class PostsResponse {
     private String content;
     private PostsCategory category;
     private String imagePath;
+    private String userName;
     private int viewCount;
     private long likeCount;
 
 
     @Builder
-    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, String imagePath, int viewCount, long likeCount) {
+    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, String imagePath, int viewCount, long likeCount,String userName) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -29,6 +30,7 @@ public class PostsResponse {
         this.imagePath = imagePath;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
+        this.userName = userName;
     }
 
     public PostsResponse(final Posts entity){
@@ -38,6 +40,7 @@ public class PostsResponse {
         this.category = entity.getCategory();
         this.viewCount = entity.getViewCount();
         this.imagePath = entity.getImagePath();
+        this.userName = entity.getUser().getName();
     }
 
 
@@ -49,6 +52,7 @@ public class PostsResponse {
                 .category(entity.getCategory())
                 .viewCount(entity.getViewCount())
                 .likeCount(entity.getLikeCount())
+                .userName(entity.getUser().getName())
                 .build();
     }
 }

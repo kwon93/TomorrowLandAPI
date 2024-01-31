@@ -5,6 +5,7 @@ import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.domain.Posts;
+import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
@@ -54,6 +55,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
         PostsResponse response = PostsResponse.builder()
                 .id(1L)
+                .userName("kwon")
                 .title("제목")
                 .content("안녕하세요.")
                 .category(PostsCategory.DEV)
@@ -96,6 +98,9 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                         fieldWithPath("title")
                                                 .type(JsonFieldType.STRING)
                                                 .description("게시물 제목"),
+                                        fieldWithPath("userName")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 작성한 유저 이름"),
                                         fieldWithPath("content")
                                                 .type(JsonFieldType.STRING)
                                                 .description("게시물 내용"),
@@ -122,6 +127,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
         List<Posts> postsList = LongStream.range(1, 11)
                 .mapToObj(i -> Posts.builder()
                         .id(i)
+                        .user(Users.builder().email("test@naver.com").password("abc123").name("kwon").build())
                         .title("제목" + i)
                         .content("내용" + i)
                         .postsCategory(PostsCategory.DEV)
@@ -155,6 +161,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                         responseFields(
                                 fieldWithPath("postsResponses").type(JsonFieldType.ARRAY).description("게시글 응답 목록"),
                                 fieldWithPath("postsResponses[].id").type(JsonFieldType.NUMBER).description("게시물 번호"),
+                                fieldWithPath("postsResponses[].userName").type(JsonFieldType.STRING).description("게시물 작성한 유저 이름"),
                                 fieldWithPath("postsResponses[].title").type(JsonFieldType.STRING).description("게시물 제목"),
                                 fieldWithPath("postsResponses[].content").type(JsonFieldType.STRING).description("게시물 내용"),
                                 fieldWithPath("postsResponses[].category").type(JsonFieldType.STRING).description("게시물 카테고리"),
@@ -173,6 +180,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
         //given
         PostsResponse response = PostsResponse.builder()
                 .id(1L)
+                .userName("kwon")
                 .title("제목")
                 .content("안녕하세요.")
                 .category(PostsCategory.DEV)
@@ -198,6 +206,9 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                         fieldWithPath("id")
                                                 .type(JsonFieldType.NUMBER)
                                                 .description("게시글 번호"),
+                                        fieldWithPath("userName")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 작성한 사용자 이름"),
                                         fieldWithPath("title")
                                                 .type(JsonFieldType.STRING)
                                                 .description("게시물 제목"),
@@ -238,6 +249,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
         PostsResponse response = PostsResponse.builder()
                 .id(1L)
+                .userName("kwon")
                 .title(updateTitle)
                 .content(updateContent)
                 .category(updateCategory)
@@ -268,6 +280,9 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("id")
                                         .type(JsonFieldType.NUMBER)
                                         .description("게시글 번호"),
+                                fieldWithPath("userName")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시물 작성합 사용자 이름"),
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
                                         .description("게시물 제목"),
