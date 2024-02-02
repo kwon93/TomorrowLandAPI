@@ -61,6 +61,8 @@ public class PostsResponse {
                 .viewCount(entity.getViewCount())
                 .likeCount(entity.getLikeCount())
                 .userName(entity.getUser().getName())
+                .regDate(entity.getRegDate())
+                .modDate(entity.getModDate())
                 .build();
     }
 }
