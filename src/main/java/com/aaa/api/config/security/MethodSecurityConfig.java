@@ -1,5 +1,6 @@
 package com.aaa.api.config.security;
 
+import com.aaa.api.config.security.permission.PostsPermissionEvaluator;
 import com.aaa.api.repository.posts.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ public class MethodSecurityConfig {
     @Bean
     public MethodSecurityExpressionHandler methodSecurityExpressionHandler(){
         DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
-        handler.setPermissionEvaluator(new CustomPermissionEvaluator(postsRepository));
+        handler.setPermissionEvaluator(new PostsPermissionEvaluator(postsRepository));
         return handler;
     }
 }

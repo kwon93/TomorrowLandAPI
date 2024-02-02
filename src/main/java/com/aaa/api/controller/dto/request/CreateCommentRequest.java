@@ -12,29 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCommentRequest {
 
-    @NotBlank(message = "작성자명을 입력해주세요.")
-    @Size(min = 3,max = 10, message = "작성자명은 3글자 이상 10글자 이하로 입력해주세요.")
-    private String username;
-    @NotBlank
-    @Size(min = 4, max = 12, message = "비밀번호는 4글자 이상 12글자 이하로 입력해주세요.")
-    private String password;
     @NotBlank
     @Size(max = 500, message = "답변은 500자 이하로 작성해주세요.")
     private String content;
 
     @Builder
-    public CreateCommentRequest(final String username, final String password, final String content) {
-        this.username = username;
-        this.password = password;
+    public CreateCommentRequest(final String content) {
         this.content = content;
     }
 
-    public CreateCommentServiceRequest toServiceDto(final Long postsId){
+    public CreateCommentServiceRequest toServiceDto(final Long postsId, final Long userId){
         return CreateCommentServiceRequest.builder()
                 .content(this.content)
-                .username(this.username)
-                .password(this.password)
                 .postsId(postsId)
+                .usersId(userId)
                 .build();
     }
 

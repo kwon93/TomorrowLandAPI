@@ -1,5 +1,6 @@
-package com.aaa.api.config.security;
+package com.aaa.api.config.security.permission;
 
+import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.repository.posts.PostsRepository;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 
 @RequiredArgsConstructor
 @Slf4j
-public class CustomPermissionEvaluator implements PermissionEvaluator {
+public class PostsPermissionEvaluator implements PermissionEvaluator {
     private final PostsRepository postsRepository;
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {

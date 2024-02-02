@@ -88,8 +88,6 @@ class UsersServiceTest extends IntegrationTestSupport {
         Posts postInTest = createPostInTest();
         Comment commentInTest = Comment.builder()
                 .posts(postInTest)
-                .username(answerUser.getName())
-                .password("123456")
                 .isRewarded(IsRewarded.False)
                 .build();
         Comment comment = commentRepository.save(commentInTest);

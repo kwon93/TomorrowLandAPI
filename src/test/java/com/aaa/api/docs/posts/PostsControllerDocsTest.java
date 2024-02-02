@@ -42,7 +42,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
 
     @Test
     @RestDocMockUser
-    @DisplayName("RestDocs: 신규 게시물을 등록 요청 API")
+    @DisplayName("RestDocs: 신규 게시물 등록 요청 API")
     void createPosts() throws Exception{
         //when
         CreatePostsRequest request = CreatePostsRequest.builder()

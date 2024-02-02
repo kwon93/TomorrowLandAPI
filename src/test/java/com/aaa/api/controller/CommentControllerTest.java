@@ -1,8 +1,10 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
+import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
+import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.controller.dto.request.CreateCommentRequest;
 import com.aaa.api.controller.dto.request.DeleteCommentRequest;
@@ -11,7 +13,9 @@ import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
 import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
+import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
+import com.aaa.api.service.dto.response.CommentsResponse;
 import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +28,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -46,29 +51,17 @@ class CommentControllerTest extends ControllerTestSupport {
     }
 
     @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
+    @CustomMockUser
     @DisplayName("createComment(): 댓글 작성 요청에 성공해 http status 201 을 응답한다.")
     void test1() throws Exception {
         //given
         final String content = "답변내용~";
-        final String password = "1234";
-        final String username = "kwon";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .username(username)
                 .content(content)
-                .password(password)
-                .build();
-
-        CreateCommentServiceRequest serviceRequest = CreateCommentServiceRequest.builder()
-                .username(username)
-                .content(content)
-                .password(password)
                 .build();
 
         PostCommentResponse response = PostCommentResponse.builder()
-                .username(username)
-                .password(password)
                 .content(content)
                 .build();
 
@@ -81,7 +74,6 @@ class CommentControllerTest extends ControllerTestSupport {
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.content").value(content))
-                .andExpect(jsonPath("$.username").value(username))
                 .andDo(print());
 
         verify(commentService, times(1)).create(any(CreateCommentServiceRequest.class));
@@ -99,9 +91,7 @@ class CommentControllerTest extends ControllerTestSupport {
         final String username = "kwon";
 
         CreateCommentRequest request = CreateCommentRequest.builder()
-                .username(username)
                 .content(invalidContent)
-                .password(password)
                 .build();
 
 
@@ -120,80 +110,20 @@ class CommentControllerTest extends ControllerTestSupport {
 
     @Test
     @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("createComment(): 댓글 작성 암호가 4~12 범위를 벗어날경우 http status 400을 응답한다.")
-    void test3() throws Exception {
-        //given
-        final String password = "12";
-        final String content = "답변내용~";
-        final String username = "kwon";
-
-        CreateCommentRequest request = CreateCommentRequest.builder()
-                .username(username)
-                .content(content)
-                .password(password)
-                .build();
-
-
-
-        // when
-        mockMvc.perform(post("/api/posts/{postsId}/comment", post.getId())
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validation.password").value("비밀번호는 4글자 이상 12글자 이하로 입력해주세요."))
-                .andDo(print());
-
-    }
-
-
-    @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("createComment(): 댓글 작성자명 10글자 범위를 벗어날경우 http status 400을 응답한다.")
-    void test4() throws Exception {
-        //given
-        final String password = "1234";
-        final String content = "답변내용~";
-        final String username = "황금독수리온세상을놀라게하다";
-
-        CreateCommentRequest request = CreateCommentRequest.builder()
-                .username(username)
-                .content(content)
-                .password(password)
-                .build();
-
-        // when
-        mockMvc.perform(post("/api/posts/{postsId}/comment", post.getId())
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validation.username").value("작성자명은 3글자 이상 10글자 이하로 입력해주세요."))
-                .andDo(print());
-
-    }
-
-
-    @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
     @DisplayName("updateComment(): 댓글 수정 요청에 성공해 http status 204를 응답받아야한다.")
     void test5() throws Exception {
         //given
          Comment comment = Comment.builder()
                 .id(1L)
                 .content("원본 댓글 내용")
-                .password("1234")
-                .username("kown")
                 .build();
 
         UpdateCommentRequest request = UpdateCommentRequest.builder()
                 .content("수정된 댓글 내용")
-                .password("1234")
                 .build();
 
         UpdateCommentServiceRequest serviceRequest = UpdateCommentServiceRequest.builder()
                 .content("수정된 댓글 내용")
-                .password("1234")
                 .build();
 
         UpdateCommentResponse updateComment = UpdateCommentResponse.builder()
@@ -226,13 +156,10 @@ class CommentControllerTest extends ControllerTestSupport {
          Comment comment = Comment.builder()
                 .id(1L)
                 .content("내용입니다.")
-                .password("1234")
-                .username("kown")
                 .build();
 
          UpdateCommentRequest request = UpdateCommentRequest.builder()
                 .content(invalidContent)
-                .password("1234")
                 .build();
         // when
         mockMvc.perform(patch("/api/comment/{commentId}", comment.getId())
@@ -256,8 +183,6 @@ class CommentControllerTest extends ControllerTestSupport {
          Comment comment = Comment.builder()
                 .id(1L)
                 .content("comment~~~~~~~~~~~~~~~")
-                .password("1234")
-                .username("kown")
                 .build();
 
         DeleteCommentRequest request = DeleteCommentRequest.builder()
@@ -276,7 +201,7 @@ class CommentControllerTest extends ControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
 
-        verify(commentService, times(1)).delete(any(DeleteCommentServiceRequest.class));
+        verify(commentService, times(1)).delete(anyLong());
     }
 
 
@@ -292,15 +217,13 @@ class CommentControllerTest extends ControllerTestSupport {
          Comment comment = Comment.builder()
                 .id(1L)
                 .content("comment~~~~~~~~~~~~~~~")
-                .password("123444")
-                .username("kown")
                 .build();
 
         DeleteCommentRequest request = DeleteCommentRequest.builder()
                 .password("1234")
                 .build();
 
-        doThrow(new InvalidCommentPassword()).when(commentService).delete(any(DeleteCommentServiceRequest.class));
+        doThrow(new InvalidCommentPassword()).when(commentService).delete(anyLong());
 
 
         // when
@@ -316,7 +239,7 @@ class CommentControllerTest extends ControllerTestSupport {
 
     @Test
     @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("getAllComment(): 댓글 전체 조회 요청에 성공해 http status 200을 응답한다.")
+    @DisplayName("getAllComment(): 비로그인시의 댓글 전체 조회 요청에 성공해 http status 200을 응답한다.")
     void test9() throws Exception{
         //given
         Posts post = Posts.builder()
@@ -325,15 +248,17 @@ class CommentControllerTest extends ControllerTestSupport {
                 .title("글 제목")
                 .postsCategory(PostsCategory.DEV)
                 .build();
-        List<Comment> comments = IntStream.range(0, 4).mapToObj(i ->
+        List<Comment> comments = LongStream.range(0, 3).mapToObj(i ->
                 Comment.builder()
+                        .id(i)
+                        .users(Users.builder().id(i).email("test@naver.com").name("kwon").build())
                         .posts(post)
                         .content("댓글" + i)
-                        .password("123456")
-                        .username("kwon")
                         .build()).toList();
 
-        given(commentService.getAll(anyLong())).willReturn(comments);
+        List<CommentsResponse> responses = comments.stream()
+                .map(comment -> new CommentsResponse(comment, false)).toList();
+        given(commentService.getAllNoPrincipal(any(GetAllCommentsServiceDto.class))).willReturn(responses);
 
         // when
         ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
@@ -342,7 +267,43 @@ class CommentControllerTest extends ControllerTestSupport {
         result.andExpect(status().isOk())
                 .andDo(print());
 
-        verify(commentService, times(1)).getAll(anyLong());
+        verify(commentService, times(1)).getAllNoPrincipal(any(GetAllCommentsServiceDto.class));
+    }
+
+    @Test
+    @CustomMockUser
+    @DisplayName("getAllComment(): 로그인시의 댓글 전체 조회 요청에 성공해 http status 200을 응답한다.")
+    void test11() throws Exception{
+        //given
+        Posts post = Posts.builder()
+                .id(1L)
+                .content("글 내용")
+                .title("글 제목")
+                .postsCategory(PostsCategory.DEV)
+                .build();
+        List<Comment> comments = LongStream.range(0, 2).mapToObj(i ->
+                Comment.builder()
+                        .id(i)
+                        .users(Users.builder().id(i).email("test@naver.com").name("kwon").build())
+                        .posts(post)
+                        .content("댓글" + i)
+                        .build()).toList();
+
+        List<CommentsResponse> responses = comments.stream()
+                .map(comment -> new CommentsResponse(comment, false)).toList();
+
+        responses.forEach(response -> {response.setModifiable(true);});
+
+        given(commentService.getAllWithPrincipal(any(GetAllCommentsServiceDto.class))).willReturn(responses);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
+
+        //then
+        result.andExpect(status().isOk())
+                .andDo(print());
+
+        verify(commentService, times(1)).getAllWithPrincipal(any(GetAllCommentsServiceDto.class));
     }
 
     @Test
@@ -354,14 +315,12 @@ class CommentControllerTest extends ControllerTestSupport {
                 Comment.builder()
                         .posts(post)
                         .content("댓글" + i)
-                        .password("123456")
-                        .username("kwon")
                         .build()).toList();
 
-        doThrow(new PostNotfound()).when(commentService).getAll(anyLong());
+        doThrow(new PostNotfound()).when(commentService).getAllNoPrincipal(any(GetAllCommentsServiceDto.class));
 
         // when
-        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment",999L).with(csrf()));
+        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment",999L).with(csrf().asHeader()));
 
         //then
         result.andExpect(status().isBadRequest())
