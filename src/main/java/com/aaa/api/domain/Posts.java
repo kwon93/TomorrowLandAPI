@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -37,7 +39,9 @@ public class Posts extends BaseEntity{
     private int likeCount;
 
     @Builder
-    public Posts(Long id, Users user, String title, String content, String imagePath, PostsCategory postsCategory, int likeCount) {
+    public Posts(Long id, Users user, String title, String content,
+                 String imagePath, PostsCategory postsCategory,
+                 int likeCount, LocalDateTime regDate, LocalDateTime modDate) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -45,6 +49,8 @@ public class Posts extends BaseEntity{
         this.imagePath = imagePath;
         this.category = postsCategory;
         this.likeCount = likeCount;
+        this.regDate = regDate;
+        this.modDate = modDate;
     }
     public Long getUserId(){
         return this.user.getId();

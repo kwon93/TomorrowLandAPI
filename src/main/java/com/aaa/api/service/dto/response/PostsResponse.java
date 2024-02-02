@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostsResponse {
@@ -17,12 +19,14 @@ public class PostsResponse {
     private PostsCategory category;
     private String imagePath;
     private String userName;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
     private int viewCount;
     private long likeCount;
 
 
     @Builder
-    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, String imagePath, int viewCount, long likeCount,String userName) {
+    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, String imagePath, int viewCount, long likeCount, String userName, LocalDateTime regDate, LocalDateTime modDate) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -31,6 +35,8 @@ public class PostsResponse {
         this.viewCount = viewCount;
         this.likeCount = likeCount;
         this.userName = userName;
+        this.regDate = regDate;
+        this.modDate = modDate;
     }
 
     public PostsResponse(final Posts entity){
@@ -41,6 +47,8 @@ public class PostsResponse {
         this.viewCount = entity.getViewCount();
         this.imagePath = entity.getImagePath();
         this.userName = entity.getUser().getName();
+        this.regDate = entity.getRegDate();
+        this.modDate = entity.getModDate();
     }
 
 

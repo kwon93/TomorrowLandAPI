@@ -43,16 +43,17 @@ public class PostsController {
     }
 
     @GetMapping("posts/{postId}")
-    public PostsResponse getOnePosts(@PathVariable("postId") final Long id ){
-        return postsService.getOne(id);
+    public ResponseEntity<PostsResponse> getOnePosts(@PathVariable("postId") final Long id ){
+        PostsResponse response = postsService.getOne(id);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("posts/{postId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'PATCH')")
-    public PostsResponse updatePosts(@RequestBody final UpdatePostsRequest request,
+    public ResponseEntity<PostsResponse> updatePosts(@RequestBody final UpdatePostsRequest request,
                                      @PathVariable("postId") final Long postsId){
-
-        return postsService.update(request.toServiceDto(postsId));
+        postsService.update(request.toServiceDto(postsId));
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("posts/{postId}")

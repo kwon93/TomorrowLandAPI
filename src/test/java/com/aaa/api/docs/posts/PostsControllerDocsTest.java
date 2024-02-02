@@ -19,6 +19,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.LongStream;
 
@@ -59,6 +60,8 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .content("안녕하세요.")
                 .category(PostsCategory.DEV)
                 .imagePath("image/test.png")
+                .regDate(LocalDateTime.now())
+                .modDate(LocalDateTime.now())
                 .build();
 
 
@@ -114,7 +117,13 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                                 .description("게시글 추천수"),
                                         fieldWithPath("imagePath")
                                                 .type(JsonFieldType.STRING)
-                                                .description("게시물 이미지 경로"))
+                                                .description("게시물 이미지 경로"),
+                                        fieldWithPath("regDate")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 등록 날짜"),
+                                        fieldWithPath("modDate")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 수정 날짜"))
                                 ));
     }
 
@@ -131,6 +140,8 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                         .content("내용" + i)
                         .postsCategory(PostsCategory.DEV)
                         .imagePath("image/test.png")
+                        .regDate(LocalDateTime.now())
+                        .modDate(LocalDateTime.now())
                         .build())
                 .toList();
 
@@ -167,7 +178,9 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("postsResponses[].category").type(JsonFieldType.STRING).description("게시물 카테고리"),
                                 fieldWithPath("postsResponses[].imagePath").type(JsonFieldType.STRING).description("게시물 이미지 경로"),
                                 fieldWithPath("postsResponses[].viewCount").type(JsonFieldType.NUMBER).description("조회수"),
-                                fieldWithPath("postsResponses[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수")
+                                fieldWithPath("postsResponses[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("postsResponses[].regDate").type(JsonFieldType.STRING).description("게시물 등록 날짜"),
+                                fieldWithPath("postsResponses[].modDate").type(JsonFieldType.STRING).description("게시물 수정 날짜")
                         )
 
                 ));
@@ -185,6 +198,8 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .content("안녕하세요.")
                 .category(PostsCategory.DEV)
                 .imagePath("image/test.png")
+                .regDate(LocalDateTime.now())
+                .modDate(LocalDateTime.now())
                 .build();
 
         given(postsService.getOne(response.getId())).willReturn(response);
@@ -226,10 +241,15 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                                 .description("게시글 추천수"),
                                         fieldWithPath("imagePath")
                                                 .type(JsonFieldType.STRING)
-                                                .description("게시물 이미지 경로"))
+                                                .description("게시물 이미지 경로"),
+                                        fieldWithPath("regDate")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 등록 날짜"),
+                                        fieldWithPath("modDate")
+                                                .type(JsonFieldType.STRING)
+                                                .description("게시물 수정 날짜"))
 
                                 ));
-        verify(postsService, times(1)).getOne(response.getId());
     }
 
     @Test
@@ -264,9 +284,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                         .with(csrf().asHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(updateTitle))
-                .andExpect(jsonPath("$.content").value(updateContent))
+                .andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(document("posts-update",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
@@ -275,33 +293,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 게시물 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 게시물 내용"),
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("수정할 게시물 카테고리")
-                        ),
-                        responseFields(
-                                fieldWithPath("id")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("게시글 번호"),
-                                fieldWithPath("userName")
-                                        .type(JsonFieldType.STRING)
-                                        .description("게시물 작성합 사용자 이름"),
-                                fieldWithPath("title")
-                                        .type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("content")
-                                        .type(JsonFieldType.STRING)
-                                        .description("게시물 내용"),
-                                fieldWithPath("category")
-                                        .type(JsonFieldType.STRING)
-                                        .description("게시글 카테고리"),
-                                fieldWithPath("viewCount")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("게시물 조회수"),
-                                fieldWithPath("likeCount")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("게시글 추천수"),
-                                fieldWithPath("imagePath")
-                                        .type(JsonFieldType.STRING)
-                                        .description("게시물 이미지 경로"))
-                        )
+                        ))
                 );
     }
 

@@ -194,9 +194,7 @@ class PostsControllerTest extends ControllerTestSupport {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(updateTitle))
-                .andExpect(jsonPath("$.content").value(updateContent))
+                .andExpect(status().isNoContent())
                 .andDo(print());
 
         verify(postsService, times(1))
