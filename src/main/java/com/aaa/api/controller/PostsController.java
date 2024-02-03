@@ -57,9 +57,9 @@ public class PostsController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("posts/{postId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'Posts', 'DELETE')")
-    public ResponseEntity<Void> deletePosts(@PathVariable("postId") final Long id){
+    @DeleteMapping("posts/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'Posts', 'DELETE')")
+    public ResponseEntity<Void> deletePosts(@PathVariable("postsId") final Long id){
         postsService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
