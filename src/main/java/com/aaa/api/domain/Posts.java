@@ -40,7 +40,7 @@ public class Posts extends BaseEntity{
 
     @Builder
     public Posts(Long id, Users user, String title, String content,
-                 String imagePath, PostsCategory postsCategory,
+                 String imagePath, PostsCategory postsCategory, int viewCount,
                  int likeCount, LocalDateTime regDate, LocalDateTime modDate) {
         this.id = id;
         this.user = user;
@@ -49,6 +49,7 @@ public class Posts extends BaseEntity{
         this.imagePath = imagePath;
         this.category = postsCategory;
         this.likeCount = likeCount;
+        this.viewCount = viewCount;
         this.regDate = regDate;
         this.modDate = modDate;
     }
@@ -71,4 +72,9 @@ public class Posts extends BaseEntity{
     }
 
 
+    public void update(String title, String content, PostsCategory category) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
 }

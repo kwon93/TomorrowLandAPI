@@ -55,11 +55,9 @@ public class PostsService {
     @Transactional
     public PostsResponse update(final UpdatePostsServiceRequest serviceRequest) {
         final Posts posts = findPostsById(serviceRequest.getPostsId());
+        posts.update(serviceRequest.getTitle(), serviceRequest.getContent(), serviceRequest.getCategory());
 
-        final Posts updatedPosts =
-                postsRepository.save(serviceRequest.updatePosts(posts));
-
-        return PostsResponse.of(updatedPosts);
+        return PostsResponse.of(posts);
     }
 
 

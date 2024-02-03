@@ -24,13 +24,4 @@ public class UpdatePostsServiceRequest {
         this.postsId = postsId;
     }
 
-    public Posts updatePosts(final Posts entity){
-        return Posts.builder()
-                .id(entity.getId())
-                .title(this.title)
-                .content(this.content)
-                .postsCategory(this.category)
-                .user(entity.getUser())
-                .build();
-    }
 }

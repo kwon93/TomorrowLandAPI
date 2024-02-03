@@ -30,6 +30,10 @@ public class PostsLikeService {
         final Users users = usersRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
+        if (likeRepository.findByUserAndPosts(users, posts).isPresent()){
+            throw new DuplicateLike();
+        }
+
         posts.increaseLikeCount();
 
         final PostsLike like = PostsLike.builder()
