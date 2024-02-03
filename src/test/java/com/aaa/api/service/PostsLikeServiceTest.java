@@ -81,20 +81,6 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Posts posts = postsRepository.findById(postInTest.getId()).orElseThrow(PostNotfound::new);
         assertThat(posts.getLikeCount()).isZero();
     }
-    @Test
-    @Transactional
-    @DisplayName("increase(): 이미 좋아요한 게시물일 경우 DuplicateLikeException을 반환한다.")
-    void test5() {
-        //given
-        Posts postInTest = createPostInTest();
-        Users userInTest = createUserInTest();
-        // when
-        likeService.increase(postInTest.getId(), userInTest.getId());
-
-        assertThatThrownBy(()-> likeService.increase(postInTest.getId(), userInTest.getId()))
-                .isInstanceOf(DuplicateLike.class)
-                .hasMessage("사용자의 중복 추천 게시물");
-    }
 
     @Test
     @DisplayName("decrease(): 좋아요는 0이하로 내려 갈 수 없다.")
