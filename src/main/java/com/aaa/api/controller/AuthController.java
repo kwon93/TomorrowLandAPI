@@ -81,8 +81,6 @@ public class AuthController {
 
         return ResponseEntity.noContent()
                 .build();
-
-
     }
 
     private static ResponseCookie getRefreshCookie(String refreshToken) {
