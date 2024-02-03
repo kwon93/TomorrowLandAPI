@@ -27,6 +27,7 @@ public class UpdatePostsRequest {
                 .postsId(postsId)
                 .title(this.title)
                 .content(this.content)
+                .category(this.category)
                 .build();
 
     }

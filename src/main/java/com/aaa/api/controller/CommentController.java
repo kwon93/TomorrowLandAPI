@@ -54,7 +54,7 @@ public class CommentController {
 
 
     @PatchMapping("/comment/{commentId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId, 'PATCH')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId,'Comment','PATCH')")
     public ResponseEntity<UpdateCommentResponse> updateComment(
                                             @PathVariable("commentId")final Long commentId,
                                             @RequestBody @Validated final UpdateCommentRequest request){
@@ -64,7 +64,7 @@ public class CommentController {
 
     //deleteMapping 요청시 @requestBody 로 값을 받기 불가능해짐. -> Post method로 진행.
     @PostMapping("/comment/{commentId}/delete")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId, 'DELETE')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId, 'Comment','DELETE')")
     public ResponseEntity<Void> deleteComment(@PathVariable("commentId")Long commentId){
         commentService.delete(commentId);
         return ResponseEntity.noContent().build();

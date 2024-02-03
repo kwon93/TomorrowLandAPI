@@ -48,16 +48,17 @@ public class PostsController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("posts/{postId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'PATCH')")
+    @PatchMapping("posts/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<PostsResponse> updatePosts(@RequestBody final UpdatePostsRequest request,
-                                     @PathVariable("postId") final Long postsId){
+                                     @PathVariable("postsId") final Long postsId){
         postsService.update(request.toServiceDto(postsId));
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("posts/{postId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'DELETE')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postId, 'Posts', 'DELETE')")
     public ResponseEntity<Void> deletePosts(@PathVariable("postId") final Long id){
         postsService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
