@@ -148,7 +148,7 @@ class PostsServiceTest extends IntegrationTestSupport {
         //then
         List<Posts> postsList = postsRepository.findAll();
 
-        assertThat(postsList.size()).isEqualTo(0);
+        assertThat(postsList.size()).isEqualTo(30);
 
     }
     @Test
