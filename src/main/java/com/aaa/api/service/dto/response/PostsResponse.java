@@ -19,6 +19,7 @@ public class PostsResponse {
     private PostsCategory category;
     private String imagePath;
     private String userName;
+    private String userEmail;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
     private int viewCount;
@@ -26,12 +27,16 @@ public class PostsResponse {
 
 
     @Builder
-    public PostsResponse(final Long id, final String title, final String content, final PostsCategory category, String imagePath, int viewCount, long likeCount, String userName, LocalDateTime regDate, LocalDateTime modDate) {
+    public PostsResponse(final Long id, final String title, final String content,
+                         final PostsCategory category, String imagePath, String userEmail,
+                         int viewCount, long likeCount, String userName,
+                         LocalDateTime regDate, LocalDateTime modDate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.category = category;
         this.imagePath = imagePath;
+        this.userEmail = userEmail;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
         this.userName = userName;
@@ -46,9 +51,10 @@ public class PostsResponse {
         this.category = entity.getCategory();
         this.viewCount = entity.getViewCount();
         this.imagePath = entity.getImagePath();
-        this.userName = entity.getUser().getName();
+        this.userName = entity.getUserName();
         this.regDate = entity.getRegDate();
         this.modDate = entity.getModDate();
+        this.userEmail = entity.getUserEmail();
     }
 
 
@@ -60,10 +66,11 @@ public class PostsResponse {
                 .category(entity.getCategory())
                 .viewCount(entity.getViewCount())
                 .likeCount(entity.getLikeCount())
-                .userName(entity.getUser().getName())
+                .userName(entity.getUserName())
                 .imagePath(entity.getImagePath())
                 .regDate(entity.getRegDate())
                 .modDate(entity.getModDate())
+                .userEmail(entity.getUserEmail())
                 .build();
     }
 }

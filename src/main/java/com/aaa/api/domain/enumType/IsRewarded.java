@@ -2,6 +2,9 @@ package com.aaa.api.domain.enumType;
 
 public enum IsRewarded {
 
-    True,
-    False
+    True(true),
+    False(false);
+
+    IsRewarded(boolean b) {
+    }
 }

@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +20,9 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Posts posts;
     @ManyToOne(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
@@ -45,5 +48,8 @@ public class Comment extends BaseEntity {
 
     public Long getUsersId(){
         return this.users.getId();
+    }
+    public String  getUsername(){
+        return this.users.getName();
     }
 }

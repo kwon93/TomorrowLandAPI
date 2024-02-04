@@ -48,8 +48,7 @@ public class PostsLikeService {
     public void decrease(final Long postsId, final Long userId) {
         final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
-        final Users users = usersRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
+        usersRepository.findById(userId).orElseThrow(UserNotFound::new);
 
         posts.decreaseLikeCount();
     }

@@ -29,7 +29,7 @@ public class CommentsResponse {
         this.regDate = entity.getRegDate();
         this.modDate = entity.getModDate();
         this.isRewarded = entity.getIsRewarded();
-        this.userName = entity.getUsers().getName();
+        this.userName = entity.getUsername();
         this.modifiable = modifiable;
     }
 

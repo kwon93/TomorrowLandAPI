@@ -71,7 +71,13 @@ public class Posts extends BaseEntity{
         }
     }
 
+    public String getUserName(){
+        return this.user.getName();
+    }
 
+    public String getUserEmail(){
+        return this.user.getEmail();
+    }
     public void update(String title, String content, PostsCategory category) {
         this.title = title;
         this.content = content;
