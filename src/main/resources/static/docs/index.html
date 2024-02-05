@@ -487,6 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_회원가입_api">회원가입 API</a></li>
 <li><a href="#_점수_주기_api">점수 주기 API</a></li>
+<li><a href="#_mypage_조회_api">MyPage 조회 API</a></li>
 </ul>
 </li>
 </ul>
@@ -568,7 +569,7 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 275
+Content-Length: 308
 
 {
   "id" : 1,
@@ -577,8 +578,9 @@ Content-Length: 275
   "category" : "DEV",
   "imagePath" : "image/test.png",
   "userName" : "kwon",
-  "regDate" : "2024-02-03T01:14:13.090478",
-  "modDate" : "2024-02-03T01:14:13.090487",
+  "userEmail" : "test@test.com",
+  "regDate" : "2024-02-06T03:34:46.695045",
+  "modDate" : "2024-02-06T03:34:46.695052",
   "viewCount" : 0,
   "likeCount" : 0
 }</code></pre>
@@ -607,6 +609,11 @@ Content-Length: 275
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">게시물 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userEmail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시물을 작성한 사용자의 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userName</code></p></td>
@@ -701,7 +708,7 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 2958
+Content-Length: 3318
 
 {
   "postsResponses" : [ {
@@ -711,8 +718,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106422",
-    "modDate" : "2024-02-03T01:14:13.106432",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711939",
+    "modDate" : "2024-02-06T03:34:46.711946",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -722,8 +730,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106438",
-    "modDate" : "2024-02-03T01:14:13.106445",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711951",
+    "modDate" : "2024-02-06T03:34:46.711952",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -733,8 +742,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106449",
-    "modDate" : "2024-02-03T01:14:13.10645",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711955",
+    "modDate" : "2024-02-06T03:34:46.711956",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -744,8 +754,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106453",
-    "modDate" : "2024-02-03T01:14:13.106454",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711958",
+    "modDate" : "2024-02-06T03:34:46.711959",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -755,8 +766,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106457",
-    "modDate" : "2024-02-03T01:14:13.106458",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711962",
+    "modDate" : "2024-02-06T03:34:46.711963",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -766,8 +778,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106461",
-    "modDate" : "2024-02-03T01:14:13.106463",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711966",
+    "modDate" : "2024-02-06T03:34:46.711967",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -777,8 +790,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106465",
-    "modDate" : "2024-02-03T01:14:13.106467",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.71197",
+    "modDate" : "2024-02-06T03:34:46.71197",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -788,8 +802,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106469",
-    "modDate" : "2024-02-03T01:14:13.10647",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711974",
+    "modDate" : "2024-02-06T03:34:46.711975",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -799,8 +814,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106473",
-    "modDate" : "2024-02-03T01:14:13.106474",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711977",
+    "modDate" : "2024-02-06T03:34:46.711978",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -810,8 +826,9 @@ Content-Length: 2958
     "category" : "DEV",
     "imagePath" : "image/test.png",
     "userName" : "kwon",
-    "regDate" : "2024-02-03T01:14:13.106478",
-    "modDate" : "2024-02-03T01:14:13.106479",
+    "userEmail" : "test@naver.com",
+    "regDate" : "2024-02-06T03:34:46.711981",
+    "modDate" : "2024-02-06T03:34:46.711986",
     "viewCount" : 0,
     "likeCount" : 0
   } ],
@@ -852,6 +869,11 @@ Content-Length: 2958
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>postsResponses[].userName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">게시물 작성한 유저 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>postsResponses[].userEmail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시물 작성한 사용자 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>postsResponses[].title</code></p></td>
@@ -924,7 +946,7 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 275
+Content-Length: 308
 
 {
   "id" : 1,
@@ -933,8 +955,9 @@ Content-Length: 275
   "category" : "DEV",
   "imagePath" : "image/test.png",
   "userName" : "kwon",
-  "regDate" : "2024-02-03T01:14:13.124817",
-  "modDate" : "2024-02-03T01:14:13.124825",
+  "userEmail" : "test@test.com",
+  "regDate" : "2024-02-06T03:34:46.732496",
+  "modDate" : "2024-02-06T03:34:46.732508",
   "viewCount" : 0,
   "likeCount" : 0
 }</code></pre>
@@ -963,6 +986,11 @@ Content-Length: 275
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>userName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">게시물 작성한 사용자 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userEmail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시물 작성한 사용자 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
@@ -1166,7 +1194,8 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Authorization: Bearer accessToken
-Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Fri, 16 Feb 2024 16:14:12 GMT; Secure; HttpOnly; SameSite=None
+Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Mon, 19 Feb 2024 18:34:46 GMT; Secure; HttpOnly; SameSite=None
+userId: 0
 Content-Type: application/json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -1238,7 +1267,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Authorization: Bearer null
-Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Fri, 16 Feb 2024 16:14:12 GMT; Secure; HttpOnly; SameSite=None
+Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Mon, 19 Feb 2024 18:34:46 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: text/plain;charset=UTF-8
 Content-Length: 7
 X-Content-Type-Options: nosniff
@@ -1418,7 +1447,7 @@ Content-Length: 33
 <h4 id="_httprequest_10"><a class="link" href="#_httprequest_10">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts/1/comment?_csrf=4-FTmkJFzwojxplwvhSb90VArQDF0GxEQhQFRMDoP37-JcJ_0odkryZxrT4Op_pEizmvkndwgDn9sl1pJC0ydKLaXh_HRPFG HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts/1/comment?_csrf=h2pohuz6mnROWjyw_WpAjnFdMtjvnoTrlTyz7_muxVIzUbSY5FtettrNqRFjb1iDmUd0thI7H-DZr73Gog6H2sDNozNXYNH6 HTTP/1.1
 Host: api.tomorrow.com</code></pre>
 </div>
 </div>
@@ -1458,32 +1487,38 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 681
+Content-Length: 843
 
 {
   "commentResponse" : [ {
     "id" : 0,
     "content" : "댓글0",
     "userName" : "kwon",
+    "userEmail" : "test@naver.com",
+    "userId" : 0,
     "isRewarded" : "False",
-    "regDate" : "2024-02-03T01:14:13.027079",
-    "modDate" : "2024-02-03T01:14:13.02709",
+    "regDate" : "2024-02-06T03:34:46.627656",
+    "modDate" : "2024-02-06T03:34:46.627663",
     "modifiable" : false
   }, {
     "id" : 1,
     "content" : "댓글1",
     "userName" : "kwon",
+    "userEmail" : "test@naver.com",
+    "userId" : 1,
     "isRewarded" : "False",
-    "regDate" : "2024-02-03T01:14:13.027193",
-    "modDate" : "2024-02-03T01:14:13.027195",
+    "regDate" : "2024-02-06T03:34:46.627746",
+    "modDate" : "2024-02-06T03:34:46.627747",
     "modifiable" : false
   }, {
     "id" : 2,
     "content" : "댓글2",
     "userName" : "kwon",
+    "userEmail" : "test@naver.com",
+    "userId" : 2,
     "isRewarded" : "False",
-    "regDate" : "2024-02-03T01:14:13.027198",
-    "modDate" : "2024-02-03T01:14:13.027199",
+    "regDate" : "2024-02-06T03:34:46.627749",
+    "modDate" : "2024-02-06T03:34:46.62775",
     "modifiable" : false
   } ]
 }</code></pre>
@@ -1524,6 +1559,16 @@ Content-Length: 681
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이름</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentResponse[].userEmail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentResponse[].userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 번호</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentResponse[].isRewarded</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 보상 여부</p></td>
@@ -1553,7 +1598,7 @@ Content-Length: 681
 <h4 id="_httprequest_11"><a class="link" href="#_httprequest_11">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/comment/1?_csrf=9jo1MXYbM9Y7AFTRyQucJJbWLM6j4zlUHsO2HyybPAiPKfwQxVtRU056UOcWMWfm8CaoR6awAayS0gt5L_TQKh2sDTC9TM9y HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/comment/1?_csrf=7Fs3RrALoHeOtc-aMp6HLZ0lkEQ2T0p1AS35trxoNqMGdQROj2gHc4JumESj16qrULOzTKVBvXwAeylYMB_PhI0MAJZkFGd3 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 43
 Host: api.tomorrow.com
@@ -1637,7 +1682,7 @@ Content-Length: 43
 <h4 id="_httprequest_12"><a class="link" href="#_httprequest_12">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/comment/1/delete HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/comment/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 25
 Host: api.tomorrow.com
@@ -2084,6 +2129,100 @@ Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mypage_조회_api"><a class="link" href="#_mypage_조회_api">MyPage 조회 API</a></h3>
+<div class="sect3">
+<h4 id="_httprequest_19"><a class="link" href="#_httprequest_19">HttpRequest</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/0 HTTP/1.1
+Host: api.tomorrow.com</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. /api/myPage/{userId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MyPage 정보를 가져올 사용자 Unique ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_httpresponse_19"><a class="link" href="#_httpresponse_19">HttpResponse</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+Content-Length: 92
+
+{
+  "email" : "test@naver.com",
+  "name" : "kwon",
+  "userPoint" : 200,
+  "userAnswer" : 2
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userPoint</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 현재 포인트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userAnswer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 채택된 답변 개수</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

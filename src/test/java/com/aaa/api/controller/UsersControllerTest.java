@@ -3,24 +3,24 @@ package com.aaa.api.controller;
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.controller.dto.request.CreateUsersRequest;
+import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import com.aaa.api.service.dto.response.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.aaa.api.domain.Users;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class UsersControllerTest extends ControllerTestSupport {
-
-
 
     @Test
     @WithMockUser
@@ -193,6 +193,39 @@ class UsersControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.errorMessage").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validation.name").value("이름을 입력해주세요."))
                 .andDo(print());
+    }
+
+
+    @Test
+    @CustomMockUser
+    @DisplayName("myPage(): myPage 조회 요청에 성공해 http Status 200을 응답해야한다. ")
+    void test8() throws Exception {
+        //given
+        Users user = Users.builder()
+                .email("test@naver.com")
+                .password("1234")
+                .name("kwon")
+                .point(200)
+                .userLevel(UserLevel.Beginner)
+                .build();
+
+
+        UserInfo response = UserInfo.builder()
+                .entity(user)
+                .userAnswer(2)
+                .build();
+
+        given(usersService.getUsersInfo(anyLong())).willReturn(response);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/myPage/{userId}", anyLong())
+                .with(csrf().asHeader())
+        );
+        //then
+        result.andExpect(status().isOk())
+                .andDo(print());
+
+        verify(usersService, times(1)).getUsersInfo(anyLong());
     }
 
 

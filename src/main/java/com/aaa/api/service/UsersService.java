@@ -7,12 +7,14 @@ import com.aaa.api.exception.*;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import com.aaa.api.service.dto.response.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,6 +63,15 @@ public class UsersService {
         }
     }
 
+    public UserInfo getUsersInfo(Long userId) {
+        Users users = usersRepository.findById(userId).orElseThrow(UserNotFound::new);
+        List<Comment> commentsByUser = commentRepository.findByUserId(users.getId());
+
+        return UserInfo.builder()
+                .entity(users)
+                .userAnswer(commentsByUser.size())
+                .build();
+    }
 
     private void duplicationEmailValidation(final CreateUsersServiceRequest serviceRequest) {
         Optional<Users> duplicateEmail

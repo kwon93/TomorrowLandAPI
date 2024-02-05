@@ -3,6 +3,7 @@ package com.aaa.api.controller;
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.service.UsersService;
+import com.aaa.api.service.dto.response.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,15 @@ public class UsersController {
                                          ){
         usersService.reward(userPrincipal.getUserId(), rewardUserId, commentId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/myPage/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<UserInfo> myPage(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
+                                    @PathVariable("userId") final Long userId
+    ){
+        UserInfo myPageInfo = usersService.getUsersInfo(userId);
+        return ResponseEntity.ok(myPageInfo);
     }
 
 }

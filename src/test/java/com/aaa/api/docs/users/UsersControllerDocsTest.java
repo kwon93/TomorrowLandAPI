@@ -1,10 +1,14 @@
 package com.aaa.api.docs.users;
 
 import com.aaa.api.config.CustomMockUser;
+import com.aaa.api.config.RestDocMockUser;
 import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.docs.RestDocsSupport;
+import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import com.aaa.api.service.dto.response.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -17,13 +21,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,5 +98,49 @@ public class UsersControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("commentId").description("해당 댓글 번호")
                         )
                         ));
+    }
+
+    @Test
+    @RestDocMockUser
+    @DisplayName("RestDocs: MyPage 조회 요청 API")
+    void test8() throws Exception {
+        //given
+        Users user = Users.builder()
+                .email("test@naver.com")
+                .password("1234")
+                .name("kwon")
+                .point(200)
+                .userLevel(UserLevel.Beginner)
+                .build();
+
+
+        UserInfo response = UserInfo.builder()
+                .entity(user)
+                .userAnswer(2)
+                .build();
+
+        given(usersService.getUsersInfo(anyLong())).willReturn(response);
+
+        // when
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/api/myPage/{userId}", anyLong())
+                .with(csrf().asHeader())
+        );
+        //then
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentation.document("users-mypage",
+                        preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userId").description("MyPage 정보를 가져올 사용자 Unique ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
+                                fieldWithPath("userPoint").type(JsonFieldType.NUMBER).description("사용자의 현재 포인트"),
+                                fieldWithPath("userAnswer").type(JsonFieldType.NUMBER).description("사용자의 채택된 답변 개수")
+                        )
+                ));
+
     }
 }

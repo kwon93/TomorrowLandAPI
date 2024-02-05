@@ -12,12 +12,14 @@ import com.aaa.api.exception.DuplicateReward;
 import com.aaa.api.exception.InvalidReward;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+import com.aaa.api.service.dto.response.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -147,6 +149,32 @@ class UsersServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> {
             usersService.reward(questionUser.getId(), questionUser.getId(), comment.getId());
         }).isInstanceOf(InvalidReward.class);
+    }
+
+
+
+    @Test
+    @DisplayName("getUsersInfo(): 사용자의 정보를 가져오는데에 성공한다.")
+    void test6() {
+        //given
+        Users userInTest = createUserInTest();
+
+        List<Comment> comments = LongStream.range(0, 3).mapToObj(i ->
+                Comment.builder()
+                        .users(userInTest)
+                        .content("test" + i)
+                        .isRewarded(IsRewarded.True)
+                        .build()
+        ).toList();
+        commentRepository.saveAll(comments);
+
+        // when
+        UserInfo usersInfo = usersService.getUsersInfo(userInTest.getId());
+
+        //then
+        assertThat(usersInfo.getEmail()).isEqualTo(userInTest.getEmail());
+        assertThat(usersInfo.getUserAnswer()).isEqualTo(3);
+
     }
 
 }

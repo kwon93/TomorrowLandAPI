@@ -7,4 +7,5 @@ import java.util.List;
 public interface CommentRepositoryCustom {
 
     List<Comment> getCommentListByQueryDSL(long postsId);
+    List<Comment> findByUserId(long userId);
 }

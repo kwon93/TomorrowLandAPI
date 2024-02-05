@@ -89,7 +89,6 @@ public abstract class IntegrationTestSupport {
                 .build();
 
         usersRepository.save(users);
-
         return users;
     }
     protected Users createUserInTest(Integer point, String email){
