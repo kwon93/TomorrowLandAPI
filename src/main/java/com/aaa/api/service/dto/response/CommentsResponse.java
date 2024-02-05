@@ -17,6 +17,8 @@ public class CommentsResponse {
     private long id;
     private String content;
     private String userName;
+    private String userEmail;
+    private long userId;
     private IsRewarded isRewarded;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
@@ -30,6 +32,8 @@ public class CommentsResponse {
         this.modDate = entity.getModDate();
         this.isRewarded = entity.getIsRewarded();
         this.userName = entity.getUsername();
+        this.userId = entity.getUsersId();
+        this.userEmail = entity.getUserEmail();
         this.modifiable = modifiable;
     }
 

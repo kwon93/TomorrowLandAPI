@@ -52,4 +52,9 @@ public class Comment extends BaseEntity {
     public String  getUsername(){
         return this.users.getName();
     }
+
+    public String getUserEmail(){
+        return this.users.getEmail();
+    }
+
 }

@@ -31,9 +31,9 @@ public class DummyInitializer {
     public void userInit(){
          dummyUser = Users.builder()
                 .id(1)
-                .email("dummy@naver.com")
+                .email("dummy@test.com")
                 .password(passwordEncoder.encode("abc123"))
-                .name("kwon")
+                .name("dummy")
                 .role(Role.USER)
                 .point(200)
                 .build();

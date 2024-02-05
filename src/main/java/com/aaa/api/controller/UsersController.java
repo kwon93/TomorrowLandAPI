@@ -26,10 +26,11 @@ public class UsersController {
     }
 
     @PatchMapping("reward/{rewardUserId}/posts/{postsId}/comment/{commentId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'PATCH')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
     public ResponseEntity<?> rewardPoint(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                          @PathVariable("rewardUserId") final Long rewardUserId,
-                                         @PathVariable("commentId") final Long commentId
+                                         @PathVariable("commentId") final Long commentId,
+                                         @PathVariable("postsId") final Long postsId
                                          ){
         usersService.reward(userPrincipal.getUserId(), rewardUserId, commentId);
         return ResponseEntity.noContent().build();

@@ -8,6 +8,7 @@ import com.aaa.api.domain.enumType.IsRewarded;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.exception.DuplicateEmail;
+import com.aaa.api.exception.DuplicateReward;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +108,29 @@ class UsersServiceTest extends IntegrationTestSupport {
                 .extracting("point","userLevel")
                 .containsExactlyInAnyOrder(201,UserLevel.Intermediate);
         assertThat(comment.getIsRewarded()).isEqualTo(IsRewarded.True);
+    }
+
+
+    @Test
+    @DisplayName("reward(): 이미 보상처리가 된 댓글에 중복 보상 요청시 DuplicateRewardException 발생.")
+    void test4() {
+        //given
+        Users questionUser = createUserInTest(200, "question@test.com");
+        Users answerUser = createUserInTest(200,"answer@test.com");
+        Posts postInTest = createPostInTest(questionUser);
+        Comment commentInTest = Comment.builder()
+                .posts(postInTest)
+                .isRewarded(IsRewarded.False)
+                .build();
+        Comment comment = commentRepository.save(commentInTest);
+        // when
+        usersService.reward(questionUser.getId(), answerUser.getId(), comment.getId());
+        assertThatThrownBy(() -> {
+            usersService.reward(questionUser.getId(), answerUser.getId(), comment.getId());
+        }).isInstanceOf(DuplicateReward.class)
+                .hasMessage("중복 보상 방지 오류.");
+
+
     }
 
 

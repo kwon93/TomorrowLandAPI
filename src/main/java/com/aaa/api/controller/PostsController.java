@@ -50,7 +50,6 @@ public class PostsController {
 
     @PatchMapping("posts/{postsId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<PostsResponse> updatePosts(@RequestBody final UpdatePostsRequest request,
                                      @PathVariable("postsId") final Long postsId){
         postsService.update(request.toServiceDto(postsId));
