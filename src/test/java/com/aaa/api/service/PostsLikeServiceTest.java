@@ -24,8 +24,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     @DisplayName("increase(): 좋아요 요청에 성공한 뒤 사용자와 해당 게시글을 반환한다.")
     void test1() {
         //given
-        Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when
         likeService.increase(postInTest.getId(), userInTest.getId());
 
@@ -43,8 +43,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     @DisplayName("increase(): 좋아요 요청 후 게시물의 likeCount가 증가되있어야한다.")
     void test2() {
         //given
-        Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when
         likeService.increase(postInTest.getId(), userInTest.getId());
 
@@ -59,7 +59,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     void test3() {
         //given
         final long invalidUserId = 999L;
-        Posts postInTest = createPostInTest();
+        Posts postInTest = createPostInTest(createUserInTest());
         // when
         assertThatThrownBy(()-> likeService.increase(postInTest.getId() ,invalidUserId))
                 .isInstanceOf(UserNotFound.class)
@@ -71,8 +71,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     @DisplayName("decrease(): 좋아요 취소 요청으로 Posts likeCount가 0이여야한다.")
     void test4() {
         //given
-        Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when
         likeService.increase(postInTest.getId(), userInTest.getId());
         likeService.decrease(postInTest.getId(), userInTest.getId());
@@ -87,8 +87,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     @DisplayName("increase(): 이미 좋아요한 게시물일 경우 DuplicateLikeException을 반환한다.")
     void test5() {
         //given
-        Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when
         likeService.increase(postInTest.getId(), userInTest.getId());
 
@@ -101,8 +101,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
     @DisplayName("decrease(): 좋아요는 0이하로 내려 갈 수 없다.")
     void test6() {
         //given
-        Posts postInTest = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when then
         assertThatThrownBy(()-> likeService.decrease(postInTest.getId(), userInTest.getId()))
                 .isInstanceOf(NegativeScoreException.class)

@@ -164,7 +164,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .build();
 
         // when
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/comment/{commentId}/delete", comment.getId())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/comment/{commentId}/delete", comment.getId())
                         .with(csrf().asHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

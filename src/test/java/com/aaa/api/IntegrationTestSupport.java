@@ -72,10 +72,10 @@ public abstract class IntegrationTestSupport {
     protected String secretKey;
     protected SecretKey key;
 
-    @AfterEach
+    @BeforeEach
     protected void tearDown() {
-        commentRepository.deleteAllInBatch();
         likeRepository.deleteAllInBatch();
+        commentRepository.deleteAllInBatch();
         postsRepository.deleteAllInBatch();
         usersRepository.deleteAllInBatch();
     }
@@ -92,9 +92,9 @@ public abstract class IntegrationTestSupport {
 
         return users;
     }
-    protected Users createUserInTest(Integer point){
+    protected Users createUserInTest(Integer point, String email){
         Users users = Users.builder()
-                .email("kwon93@naver.com")
+                .email(email)
                 .password(passwordEncoder.encode("kdh1234"))
                 .name("kwon")
                 .point(point)
@@ -107,18 +107,7 @@ public abstract class IntegrationTestSupport {
     }
 
 
-    protected Posts createPostInTest() {
-        Users users = Users.builder()
-                .id(99L)
-                .email("test@naver.com")
-                .password(passwordEncoder.encode("kdh1234"))
-                .name("kwon")
-                .point(200)
-                .role(Role.ADMIN)
-                .build();
-
-        usersRepository.save(users);
-
+    protected Posts createPostInTest(Users users) {
         Posts posts = Posts.builder()
                 .user(users)
                 .title("제목")

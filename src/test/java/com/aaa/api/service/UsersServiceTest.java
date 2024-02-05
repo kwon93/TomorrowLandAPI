@@ -83,9 +83,9 @@ class UsersServiceTest extends IntegrationTestSupport {
     @DisplayName("reward(): 질문자와 답변자의 점수 주고받기에 성공해야한다.")
     void test3() {
         //given
-        Users questionUser = createUserInTest(220);
-        Users answerUser = createUserInTest(151);
-        Posts postInTest = createPostInTest();
+        Users questionUser = createUserInTest(220, "question@test.com");
+        Users answerUser = createUserInTest(151,"answer@test.com");
+        Posts postInTest = createPostInTest(questionUser);
         Comment commentInTest = Comment.builder()
                 .posts(postInTest)
                 .isRewarded(IsRewarded.False)

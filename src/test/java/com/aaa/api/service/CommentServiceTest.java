@@ -33,7 +33,7 @@ class CommentServiceTest extends IntegrationTestSupport {
         final String content = "댓글 내용";
 
         Users userInTest = createUserInTest();
-        Posts postInTest = createPostInTest();
+        Posts postInTest = createPostInTest(userInTest);
 
         CreateCommentServiceRequest request = CreateCommentServiceRequest.builder()
                 .usersId(userInTest.getId())
@@ -120,21 +120,19 @@ class CommentServiceTest extends IntegrationTestSupport {
     @DisplayName("getAllNoPrincipal(): 비로그인시 해당 게시물의 댓글들을 작성 시간 오름차순으로 가져온다.")
     void test7() {
         //given
-        final String name = "kwon";
-        final String content = "댓글 내용";
-        final String password = "123455";
-        final String invalidPassword = "invalid";
+        Users userInTest = createUserInTest();
 
-        Posts postInTest = createPostInTest();
+        Posts postInTest = createPostInTest(userInTest);
         LocalDateTime now = LocalDateTime.now();
 
         List<Comment> comments = IntStream.range(0, 3).mapToObj(i ->
                 Comment.builder()
-                        .users(createUserInTest())
+                        .users(userInTest)
                         .posts(postInTest)
                         .content("댓글" + i)
                         .regDate(now)
-                        .build()).toList();
+                        .build())
+                .toList();
 
         commentRepository.saveAll(comments);
 
@@ -153,11 +151,8 @@ class CommentServiceTest extends IntegrationTestSupport {
     @DisplayName("getAllNoPrincipal(): 로그인시 해당 게시물의 댓글들 가져온다.")
     void test8() {
         //given
-        final String name = "kwon";
-        final String content = "댓글 내용";
-        final String password = "123455";
-        final String invalidPassword = "invalid";
-        final Posts postInTest = createPostInTest();
+        final Users userInTest = createUserInTest();
+        final Posts postInTest = createPostInTest(userInTest);
         final LocalDateTime now = LocalDateTime.now();
         final Users modifiableUser = Users.builder()
                 .id(99L)
@@ -169,11 +164,12 @@ class CommentServiceTest extends IntegrationTestSupport {
 
         List<Comment> comments = IntStream.range(0, 3).mapToObj(i ->
                 Comment.builder()
-                        .users(createUserInTest())
+                        .users(userInTest)
                         .posts(postInTest)
                         .content("댓글" + i)
                         .regDate(now)
-                        .build()).toList();
+                        .build())
+                .toList();
         commentRepository.saveAll(comments);
 
         Comment modifiableComment = Comment.builder()

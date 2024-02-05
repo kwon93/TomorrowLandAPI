@@ -80,7 +80,8 @@ class PostsServiceTest extends IntegrationTestSupport {
     @DisplayName("getOne(): 단건 조회에 성공해야한다.")
     void test3() throws Exception {
         //given
-        Posts savedPosts = createPostInTest();
+
+        Posts savedPosts = createPostInTest(createUserInTest());
 
         // when
         postsService.getOne(savedPosts.getId());
@@ -115,7 +116,7 @@ class PostsServiceTest extends IntegrationTestSupport {
         final String updateContent = "complete";
         final PostsCategory updateCategory = PostsCategory.MEDIA;
 
-        Posts postInTest = createPostInTest();
+        Posts postInTest = createPostInTest(createUserInTest());
 
         UpdatePostsServiceRequest request = UpdatePostsServiceRequest.builder()
                 .postsId(postInTest.getId())
@@ -142,21 +143,22 @@ class PostsServiceTest extends IntegrationTestSupport {
     @DisplayName("delete(): 게시물 삭제에 성공해야한다.")
     void test6() throws Exception {
         //given
-        Posts postInTest = createPostInTest();
+        Users userInTest = createUserInTest();
+        Posts postInTest = createPostInTest(userInTest);
         // when
         postsService.delete(postInTest.getId());
         //then
         List<Posts> postsList = postsRepository.findAll();
 
-        assertThat(postsList.size()).isEqualTo(30);
+        assertThat(postsList.size()).isEqualTo(0);
 
     }
     @Test
     @DisplayName("getOne(): 좋아요가 눌린 글이 조회되야 한다.")
     void test7() throws Exception {
         //given
-        Posts savedPosts = createPostInTest();
         Users userInTest = createUserInTest();
+        Posts savedPosts = createPostInTest(userInTest);
         likeService.increase(savedPosts.getId(), userInTest.getId());
 
         // when

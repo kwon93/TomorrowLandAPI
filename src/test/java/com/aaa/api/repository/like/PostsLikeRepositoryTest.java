@@ -21,8 +21,8 @@ class PostsLikeRepositoryTest extends IntegrationTestSupport {
     @DisplayName("deleteLikeByUserAndPosts(): 사용자와 게시물을 참조해 좋아요를 삭제해야한다.")
     void test1() {
         //given
-        Posts posts = createPostInTest();
         Users users = createUserInTest();
+        Posts posts = createPostInTest(users);
         PostsLike like = PostsLike.builder()
                 .posts(posts)
                 .user(users)

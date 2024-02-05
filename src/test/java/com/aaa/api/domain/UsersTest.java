@@ -16,7 +16,7 @@ class UsersTest extends IntegrationTestSupport {
     @DisplayName("decreasePoint(): 사용자의 점수를 20점에서 20점 차감하는데에 성공한다.")
     void test1() {
         //given
-        Users userInTest = createUserInTest(20);
+        Users userInTest = createUserInTest(20, "decrease@test.com");
         // when
         userInTest.decreasePoint();
         //then
@@ -27,7 +27,7 @@ class UsersTest extends IntegrationTestSupport {
     @DisplayName("decreasePoint(): 사용자의 점수가 19점일때 20점 차감시 NotEnoughPointException이 발생한다.")
     void test2() {
         //given
-        Users userInTest = createUserInTest(19);
+        Users userInTest = createUserInTest(19, "decrease@test.com");
         // when then
         assertThatThrownBy(userInTest::decreasePoint)
                 .isInstanceOf(NotEnoughPoint.class)
