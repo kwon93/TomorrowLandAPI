@@ -60,6 +60,7 @@ public class AuthControllerDocsTest extends RestDocsSupport {
                         .header("Authorization", "Bearer")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(header().string("userId","0"))
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(document("auth-login",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
@@ -72,7 +73,11 @@ public class AuthControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("grantType").type(JsonFieldType.STRING).description("Token GrantType"),
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING).description("JWT AccessToken"),
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("JWT RefreshToken")
+                        ),
+                        responseHeaders(
+                                headerWithName("userId").description("사용자의 UniqueID")
                         )
+
                 ));
     }
 

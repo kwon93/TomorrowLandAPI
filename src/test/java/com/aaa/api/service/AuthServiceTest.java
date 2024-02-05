@@ -109,4 +109,22 @@ class AuthServiceTest extends IntegrationTestSupport {
 
         assertThat(claims.getSubject()).isEqualTo(userInTest.getEmail());
     }
+
+
+    @Test
+    @DisplayName("getUserId(): 사용자의 UniqueId를 가져오는데 성공한다.")
+    void test5() {
+        //given
+        Users userInTest = createUserInTest();
+        LoginServiceRequest request = LoginServiceRequest.builder()
+                .email(userInTest.getEmail())
+                .password(userInTest.getPassword())
+                .build();
+
+        // when
+        long userId = authService.getUserId(request);
+        //then
+        assertThat(userId).isEqualTo(userInTest.getId());
+
+    }
 }

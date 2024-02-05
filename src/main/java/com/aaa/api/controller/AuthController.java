@@ -35,11 +35,13 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<JwtToken> signIn(@RequestBody @Validated final LoginRequest loginRequest) {
         final JwtToken jwtToken = authService.login(loginRequest.toServiceDto());
+        final String userId = String.valueOf(authService.getUserId(loginRequest.toServiceDto()));
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         ResponseCookie refreshCookie = getRefreshCookie(jwtToken.getRefreshToken());
         httpHeaders.add(JWT_AUTH_HEADER, GRANT_TYPE + jwtToken.getAccessToken());
         httpHeaders.add(SET_COOKIE, refreshCookie.toString());
+        httpHeaders.add("userId",userId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(httpHeaders)

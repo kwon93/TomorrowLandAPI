@@ -45,6 +45,7 @@ class AuthControllerTest extends ControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(cookie().httpOnly("RefreshToken", true))
+                .andExpect(header().string("userId","0"))
                 .andDo(MockMvcResultHandlers.print());
 
         verify(authService, times(1))
