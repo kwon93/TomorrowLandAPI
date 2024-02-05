@@ -9,6 +9,7 @@ import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.exception.DuplicateEmail;
 import com.aaa.api.exception.DuplicateReward;
+import com.aaa.api.exception.InvalidReward;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -129,9 +130,23 @@ class UsersServiceTest extends IntegrationTestSupport {
             usersService.reward(questionUser.getId(), answerUser.getId(), comment.getId());
         }).isInstanceOf(DuplicateReward.class)
                 .hasMessage("중복 보상 방지 오류.");
-
-
     }
 
+    @Test
+    @DisplayName("reward(): 본인이 등록한 댓글에는 보상을 줄 수 없다.")
+    void test5() {
+        //given
+        Users questionUser = createUserInTest(200, "question@test.com");
+        Posts postInTest = createPostInTest(questionUser);
+        Comment commentInTest = Comment.builder()
+                .posts(postInTest)
+                .isRewarded(IsRewarded.False)
+                .build();
+        Comment comment = commentRepository.save(commentInTest);
+        // when
+        assertThatThrownBy(() -> {
+            usersService.reward(questionUser.getId(), questionUser.getId(), comment.getId());
+        }).isInstanceOf(InvalidReward.class);
+    }
 
 }

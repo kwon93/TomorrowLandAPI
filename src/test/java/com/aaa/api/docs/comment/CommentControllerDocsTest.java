@@ -164,7 +164,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .build();
 
         // when
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/comment/{commentId}/delete", comment.getId())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/comment/{commentId}", comment.getId())
                         .with(csrf().asHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -222,6 +222,8 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("commentResponse[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                                 fieldWithPath("commentResponse[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                                 fieldWithPath("commentResponse[].userName").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                                fieldWithPath("commentResponse[].userEmail").type(JsonFieldType.STRING).description("댓글 작성자 이메일"),
+                                fieldWithPath("commentResponse[].userId").type(JsonFieldType.NUMBER).description("댓글 작성자 번호"),
                                 fieldWithPath("commentResponse[].isRewarded").type(JsonFieldType.STRING).description("댓글 보상 여부"),
                                 fieldWithPath("commentResponse[].regDate").type(JsonFieldType.STRING).description("댓글 작성 날짜"),
                                 fieldWithPath("commentResponse[].modDate").type(JsonFieldType.STRING).description("댓글 수정 날짜"),

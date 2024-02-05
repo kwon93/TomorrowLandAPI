@@ -3,10 +3,7 @@ package com.aaa.api.service;
 import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.IsRewarded;
-import com.aaa.api.exception.CommentNotFound;
-import com.aaa.api.exception.DuplicateEmail;
-import com.aaa.api.exception.DuplicateReward;
-import com.aaa.api.exception.UserNotFound;
+import com.aaa.api.exception.*;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
@@ -42,9 +39,7 @@ public class UsersService {
     public void reward(Long questionUserId, Long rewardUserId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
-        if(comment.getIsRewarded().equals(IsRewarded.True)){
-            throw new DuplicateReward();
-        }
+        rewardValidator(questionUserId, rewardUserId, comment);
 
         final Users questionUser = usersRepository.findById(questionUserId)
                 .orElseThrow(UserNotFound::new);
@@ -55,6 +50,15 @@ public class UsersService {
         rewardUser.increasePoint();
 
         comment.updateRewardState();
+    }
+
+    private static void rewardValidator(Long questionUserId, Long rewardUserId, Comment comment) {
+        if(comment.getIsRewarded().equals(IsRewarded.True)){
+            throw new DuplicateReward();
+        }
+        if(questionUserId.equals(rewardUserId)){
+            throw new InvalidReward();
+        }
     }
 
 

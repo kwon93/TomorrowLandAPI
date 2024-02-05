@@ -195,7 +195,7 @@ class CommentControllerTest extends ControllerTestSupport {
 
 
         // when
-        mockMvc.perform(delete("/api/comment/{commentId}/delete", comment.getId())
+        mockMvc.perform(delete("/api/comment/{commentId}", comment.getId())
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -227,7 +227,7 @@ class CommentControllerTest extends ControllerTestSupport {
 
 
         // when
-        mockMvc.perform(delete("/api/comment/{commentId}/delete", comment.getId())
+        mockMvc.perform(delete("/api/comment/{commentId}", comment.getId())
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
