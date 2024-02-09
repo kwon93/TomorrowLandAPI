@@ -35,7 +35,7 @@ public class PostsController {
     }
 
     @GetMapping("posts")
-    public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(final PostSearch postSearch){
+    public ResponseEntity<PostsResult<PostsResponse>> getAllPosts(@ModelAttribute final PostSearch postSearch){
         final List<PostsResponse> responses = postsService.getPage(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();

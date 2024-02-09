@@ -3,10 +3,7 @@ package com.aaa.api.domain;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.exception.NegativeScoreException;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
