@@ -158,10 +158,11 @@ public class PostsControllerDocsTest extends RestDocsSupport {
         given(postsService.getPage(any(PostSearchForService.class))).willReturn(postsList);
 
         // when
-        mockMvc.perform(get("/api/posts?page=1&size=10")
+        mockMvc.perform(get("/api/posts?page=1&size=10&category=DEV")
                         .with(csrf().asHeader())
                         .param("page","1")
                         .param("size","10")
+                        .param("category","DEV")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -170,7 +171,9 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
-                                parameterWithName("size").description("한 페이지당 보여질 글 개수")
+                                parameterWithName("size").description("한 페이지당 보여질 글 개수"),
+                                parameterWithName("category").description("카테고리별 조회, null일 경우 전체 카테고리 조회됨.")
+
                         ),
                         responseFields(
                                 fieldWithPath("totalPosts").type(JsonFieldType.NUMBER).description("DB에 존재하는 모든 게시물 개수"),
