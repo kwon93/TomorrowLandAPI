@@ -2,6 +2,7 @@ package com.aaa.api.service;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
+import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.posts.PostsRepository;
@@ -39,8 +40,8 @@ public class PostsService {
          return postsRepository.getList(serviceDto.toRepository());
     }
 
-    public List<Posts> getAll(){
-        return postsRepository.findAll();
+    public List<Posts> getAll(PostsCategory category){
+        return postsRepository.getNoPagingLists(category);
     }
 
     @Transactional

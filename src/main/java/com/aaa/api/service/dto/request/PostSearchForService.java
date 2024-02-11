@@ -26,6 +26,7 @@ public class PostSearchForService {
                 .page(this.page)
                 .size(this.size)
                 .offset(this.offset)
+                .category(this.category)
                 .build();
     }
 }

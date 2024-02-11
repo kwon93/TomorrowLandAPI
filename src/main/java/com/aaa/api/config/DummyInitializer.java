@@ -42,17 +42,41 @@ public class DummyInitializer {
 
     @PostConstruct
     public void postInit(){
-        List<Posts> posts = LongStream.range(0, 30)
+        List<Posts> devPosts = LongStream.range(0, 10)
                 .mapToObj(i ->
                 Posts.builder()
                         .user(dummyUser)
-                        .title("DummyPosts " + i)
+                        .title("devPosts " + i)
                         .content("DummyContent " + i)
                         .postsCategory(PostsCategory.DEV)
                         .build()
         ).collect(Collectors.toList());
 
-        postsRepository.saveAll(posts);
+        postsRepository.saveAll(devPosts);
+
+        List<Posts> mediaPosts = LongStream.range(0, 10)
+                .mapToObj(i ->
+                        Posts.builder()
+                                .user(dummyUser)
+                                .title("mediaPosts " + i)
+                                .content("DummyContent " + i)
+                                .postsCategory(PostsCategory.MEDIA)
+                                .build()
+                ).collect(Collectors.toList());
+
+        postsRepository.saveAll(mediaPosts);
+
+        List<Posts> etcPosts = LongStream.range(0, 23)
+                .mapToObj(i ->
+                        Posts.builder()
+                                .user(dummyUser)
+                                .title("etcPosts " + i)
+                                .content("DummyContent " + i)
+                                .postsCategory(PostsCategory.ETC)
+                                .build()
+                ).collect(Collectors.toList());
+
+        postsRepository.saveAll(etcPosts);
     }
 
 }

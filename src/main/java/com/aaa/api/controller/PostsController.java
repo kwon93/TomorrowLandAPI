@@ -39,7 +39,7 @@ public class PostsController {
         final List<PostsResponse> responses = postsService.getPage(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
-        return ResponseEntity.ok(new PostsResult<>(responses, postsService.getAll()));
+        return ResponseEntity.ok(new PostsResult<>(responses, postsService.getAll(postSearch.getCategory())));
     }
 
     @GetMapping("posts/{postId}")

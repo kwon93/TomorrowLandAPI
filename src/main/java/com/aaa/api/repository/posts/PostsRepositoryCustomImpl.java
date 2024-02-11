@@ -26,6 +26,13 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
                 .fetch();
     }
 
+    @Override
+    public List<Posts> getNoPagingLists(PostsCategory category) {
+        return jpaQueryFactory.selectFrom(QPosts.posts)
+                .where(eqCategory(category))
+                .fetch();
+    }
+
     private BooleanExpression eqCategory(PostsCategory category){
         if (category == null){
             return null;
