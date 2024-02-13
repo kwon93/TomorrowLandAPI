@@ -11,9 +11,11 @@ import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
 import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import com.aaa.api.service.dto.response.PostsResponse;
+import com.aaa.api.service.image.S3ImageUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final UsersRepository usersRepository;
+    private final S3ImageUploader s3ImageUploader;
 
     @Transactional
     public PostsResponse create(final CreatePostsServiceRequest serviceRequest) {
@@ -65,6 +68,9 @@ public class PostsService {
     @Transactional
     public void delete(final Long id) {
         final Posts posts = findPostsById(id);
+        if (StringUtils.hasText(posts.getImagePath())){
+            s3ImageUploader.deleteImage(posts.getImagePath());
+        }
         postsRepository.delete(posts);
     }
 

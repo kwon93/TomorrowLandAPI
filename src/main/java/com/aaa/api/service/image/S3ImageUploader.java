@@ -3,6 +3,7 @@ package com.aaa.api.service.image;
 import com.aaa.api.service.dto.request.ImageInfo;
 import com.aaa.api.service.dto.response.ImageUrl;
 import com.aaa.api.service.dto.response.ImageResponse;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -55,6 +56,10 @@ public class S3ImageUploader {
         return ImageUrl.builder()
                 .imageUrl(url.toString())
                 .build();
+    }
+
+    public void deleteImage(String fileName) throws AmazonServiceException {
+        amazonS3.deleteObject(bucket, fileName);
     }
 
     private Date generateExpirationTime(){
