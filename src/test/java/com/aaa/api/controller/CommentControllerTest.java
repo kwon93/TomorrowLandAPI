@@ -237,38 +237,6 @@ class CommentControllerTest extends ControllerTestSupport {
 
     }
 
-    @Test
-    @WithMockUser(username = "kdh93@naver.com", password = "kdh1234", roles = "{ROLE_USER}")
-    @DisplayName("getAllComment(): 비로그인시의 댓글 전체 조회 요청에 성공해 http status 200을 응답한다.")
-    void test9() throws Exception{
-        //given
-        Posts post = Posts.builder()
-                .id(1L)
-                .content("글 내용")
-                .title("글 제목")
-                .postsCategory(PostsCategory.DEV)
-                .build();
-        List<Comment> comments = LongStream.range(0, 3).mapToObj(i ->
-                Comment.builder()
-                        .id(i)
-                        .users(Users.builder().id(i).email("test@naver.com").name("kwon").build())
-                        .posts(post)
-                        .content("댓글" + i)
-                        .build()).toList();
-
-        List<CommentsResponse> responses = comments.stream()
-                .map(comment -> new CommentsResponse(comment, false)).toList();
-        given(commentService.getAllNoPrincipal(any(GetAllCommentsServiceDto.class))).willReturn(responses);
-
-        // when
-        ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
-
-        //then
-        result.andExpect(status().isOk())
-                .andDo(print());
-
-        verify(commentService, times(1)).getAllNoPrincipal(any(GetAllCommentsServiceDto.class));
-    }
 
     @Test
     @CustomMockUser
@@ -290,11 +258,10 @@ class CommentControllerTest extends ControllerTestSupport {
                         .build()).toList();
 
         List<CommentsResponse> responses = comments.stream()
-                .map(comment -> new CommentsResponse(comment, false)).toList();
+                .map(CommentsResponse::new).toList();
 
-        responses.forEach(response -> {response.setModifiable(true);});
 
-        given(commentService.getAllWithPrincipal(any(GetAllCommentsServiceDto.class))).willReturn(responses);
+        given(commentService.getAllComments(any(GetAllCommentsServiceDto.class))).willReturn(responses);
 
         // when
         ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
@@ -303,7 +270,7 @@ class CommentControllerTest extends ControllerTestSupport {
         result.andExpect(status().isOk())
                 .andDo(print());
 
-        verify(commentService, times(1)).getAllWithPrincipal(any(GetAllCommentsServiceDto.class));
+        verify(commentService, times(1)).getAllComments(any(GetAllCommentsServiceDto.class));
     }
 
     @Test
@@ -317,7 +284,7 @@ class CommentControllerTest extends ControllerTestSupport {
                         .content("댓글" + i)
                         .build()).toList();
 
-        doThrow(new PostNotfound()).when(commentService).getAllNoPrincipal(any(GetAllCommentsServiceDto.class));
+        doThrow(new PostNotfound()).when(commentService).getAllComments(any(GetAllCommentsServiceDto.class));
 
         // when
         ResultActions result = mockMvc.perform(get("/api/posts/{postsId}/comment",999L).with(csrf().asHeader()));

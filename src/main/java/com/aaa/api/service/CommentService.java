@@ -5,7 +5,6 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.repository.UsersRepository;
-import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.response.CommentsResponse;
 import com.aaa.api.service.dto.response.PostCommentResponse;
@@ -60,27 +59,14 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentsResponse> getAllWithPrincipal(GetAllCommentsServiceDto serviceRequest) {
+    public List<CommentsResponse> getAllComments(GetAllCommentsServiceDto serviceRequest) {
         postsRepository.findById(serviceRequest.getPostsId()).orElseThrow(PostNotfound::new);
-        Users commentedUser = usersRepository.findById(serviceRequest.getUserId()).orElseThrow(UserNotFound::new);
 
-        List<CommentsResponse> responses = commentRepository.getCommentListByQueryDSL(serviceRequest.getPostsId()).stream()
-                .map(comment -> new CommentsResponse(comment, false))
+        return commentRepository.getCommentListByQueryDSL(serviceRequest.getPostsId()).stream()
+                .map(CommentsResponse::new)
                 .toList();
-
-        responses.forEach(response ->
-                response.setModifiable(response.getUserName().equals(commentedUser.getName()))
-        );
-        return responses;
     }
 
-    @Transactional(readOnly = true)
-    public List<CommentsResponse> getAllNoPrincipal(GetAllCommentsServiceDto serviceRequest){
-            postsRepository.findById(serviceRequest.getPostsId()).orElseThrow(PostNotfound::new);
-            return commentRepository.getCommentListByQueryDSL(serviceRequest.getPostsId()).stream()
-                    .map(comment -> new CommentsResponse(comment,false))
-                    .toList();
-    }
 
     private Comment findCommentById(final Long commentId) {
         return commentRepository.findById(commentId).

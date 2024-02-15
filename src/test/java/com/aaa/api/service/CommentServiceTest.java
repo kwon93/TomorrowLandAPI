@@ -5,10 +5,8 @@ import com.aaa.api.domain.Comment;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.CommentNotFound;
-import com.aaa.api.exception.InvalidCommentPassword;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
-import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import com.aaa.api.service.dto.response.CommentsResponse;
@@ -137,10 +135,9 @@ class CommentServiceTest extends IntegrationTestSupport {
         commentRepository.saveAll(comments);
 
         // when
-        List<CommentsResponse> commentsByTest = commentService.getAllNoPrincipal(new GetAllCommentsServiceDto(postInTest.getId(), null));
+        List<CommentsResponse> commentsByTest = commentService.getAllComments(new GetAllCommentsServiceDto(postInTest.getId()));
         //then
         assertThat(commentsByTest.size()).isEqualTo(3);
-        assertThat(commentsByTest.get(0).isModifiable()).isFalse();
         assertThat(comments.get(0))
                 .extracting("content","users")
                 .contains("댓글0",comments.get(0).getUsers());
@@ -181,11 +178,9 @@ class CommentServiceTest extends IntegrationTestSupport {
         commentRepository.save(modifiableComment);
 
         // when
-        List<CommentsResponse> commentsByTest = commentService.getAllWithPrincipal(new GetAllCommentsServiceDto(postInTest.getId(), modifiableUser.getId()));
+        List<CommentsResponse> commentsByTest = commentService.getAllComments(new GetAllCommentsServiceDto(postInTest.getId()));
         //then
         assertThat(commentsByTest.size()).isEqualTo(4);
-        assertThat(commentsByTest.get(0).isModifiable()).isFalse();
-        assertThat(commentsByTest.get(3).isModifiable()).isTrue();
         assertThat(commentsByTest.get(3).getContent()).isEqualTo("modifiable");
     }
 

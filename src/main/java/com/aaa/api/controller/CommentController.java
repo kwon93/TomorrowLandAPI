@@ -1,7 +1,6 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.controller.dto.request.DeleteCommentRequest;
 import com.aaa.api.controller.dto.request.CreateCommentRequest;
 import com.aaa.api.controller.dto.request.UpdateCommentRequest;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
@@ -19,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -39,16 +37,10 @@ public class CommentController {
     }
 
     @GetMapping("/posts/{postsId}/comment")
-    public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
-                                                                         @PathVariable("postsId") final Long postsId) {
-        if (Optional.ofNullable(userPrincipal).isPresent()){
-            Long userId = userPrincipal.getUserId();
-            List<CommentsResponse> responses = commentService.getAllWithPrincipal(new GetAllCommentsServiceDto(postsId, userId));
-            return ResponseEntity.ok(new CommentResult<CommentsResponse>(responses));
-        }
-
-        List<CommentsResponse> responses = commentService.getAllNoPrincipal(new GetAllCommentsServiceDto(postsId, null));
-        return ResponseEntity.ok(new CommentResult<CommentsResponse>(responses));
+    public ResponseEntity<CommentResult<CommentsResponse>> getAllComment(@PathVariable("postsId") final Long postsId) {
+            List<CommentsResponse> responses =
+                    commentService.getAllComments(new GetAllCommentsServiceDto(postsId));
+        return ResponseEntity.ok(new CommentResult<>(responses));
     }
 
 

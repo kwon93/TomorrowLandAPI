@@ -22,10 +22,8 @@ public class CommentsResponse {
     private IsRewarded isRewarded;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
-    @Setter
-    private boolean modifiable;
 
-    public CommentsResponse(final Comment entity, final boolean modifiable) {
+    public CommentsResponse(final Comment entity) {
         this.id = entity.getId();
         this.content = entity.getContent();
         this.regDate = entity.getRegDate();
@@ -34,7 +32,6 @@ public class CommentsResponse {
         this.userName = entity.getUsername();
         this.userId = entity.getUsersId();
         this.userEmail = entity.getUserEmail();
-        this.modifiable = modifiable;
     }
 
 }

@@ -202,8 +202,8 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                         .build()).toList();
 
         List<CommentsResponse> responses = comments.stream()
-                .map(comment -> new CommentsResponse(comment, false)).toList();
-        given(commentService.getAllNoPrincipal(any(GetAllCommentsServiceDto.class))).willReturn(responses);
+                .map(CommentsResponse::new).toList();
+        given(commentService.getAllComments(any(GetAllCommentsServiceDto.class))).willReturn(responses);
 
         // when
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/api/posts/{postsId}/comment", post.getId()).with(csrf()));
@@ -226,8 +226,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("commentResponse[].userId").type(JsonFieldType.NUMBER).description("댓글 작성자 번호"),
                                 fieldWithPath("commentResponse[].isRewarded").type(JsonFieldType.STRING).description("댓글 보상 여부"),
                                 fieldWithPath("commentResponse[].regDate").type(JsonFieldType.STRING).description("댓글 작성 날짜"),
-                                fieldWithPath("commentResponse[].modDate").type(JsonFieldType.STRING).description("댓글 수정 날짜"),
-                                fieldWithPath("commentResponse[].modifiable").type(JsonFieldType.BOOLEAN).description("댓글 수정, 삭제 가능 여부 true시 화면에 수정,삭제 버튼 노출")
+                                fieldWithPath("commentResponse[].modDate").type(JsonFieldType.STRING).description("댓글 수정 날짜")
                         )
                         ));
 

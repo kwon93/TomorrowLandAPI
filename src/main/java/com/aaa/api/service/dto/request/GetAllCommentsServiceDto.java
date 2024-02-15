@@ -10,11 +10,9 @@ import java.util.Optional;
 public class GetAllCommentsServiceDto {
 
     private final Long postsId;
-    private final Long userId;
 
     @Builder
-    public GetAllCommentsServiceDto(final Long postsId, final Long userId) {
+    public GetAllCommentsServiceDto(final Long postsId) {
             this.postsId = postsId;
-            this.userId = userId;
     }
 }
