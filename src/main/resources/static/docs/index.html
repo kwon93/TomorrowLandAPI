@@ -579,8 +579,8 @@ Content-Length: 308
   "imagePath" : "image/test.png",
   "userName" : "kwon",
   "userEmail" : "test@test.com",
-  "regDate" : "2024-02-06T03:34:46.695045",
-  "modDate" : "2024-02-06T03:34:46.695052",
+  "regDate" : "2024-02-17T17:49:34.052896",
+  "modDate" : "2024-02-17T17:49:34.052907",
   "viewCount" : 0,
   "likeCount" : 0
 }</code></pre>
@@ -665,7 +665,7 @@ Content-Length: 308
 <h4 id="_httprequest_2"><a class="link" href="#_httprequest_2">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts?page=1&amp;size=10 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts?page=1&amp;size=10&amp;category=DEV HTTP/1.1
 Host: api.tomorrow.com</code></pre>
 </div>
 </div>
@@ -688,6 +688,10 @@ Host: api.tomorrow.com</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">한 페이지당 보여질 글 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리별 조회, null일 경우 전체 카테고리 조회됨.</p></td>
 </tr>
 </tbody>
 </table>
@@ -719,8 +723,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711939",
-    "modDate" : "2024-02-06T03:34:46.711946",
+    "regDate" : "2024-02-17T17:49:34.069565",
+    "modDate" : "2024-02-17T17:49:34.069576",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -731,8 +735,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711951",
-    "modDate" : "2024-02-06T03:34:46.711952",
+    "regDate" : "2024-02-17T17:49:34.069583",
+    "modDate" : "2024-02-17T17:49:34.069584",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -743,8 +747,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711955",
-    "modDate" : "2024-02-06T03:34:46.711956",
+    "regDate" : "2024-02-17T17:49:34.069588",
+    "modDate" : "2024-02-17T17:49:34.069589",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -755,8 +759,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711958",
-    "modDate" : "2024-02-06T03:34:46.711959",
+    "regDate" : "2024-02-17T17:49:34.069598",
+    "modDate" : "2024-02-17T17:49:34.069599",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -767,8 +771,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711962",
-    "modDate" : "2024-02-06T03:34:46.711963",
+    "regDate" : "2024-02-17T17:49:34.069602",
+    "modDate" : "2024-02-17T17:49:34.069604",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -779,8 +783,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711966",
-    "modDate" : "2024-02-06T03:34:46.711967",
+    "regDate" : "2024-02-17T17:49:34.069608",
+    "modDate" : "2024-02-17T17:49:34.06961",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -791,8 +795,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.71197",
-    "modDate" : "2024-02-06T03:34:46.71197",
+    "regDate" : "2024-02-17T17:49:34.069614",
+    "modDate" : "2024-02-17T17:49:34.069615",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -803,8 +807,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711974",
-    "modDate" : "2024-02-06T03:34:46.711975",
+    "regDate" : "2024-02-17T17:49:34.069618",
+    "modDate" : "2024-02-17T17:49:34.06962",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -815,8 +819,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711977",
-    "modDate" : "2024-02-06T03:34:46.711978",
+    "regDate" : "2024-02-17T17:49:34.069623",
+    "modDate" : "2024-02-17T17:49:34.069624",
     "viewCount" : 0,
     "likeCount" : 0
   }, {
@@ -827,8 +831,8 @@ Content-Length: 3318
     "imagePath" : "image/test.png",
     "userName" : "kwon",
     "userEmail" : "test@naver.com",
-    "regDate" : "2024-02-06T03:34:46.711981",
-    "modDate" : "2024-02-06T03:34:46.711986",
+    "regDate" : "2024-02-17T17:49:34.069627",
+    "modDate" : "2024-02-17T17:49:34.069628",
     "viewCount" : 0,
     "likeCount" : 0
   } ],
@@ -956,8 +960,8 @@ Content-Length: 308
   "imagePath" : "image/test.png",
   "userName" : "kwon",
   "userEmail" : "test@test.com",
-  "regDate" : "2024-02-06T03:34:46.732496",
-  "modDate" : "2024-02-06T03:34:46.732508",
+  "regDate" : "2024-02-17T17:49:34.091022",
+  "modDate" : "2024-02-17T17:49:34.091033",
   "viewCount" : 0,
   "likeCount" : 0
 }</code></pre>
@@ -1194,7 +1198,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Authorization: Bearer accessToken
-Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Mon, 19 Feb 2024 18:34:46 GMT; Secure; HttpOnly; SameSite=None
+Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Sat, 2 Mar 2024 08:49:33 GMT; Secure; HttpOnly; SameSite=None
 userId: 0
 Content-Type: application/json
 X-Content-Type-Options: nosniff
@@ -1267,7 +1271,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Authorization: Bearer null
-Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Mon, 19 Feb 2024 18:34:46 GMT; Secure; HttpOnly; SameSite=None
+Set-Cookie: RefreshToken=refreshToken; Path=/; Max-Age=1209600; Expires=Sat, 2 Mar 2024 08:49:33 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: text/plain;charset=UTF-8
 Content-Length: 7
 X-Content-Type-Options: nosniff
@@ -1447,7 +1451,7 @@ Content-Length: 33
 <h4 id="_httprequest_10"><a class="link" href="#_httprequest_10">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts/1/comment?_csrf=h2pohuz6mnROWjyw_WpAjnFdMtjvnoTrlTyz7_muxVIzUbSY5FtettrNqRFjb1iDmUd0thI7H-DZr73Gog6H2sDNozNXYNH6 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/posts/1/comment?_csrf=U0BJM7GppAYv6K7Bc0UD1qB-GBtEOdfuo041TEXdL2xrAAt9NXQqB9fNlGUC3JzwF2g378QbNSIlW-bDwC1QfHS-SlgNMT5F HTTP/1.1
 Host: api.tomorrow.com</code></pre>
 </div>
 </div>
@@ -1487,7 +1491,7 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 843
+Content-Length: 766
 
 {
   "commentResponse" : [ {
@@ -1497,9 +1501,8 @@ Content-Length: 843
     "userEmail" : "test@naver.com",
     "userId" : 0,
     "isRewarded" : "False",
-    "regDate" : "2024-02-06T03:34:46.627656",
-    "modDate" : "2024-02-06T03:34:46.627663",
-    "modifiable" : false
+    "regDate" : "2024-02-17T17:49:33.980093",
+    "modDate" : "2024-02-17T17:49:33.980105"
   }, {
     "id" : 1,
     "content" : "댓글1",
@@ -1507,9 +1510,8 @@ Content-Length: 843
     "userEmail" : "test@naver.com",
     "userId" : 1,
     "isRewarded" : "False",
-    "regDate" : "2024-02-06T03:34:46.627746",
-    "modDate" : "2024-02-06T03:34:46.627747",
-    "modifiable" : false
+    "regDate" : "2024-02-17T17:49:33.980202",
+    "modDate" : "2024-02-17T17:49:33.980204"
   }, {
     "id" : 2,
     "content" : "댓글2",
@@ -1517,9 +1519,8 @@ Content-Length: 843
     "userEmail" : "test@naver.com",
     "userId" : 2,
     "isRewarded" : "False",
-    "regDate" : "2024-02-06T03:34:46.627749",
-    "modDate" : "2024-02-06T03:34:46.62775",
-    "modifiable" : false
+    "regDate" : "2024-02-17T17:49:33.980207",
+    "modDate" : "2024-02-17T17:49:33.980209"
   } ]
 }</code></pre>
 </div>
@@ -1583,11 +1584,6 @@ Content-Length: 843
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수정 날짜</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentResponse[].modifiable</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수정, 삭제 가능 여부 true시 화면에 수정,삭제 버튼 노출</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1598,7 +1594,7 @@ Content-Length: 843
 <h4 id="_httprequest_11"><a class="link" href="#_httprequest_11">HttpRequest</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/comment/1?_csrf=7Fs3RrALoHeOtc-aMp6HLZ0lkEQ2T0p1AS35trxoNqMGdQROj2gHc4JumESj16qrULOzTKVBvXwAeylYMB_PhI0MAJZkFGd3 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/comment/1?_csrf=A2GxZkxFXk-17YVnyltjadLu_ZgKTPl4xS64Jx7PUSyL7HiFZgKCV3RwbCyYiLdX_nZXXeuP0KBvfp1VpBveES_6ZBq4jhy3 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 43
 Host: api.tomorrow.com
