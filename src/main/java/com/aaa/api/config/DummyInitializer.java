@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 public class DummyInitializer {
 
     private final UsersRepository usersRepository;
-    private final PostsRepository postsRepository;
     private final PasswordEncoder passwordEncoder;
     private Users dummyUser;
 
@@ -38,45 +37,6 @@ public class DummyInitializer {
                 .point(200)
                 .build();
         usersRepository.save(dummyUser);
-    }
-
-    @PostConstruct
-    public void postInit(){
-        List<Posts> devPosts = LongStream.range(0, 10)
-                .mapToObj(i ->
-                Posts.builder()
-                        .user(dummyUser)
-                        .title("devPosts " + i)
-                        .content("DummyContent " + i)
-                        .postsCategory(PostsCategory.DEV)
-                        .build()
-        ).collect(Collectors.toList());
-
-        postsRepository.saveAll(devPosts);
-
-        List<Posts> mediaPosts = LongStream.range(0, 10)
-                .mapToObj(i ->
-                        Posts.builder()
-                                .user(dummyUser)
-                                .title("mediaPosts " + i)
-                                .content("DummyContent " + i)
-                                .postsCategory(PostsCategory.MEDIA)
-                                .build()
-                ).collect(Collectors.toList());
-
-        postsRepository.saveAll(mediaPosts);
-
-        List<Posts> etcPosts = LongStream.range(0, 23)
-                .mapToObj(i ->
-                        Posts.builder()
-                                .user(dummyUser)
-                                .title("etcPosts " + i)
-                                .content("DummyContent " + i)
-                                .postsCategory(PostsCategory.ETC)
-                                .build()
-                ).collect(Collectors.toList());
-
-        postsRepository.saveAll(etcPosts);
     }
 
 }

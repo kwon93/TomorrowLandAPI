@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  database:
+    container_name: mysql_db
+    image: mysql
+    environment:
+      MYSQL_DATABASE: tomorrow
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: sys123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - tomorrow_network
+
+  application:
+    container_name: tomorrow
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/tomorrow?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: sys123
+    depends_on:
+      - database
+    networks:
+      - tomorrow_network
+
+networks:
+  tomorrow_network:
