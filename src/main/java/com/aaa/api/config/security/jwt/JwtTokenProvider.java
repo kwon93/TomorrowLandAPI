@@ -27,7 +27,7 @@ import java.util.List;
 public class JwtTokenProvider {
 
 
-    private static final long EXPIRATION_DATE = 5 * 60 * 1000;
+    private static final long EXPIRATION_DATE = 10 * 60 * 1000;
     private final SecretKey key;
     private final CustomUserDetailsService userDetailsSerivce;
 

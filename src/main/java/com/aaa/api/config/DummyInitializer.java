@@ -32,7 +32,7 @@ public class DummyInitializer {
                 .id(1)
                 .email("dummy@test.com")
                 .password(passwordEncoder.encode("abc123"))
-                .name("dummy")
+                .name("foo")
                 .role(Role.USER)
                 .point(200)
                 .build();
