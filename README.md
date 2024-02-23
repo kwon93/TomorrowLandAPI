@@ -1,7 +1,7 @@
 ## 1. TomorrowLand 1.0 [ 개인 프로젝트 ]
 
 <p>
-    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/7bce1eac-c77a-43b0-a754-eb57123c658c](https://github.com/kwon93/TomorrowLandAPI/assets/133971731/b9918f64-4aeb-4fc1-913f-407d7dd58d6b">
+    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/27863cfc-40be-4b97-9660-b74701b5aa92">
 </p>
 **지식 정보 공유 커뮤니티 사이트**
 
@@ -26,13 +26,15 @@
 
 <p>
     <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/7bce1eac-c77a-43b0-a754-eb57123c658c">
+     <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/0e0fcd07-cf75-47a9-9504-8c43eac09598">
 </p>
 
-![Database.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/bc8e2d21-f622-491b-98bb-2872d2f51d85/Database.png)
+<p>
+    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/8b3c56c8-cd6b-42ef-97d2-3bd8d02f510c">
+    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/e30206a3-e90c-4f47-9e62-e7f48bc82d6b">
+</p>
 
-![FrontTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/83c3f265-cdb4-4aad-ada1-eef54a206b65/FrontTechStack.png)
 
-![DevOpsTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/5065f3ec-0a16-4e6d-ba4b-8e992992459f/DevOpsTechStack.png)
 
 ### *기능 구현*
 
