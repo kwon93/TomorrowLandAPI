@@ -1,24 +1,79 @@
-<h2>프로젝트를 제작하며 고민하고있고 생각하고있는것들...</h2>
+## 1. TomorrowLand 1.0 [ 개인 프로젝트 ]
 
-<h3>1. paging 처리시 pageable 활용이 아닌 queryDSL를 사용한 이유</h3>
-    -> 카테고리 검색등 더 조회 방식을 확장시키고 동적으로 처리하기 위해.
+![TomorrowLand Architecture.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/208e63df-443d-40fd-b9be-e9ed28dbeae1/TomorrowLand_Architecture.png)
 
-<h3>2. Presentation, Business Layer 별 DTO 사용 refactoring 예정.</h3>
-    -> 각 Layer간 의존성 분리 하위 Layer가 상위 Layer를 의존하지 않도록 않도록. ex) Service가 Controller를 모르게끔<p>
-    -> @Valid등 Service에서는 필요한 data만 이용하여 불필요한 데이터를 담지않도록 성능 최적화 <p>
-    -> 단순 DTO뿐 아니라 Layer별로 의존하지않는 구조를 가지도록 틈틈히 refactoring 하자.
+**지식 정보 공유 커뮤니티 사이트**
 
-<h3>3. CQRS Command와 Query의 분리 </h3>
-    -> 읽기 전용 테이블을 새로 생성할지 고민을 해봐야할듯...
+**질문자:** 20 *Point*를 차감하고 답변을 채택
 
-<h3>4. Service 에서 Security 의존 코드 제거하기 (순수 Business Logic만 남겨두기)<h3>
-    -> 멀티 모듈을 사용하거나 인증 전용 서버를 만들면 쉽게 해결할거같지만 대공사가 될거같다...
+**답변자:** 답변이 채택될시 50 *Point* 보상 *( Point에 따른 사용자 Level 존재 )*
 
-<h3>5. DB 동시성 문제를 해결할 때 JPA가 제공해주는 비관적,낙관적 Lock을 사용할지, Select for update Query를 사용할지</h3>
-    -> 비관적 lock 사용으로 결정. 글 조회같이 쓰레드 경합이 빈번할때에는 낙관적락보다는 비관적락을 사용하자.
+*답변글은 질문자 본인만 확인 가능한 시스템.*
 
-<h3>6. 이미지 업로드 방식 stream? or multiPart MediaType을 어느것을 사용할것인지 </h3>
-    -> stream 으로 결정, 서버 메모리 디스크에 용량을 차지하지않다는점 (유지보수 편리), 구현의 간편함으로 인해
+### *제작 목적*
 
-<h3>7. Testable Code를 위한 Refactoring을 진행해야함 </h3>
-    -> 외부 요소로 인해 결정되는 값들은 매개변수로 옮기기, 관심사의 분리 등등....
+- Frontend ~ BackEnd , 배포 까지 혼자서 진행해 **Web Site의 전체적인 흐름과 구조**를 직접 개발하기.
+- 지난 팀 프로젝트에서 구현하지않았던 **Spring Security** 와 Session 방식이 아닌 **JWT** 방식의 인증 및 인가 시스템 구축
+- 프로젝트 완성 후 **지속적인 Refactoring** 및 **기능 확장**을 해보며 건강한 Web Application 개발 학습
+
+### ***제작 기간***
+
+- **[Ver 1.0] *23.12.12 ~ 24.02.14** { BackEnd 1Month, Front 1Month }*
+- **[Ver 2.0] 24.02.20 ~ 현재 추가 개발 중 …**
+
+### ***사용한 기술 스택***
+
+![BackendTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/f1d91442-f039-4151-a0dc-e962daab5683/BackendTechStack.png)
+
+![Database.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/bc8e2d21-f622-491b-98bb-2872d2f51d85/Database.png)
+
+![FrontTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/83c3f265-cdb4-4aad-ada1-eef54a206b65/FrontTechStack.png)
+
+![DevOpsTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/5065f3ec-0a16-4e6d-ba4b-8e992992459f/DevOpsTechStack.png)
+
+### *기능 구현*
+
+1. **JWT 를 통한 인증 및 인가 시스템 구축.** 
+    - AccessToken → Web Storage 저장
+    - RefreshToken → Cookie 저장
+
+[JWT를 구현하며 … ( Blog Link 1 )](https://kdh931228.tistory.com/33)
+
+[JWT Token, Cookie ? LocalStorage ? ( Blog Link 2 )](https://kdh931228.tistory.com/79)
+
+1. **AWS Cloud Image Upload , Download 기능 구현**
+    - Multi Part가 아닌 **Octet-Stream**을 활용해 간편하고 빠른 이미지 업로드 기능 구현
+
+[Image Upload, MIME Type을 Octet-Stream으로 결정한 이유 ( Blog Link )](https://kdh931228.tistory.com/62)
+
+1. **조회수 및 좋아요 기능의 동시성 문제 해결**
+    - 낙관적 Lock 과 비관적 Lock 중 **비관적 Lock** 을 활용해 동시성 문제 해결
+    - 성능 테스트를 위해 **Jmeter** 활용.
+
+[조회수 동시성문제 비관적 Lock을 선택한이유. ( Blog Link )](https://kdh931228.tistory.com/46)
+
+1. **Spring REST Docs 를 활용해 BackEnd API 문서화 진행**
+    - @AuthenticationPrincipal **Error**로 인해
+    
+    MockMvc를 설정할 때 *standAloneSetup()* 가 아닌 **@AutoConfigureRestDocs** 활용해 해결.
+    
+
+[RestDocs @AuthenticationPrinciapl 인증 실패 Error ( Blog Link )](https://kdh931228.tistory.com/70)
+
+1. **Lyerd Architecture 사용, Layer들이 상위 Layer를 의존하지 않도록 구현**
+    - 상위 **Layer를 의존하지않게** 확장성 있는 Application 개발
+
+[Layer간 의존성 줄이기 ( Blog Link )](https://kdh931228.tistory.com/43)
+
+***그 외 프로젝트를 개발하며 고민했던 점들 …***
+
+- Teat Code에 관한 고민
+    - Testable Code를 만들기위해 AWS S3와 같은 외부 API 분리 ( **관심사의 분리 진행** )
+    - 외부 API 혹은 외부 라이브러리의 API 또한 테스트를 반드시 진행해야하는지에대한 고민
+    - 각 **계층별 테스트의 목적**에 관한 고민 ( Controller 계층에서 테스트해야하는 점들 학습 )
+- BackEnd, FrontEnd 의 역할에 관한 고민
+    - 권한별 동적 렌더링을 진행할 때 BackEnd Server에서 렌더링을 위한 BusinessLogic을 작성해야하는지 Or FrontEnd에서 권한별 동적 렌더링에 관한 Logic을 작성해야하는지
+
+[TomorrowLand 1.0 배포](http://tomorrow-front.s3-website.ap-northeast-2.amazonaws.com/)
+
+[TomorrowLand GitHub Repository](https://github.com/kwon93/TomorrowLandAPI)
