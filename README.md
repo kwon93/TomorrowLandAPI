@@ -1,7 +1,8 @@
 ## 1. TomorrowLand 1.0 [ 개인 프로젝트 ]
 
-![TomorrowLand Architecture.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/208e63df-443d-40fd-b9be-e9ed28dbeae1/TomorrowLand_Architecture.png)
-
+<p>
+    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/7bce1eac-c77a-43b0-a754-eb57123c658c](https://github.com/kwon93/TomorrowLandAPI/assets/133971731/b9918f64-4aeb-4fc1-913f-407d7dd58d6b">
+</p>
 **지식 정보 공유 커뮤니티 사이트**
 
 **질문자:** 20 *Point*를 차감하고 답변을 채택
@@ -23,7 +24,9 @@
 
 ### ***사용한 기술 스택***
 
-![BackendTechStack.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/f1d91442-f039-4151-a0dc-e962daab5683/BackendTechStack.png)
+<p>
+    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/7bce1eac-c77a-43b0-a754-eb57123c658c">
+</p>
 
 ![Database.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2cfd76ad-af06-49a6-8535-c74feb79a8e6/bc8e2d21-f622-491b-98bb-2872d2f51d85/Database.png)
 
