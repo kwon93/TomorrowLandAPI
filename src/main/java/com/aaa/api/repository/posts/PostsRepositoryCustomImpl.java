@@ -2,6 +2,7 @@ package com.aaa.api.repository.posts;
 
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.QPosts;
+import com.aaa.api.domain.QUsers;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.repository.posts.dto.PostSearchForRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,6 +20,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
     @Override
     public List<Posts> getList(final PostSearchForRepository postSearch) {
         return jpaQueryFactory.selectFrom(QPosts.posts)
+                .leftJoin(QPosts.posts.user, QUsers.users).fetchJoin()
                 .limit(postSearch.getSize())
                 .offset(postSearch.getOffset())
                 .where(eqCategory(postSearch.getCategory()))

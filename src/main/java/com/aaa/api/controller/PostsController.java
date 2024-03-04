@@ -29,7 +29,6 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
                                                      @RequestBody @Validated final CreatePostsRequest request){
-
         final PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
@@ -39,7 +38,7 @@ public class PostsController {
         final List<PostsResponse> responses = postsService.getPage(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
-        return ResponseEntity.ok(new PostsResult<>(responses, postsService.getAll(postSearch.getCategory())));
+        return ResponseEntity.ok(new PostsResult<>(responses));
     }
 
     @GetMapping("posts/{postId}")
