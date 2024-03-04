@@ -47,6 +47,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
     @Override
     public Optional<Posts> getOneByPessimistLock(Long postsId) {
         Posts posts = jpaQueryFactory.selectFrom(QPosts.posts)
+                .leftJoin(QPosts.posts.user, QUsers.users).fetchJoin()
                 .where(QPosts.posts.id.eq(postsId))
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchOne();
