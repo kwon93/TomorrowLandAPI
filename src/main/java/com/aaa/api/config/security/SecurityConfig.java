@@ -28,6 +28,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -53,10 +55,10 @@ public class SecurityConfig {
         return web -> web.ignoring()
                 .requestMatchers(
                         new AntPathRequestMatcher("/favicon.ico"),
-                        new AntPathRequestMatcher("/error")
-//                        toH2Console() // H2 DB
+                        new AntPathRequestMatcher("/error"),
+                        toH2Console() // H2 DB
                 );
-    };
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{

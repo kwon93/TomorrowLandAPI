@@ -37,7 +37,7 @@ public class QUsers extends EntityPathBase<Users> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final EnumPath<com.aaa.api.domain.enumType.Role> role = createEnum("role", com.aaa.api.domain.enumType.Role.class);
+    public final EnumPath<com.aaa.api.domain.enumType.Role> roles = createEnum("roles", com.aaa.api.domain.enumType.Role.class);
 
     public final EnumPath<com.aaa.api.domain.enumType.UserLevel> userLevel = createEnum("userLevel", com.aaa.api.domain.enumType.UserLevel.class);
 
