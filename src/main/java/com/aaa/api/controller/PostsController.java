@@ -4,7 +4,6 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.PostSearch;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
-import com.aaa.api.domain.Posts;
 import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.service.dto.response.PostsResult;
 import com.aaa.api.service.PostsService;

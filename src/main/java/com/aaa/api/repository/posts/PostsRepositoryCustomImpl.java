@@ -17,13 +17,14 @@ import java.util.Optional;
 public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
+
     @Override
     public List<Posts> getList(final PostSearchForRepository postSearch) {
         return jpaQueryFactory.selectFrom(QPosts.posts)
                 .leftJoin(QPosts.posts.user, QUsers.users).fetchJoin()
                 .limit(postSearch.getSize())
                 .offset(postSearch.getOffset())
-                .where(eqCategory(postSearch.getCategory()))
+                .where(eqCategory(postSearch.getCategory()), eqKeyword(postSearch.getSearchKeyword()))
                 .orderBy(QPosts.posts.id.desc())
                 .fetch();
     }
@@ -42,6 +43,12 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom{
         return QPosts.posts.category.eq(category);
     }
 
+    private BooleanExpression eqKeyword(String searchKeyword){
+        if (searchKeyword == null){
+            return null;
+        }
+        return QPosts.posts.title.contains(searchKeyword);
+    }
 
 
     @Override

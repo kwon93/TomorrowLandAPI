@@ -12,13 +12,15 @@ public class PostSearchForService {
     private final int size;
     private final int offset;
     private final PostsCategory category;
+    private final String searchKeyword;
 
     @Builder
-    public PostSearchForService(final int page, final int size, final int offset, PostsCategory category) {
+    public PostSearchForService(final int page, final int size, final int offset, PostsCategory category, String searchKeyword) {
         this.page = page;
         this.size = size;
         this.offset = offset;
         this.category = category;
+        this.searchKeyword = searchKeyword;
     }
 
     public PostSearchForRepository toRepository(){
@@ -27,6 +29,7 @@ public class PostSearchForService {
                 .size(this.size)
                 .offset(this.offset)
                 .category(this.category)
+                .searchKeyword(this.searchKeyword)
                 .build();
     }
 }
