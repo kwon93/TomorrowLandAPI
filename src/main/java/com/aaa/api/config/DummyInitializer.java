@@ -1,9 +1,7 @@
 package com.aaa.api.config;
 
 import com.aaa.api.domain.Users;
-import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.repository.UsersRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

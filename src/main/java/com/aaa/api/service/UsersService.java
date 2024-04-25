@@ -9,13 +9,13 @@ import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import com.aaa.api.service.dto.response.UserInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @Transactional(readOnly = true)
