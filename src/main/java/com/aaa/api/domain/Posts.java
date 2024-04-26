@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(indexes = {@Index(name = "idx_post_title", columnList = "title")} )
 public class Posts extends BaseEntity{
 
     @Id
