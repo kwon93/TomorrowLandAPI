@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         new AntPathRequestMatcher("/favicon.ico"),
                         new AntPathRequestMatcher("/error"),
+                        new AntPathRequestMatcher("/notice"),
                         toH2Console() // H2 DB
                 );
     }
