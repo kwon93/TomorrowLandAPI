@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -57,6 +58,9 @@ public abstract class RestDocsSupport {
     protected S3ImageUploader imageUploader;
     @MockBean
     protected PostsLikeService likeService;
+    @MockBean
+    protected SimpMessagingTemplate simpMessagingTemplate;
+
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {
         Users user = Users.builder()
