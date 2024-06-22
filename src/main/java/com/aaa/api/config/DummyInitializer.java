@@ -14,17 +14,4 @@ public class DummyInitializer {
     private final PasswordEncoder passwordEncoder;
     private Users dummyUser;
 
-//    @PostConstruct
-//    public void userInit(){
-//         dummyUser = Users.builder()
-//                .id(1L)
-//                .email("dummy@test.com")
-//                .password(passwordEncoder.encode("abc123"))
-//                .name("foo")
-//                .role(Role.USER)
-//                .point(200)
-//                .build();
-//        usersRepository.save(dummyUser);
-//    }
-
 }

@@ -1,7 +1,5 @@
 package com.aaa.api.config.security;
 
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
-import com.aaa.api.config.security.jwt.filter.JwtAuthenticationFilter;
 import com.aaa.api.config.security.provider.CustomAuthenticationProvider;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.posts.PostsRepository;
@@ -21,8 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Collections;
@@ -35,7 +31,6 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final UsersRepository usersRepository;
     private final PostsRepository postsRepository;
     private final ObjectMapper objectMapper;
@@ -54,23 +49,18 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
                 .requestMatchers(
-                        new AntPathRequestMatcher("/favicon.ico"),
-                        new AntPathRequestMatcher("/error"),
-                        new AntPathRequestMatcher("/notice"),
                         toH2Console() // H2 DB
                 );
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-
         return http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(request -> request.anyRequest().permitAll())
                 .formLogin(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable) //jwt 활용으로 csrf방어 비활성
+                .csrf(AbstractHttpConfigurer::disable)  //csrfToken 대신 filter 에서 RefererCheck 진행
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));

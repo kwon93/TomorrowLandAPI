@@ -46,12 +46,6 @@ public class AuthControllerDocsTest extends RestDocsSupport {
                 .password("kdh1234")
                 .build();
 
-        given(authService.login(any(LoginServiceRequest.class)))
-                .willReturn(JwtToken.builder()
-                        .grantType("Bearer")
-                        .accessToken("accessToken")
-                        .refreshToken("refreshToken")
-                .build());
 
         // when then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/api/login")

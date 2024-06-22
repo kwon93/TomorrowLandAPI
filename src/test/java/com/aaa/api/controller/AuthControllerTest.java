@@ -35,7 +35,6 @@ class AuthControllerTest extends ControllerTestSupport {
                 .password("kdh1234")
                 .build();
 
-        given(authService.login(any(LoginServiceRequest.class))).willReturn(JwtToken.builder().build());
 
         // when then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")

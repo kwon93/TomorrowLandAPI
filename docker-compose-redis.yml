@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  aroundhub_redis:
+  tomorrowLand_redis:
     image: redis
     restart: always
     ports:
