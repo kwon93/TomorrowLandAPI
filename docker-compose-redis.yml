@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   tomorrowLand_redis:
     image: redis
