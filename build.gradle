@@ -77,9 +77,10 @@ dependencies {
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 	//redis-session
 	implementation 'org.springframework.session:spring-session-data-redis'
+	//embedded Redis
+	implementation 'it.ozimov:embedded-redis:0.7.2'
 
 
 }

@@ -4,23 +4,14 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.InvalidSignInInfomation;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
-import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthServiceTest extends IntegrationTestSupport {
 
-    @BeforeEach
-    void setUp() {
-        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
-        key = Keys.hmacShaKeyFor(decodedKey);
-    }
 
     @Test
     @DisplayName("login(): 요청에 맞는 로그인에 성공해 사용자의 JWT Token을 반환한다.")

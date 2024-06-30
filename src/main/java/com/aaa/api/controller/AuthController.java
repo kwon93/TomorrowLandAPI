@@ -34,7 +34,6 @@ public class AuthController {
     @PostMapping("logout")
     public ResponseEntity<Void> signOut(HttpSession session) {
         session.invalidate();
-
         return ResponseEntity.noContent()
                 .build();
     }

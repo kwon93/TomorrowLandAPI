@@ -2,7 +2,6 @@ package com.aaa.api.config;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.Users;
-import com.aaa.api.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +25,7 @@ public class CustomMockSecurityContext implements WithSecurityContextFactory<Cus
                 .role(annotation.role())
                 .build();
 
-        CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.of(user);
+        CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(annotation.name(),annotation.role().toString(), annotation.id());
 
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserPrincipal,

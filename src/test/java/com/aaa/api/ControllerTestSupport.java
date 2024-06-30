@@ -1,8 +1,6 @@
 package com.aaa.api;
 
 import com.aaa.api.config.CustomMockSecurityContext;
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
-import com.aaa.api.config.security.jwt.JwtTokenReIssueProvider;
 import com.aaa.api.controller.*;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.*;
@@ -40,10 +38,6 @@ public abstract class ControllerTestSupport {
     protected AuthService authService;
     @MockBean
     protected CommentService commentService;
-    @MockBean
-    protected JwtTokenProvider jwtTokenProvider;
-    @MockBean
-    protected JwtTokenReIssueProvider reIssueProvider;
     @MockBean
     protected ImageService imageService;
     @MockBean

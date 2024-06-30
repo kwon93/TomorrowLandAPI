@@ -1,7 +1,6 @@
 package com.aaa.api;
 
 
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
@@ -15,12 +14,9 @@ import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
-import javax.crypto.SecretKey;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -51,8 +47,6 @@ public abstract class IntegrationTestSupport {
     //passwordEncoder
     @Autowired
     protected PasswordEncoder passwordEncoder;
-    @Autowired
-    protected JwtTokenProvider jwtTokenProvider;
 
     //ImageService
     @Autowired
@@ -65,11 +59,6 @@ public abstract class IntegrationTestSupport {
     protected PostsLikeService likeService;
     @Autowired
     protected PostsLikeRepository likeRepository;
-
-    //JwtKey
-    @Value("${jwt.secretKey}")
-    protected String secretKey;
-    protected SecretKey key;
 
     @BeforeEach
     protected void tearDown() {
