@@ -4,6 +4,7 @@ import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.InvalidSignInInfomation;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
+import com.aaa.api.service.dto.response.SessionDataResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ class AuthServiceTest extends IntegrationTestSupport {
 
 
     @Test
-    @DisplayName("login(): 요청에 맞는 로그인에 성공해 사용자의 JWT Token을 반환한다.")
+    @DisplayName("login(): 요청에 맞는 로그인에 성공해 SessionDataResponse를 반환한다.")
     void test1() throws Exception {
         //given
         Users userInTest = createUserInTest();
@@ -23,10 +24,11 @@ class AuthServiceTest extends IntegrationTestSupport {
                 .email("kwon93@naver.com")
                 .password("kdh1234")
                 .build();
-
-
         // when
+        SessionDataResponse login = authService.login(request);
+
         //then
+        assertThat(login.getEmail()).isEqualTo(request.getEmail());
     }
 
 

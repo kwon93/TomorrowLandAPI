@@ -2,14 +2,11 @@ package com.aaa.api.docs.auth;
 
 import com.aaa.api.controller.dto.request.LoginRequest;
 import com.aaa.api.docs.RestDocsIntegrationSupport;
-import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.service.dto.response.SessionDataResponse;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
@@ -19,12 +16,12 @@ import java.util.Base64;
 
 import static org.springframework.restdocs.cookies.CookieDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,19 +36,12 @@ class AuthControllerDocsTest extends RestDocsIntegrationSupport {
     void test1() throws Exception {
         //given
         LoginRequest request = LoginRequest.builder()
-                .email("kwon93@naver.com")
+                .email("async@naver.com")
                 .password("kdh1234")
                 .build();
 
-        SessionDataResponse response = SessionDataResponse.builder()
-                .id(1L)
-                .email("test@test.com")
-                .role(Role.ADMIN)
-                .name("foo")
-                .build();
-
         // when then
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/login")
+        mockMvc.perform(post("/api/login")
                         .with(csrf().asHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -84,11 +74,11 @@ class AuthControllerDocsTest extends RestDocsIntegrationSupport {
         String encodedSessionId = Base64.getEncoder().encodeToString(session.getId().getBytes());
         Cookie tomorrowSession = new Cookie("tomorrowSession", encodedSessionId);
 
-        //when
+//        when
         ResultActions result = mockMvc.perform(post("/api/logout")
                         .with(request -> request)
                         .cookie(tomorrowSession));
-        //then
+//        then
         result.andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(document("auth-logout",

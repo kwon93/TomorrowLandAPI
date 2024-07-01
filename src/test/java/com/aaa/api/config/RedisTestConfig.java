@@ -10,10 +10,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @TestConfiguration
-@EnableRedisHttpSession
 public class RedisTestConfig {
 
     @Value("${spring.data.redis.host}")
@@ -21,8 +19,6 @@ public class RedisTestConfig {
 
     @Value("${spring.data.redis.port}")
     private int port;
-
-    private ClassLoader loader;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
