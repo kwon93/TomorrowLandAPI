@@ -66,4 +66,5 @@ public class RedisConfig implements BeanClassLoaderAware {
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.loader = classLoader;
     }
+
 }

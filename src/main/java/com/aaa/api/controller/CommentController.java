@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -23,12 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PostMapping("/posts/{postsId}/comment")
@@ -66,8 +65,8 @@ public class CommentController {
     }
 
     @MessageMapping("/posts/comment")
-    public void commentNotice(CommentNotice commentNotice) throws Exception{
-        messagingTemplate.convertAndSend("/comment", commentNotice.notice());
+    @SendTo("/topic/notice")
+    public String commentNotice(CommentNotice commentNotice) throws Exception{
+        return commentNotice.notice();
     }
-
 }

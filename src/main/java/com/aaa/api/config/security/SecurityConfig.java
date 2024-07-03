@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -57,33 +56,28 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .authorizeHttpRequests(request -> request.anyRequest().permitAll())
+                .authorizeHttpRequests(request -> {
+                    request.anyRequest().permitAll();
+                        })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)  //csrfToken 대신 filter 에서 RefererCheck 진행
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                    config.addAllowedOrigin("https://apic.app"); // webSocket Test용 CORS 설정
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
-                    config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setExposedHeaders(List.of("Authorization","userId"));
                     config.setMaxAge(3600L);
                     return config;
                         }
                 ))
-                .addFilterBefore(sessionAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SessionAuthenticationFilter(customUserDetailsService,redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SessionAuthenticationFilter sessionAuthenticationFilter() {
-        return new SessionAuthenticationFilter(customUserDetailsService, redisTemplate);
     }
 
 }

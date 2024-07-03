@@ -1,6 +1,5 @@
 package com.aaa.api.config.security.filter;
 
-import com.aaa.api.exception.InvalidSession;
 import com.aaa.api.exception.MissingRedisSession;
 import com.aaa.api.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -33,7 +33,7 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
     private  String sessionNamespace;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             filterChain.doFilter(request, response);
@@ -42,26 +42,35 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
         String sessionValue = extractSessionFromCookie(cookies);
 
-        String session = new String(Base64.getDecoder().decode(sessionValue));
-        String key = sessionNamespace + ":sessions:" + session;
-        String userEmail =  (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userEmail");
-        String userRole =  (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userRoles");
+        if (sessionValue.equals("tomorrowSession")) {
+            String session = new String(Base64.getDecoder().decode(sessionValue));
+            String key = sessionNamespace + ":sessions:" + session;
+            String userEmail = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userEmail");
+            String userRole = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userRoles");
 
-        if (userEmail.isEmpty()){
-            throw new MissingRedisSession();
+            if (userEmail.isEmpty()) {
+                throw new MissingRedisSession();
+            }
+
+            setAuthenticationBySession(userEmail, userRole);
+
+            filterChain.doFilter(request, response);
         }
 
-        setAuthenticationBySession(userEmail, userRole);
-
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
     }
 
     private String extractSessionFromCookie(Cookie[] cookies) {
-        return Arrays.stream(cookies)
+        Optional<String> tomorrowSession = Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("tomorrowSession"))
                 .map(Cookie::getValue)
-                .findFirst()
-                .orElseThrow(InvalidSession::new);
+                .findFirst();
+
+        if (tomorrowSession.isEmpty()) {
+            return "noAuth";
+        }
+
+        return tomorrowSession.get();
     }
 
     private void setAuthenticationBySession(String userEmail, String userRole) {
