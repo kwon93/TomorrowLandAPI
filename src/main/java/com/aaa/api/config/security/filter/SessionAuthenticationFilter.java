@@ -8,7 +8,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Slf4j
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -40,10 +38,11 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String sessionValue = extractSessionFromCookie(cookies);
+        Optional<String> sessionValue = extractSessionFromCookie(cookies);
 
-        if (sessionValue.equals("tomorrowSession")) {
-            String session = new String(Base64.getDecoder().decode(sessionValue));
+        if (sessionValue.isPresent()) {
+            String tomorrowSession = sessionValue.get();
+            String session = new String(Base64.getDecoder().decode(tomorrowSession));
             String key = sessionNamespace + ":sessions:" + session;
             String userEmail = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userEmail");
             String userRole = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userRoles");
@@ -53,24 +52,18 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             }
 
             setAuthenticationBySession(userEmail, userRole);
-
             filterChain.doFilter(request, response);
+            return;
         }
 
         filterChain.doFilter(request,response);
     }
 
-    private String extractSessionFromCookie(Cookie[] cookies) {
-        Optional<String> tomorrowSession = Arrays.stream(cookies)
+    private Optional<String> extractSessionFromCookie(Cookie[] cookies) {
+        return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("tomorrowSession"))
                 .map(Cookie::getValue)
                 .findFirst();
-
-        if (tomorrowSession.isEmpty()) {
-            return "noAuth";
-        }
-
-        return tomorrowSession.get();
     }
 
     private void setAuthenticationBySession(String userEmail, String userRole) {

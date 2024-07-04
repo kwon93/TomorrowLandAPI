@@ -40,7 +40,7 @@ public class AuthService {
     public SessionDataResponse login(LoginServiceRequest request) {
         Users userByEmail =
                 usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(InvalidSignInInfomation::new);
+                .orElseThrow(UserNotFound::new);
 
         if(!passwordEncoder.matches(request.getPassword(), userByEmail.getPassword())) {
             throw new InvalidSignInInfomation();

@@ -3,6 +3,7 @@ package com.aaa.api.service;
 import com.aaa.api.IntegrationTestSupport;
 import com.aaa.api.domain.Users;
 import com.aaa.api.exception.InvalidSignInInfomation;
+import com.aaa.api.exception.UserNotFound;
 import com.aaa.api.service.dto.request.LoginServiceRequest;
 import com.aaa.api.service.dto.response.SessionDataResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -44,11 +45,11 @@ class AuthServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        InvalidSignInInfomation e = assertThrows(InvalidSignInInfomation.class, () -> {
+        UserNotFound e = assertThrows(UserNotFound.class, () -> {
             authService.login(request);
         });
 
-        assertThat(e.getMessage()).isEqualTo("이메일 또는 비밀번호 인증 실패");
+        assertThat(e.getMessage()).isEqualTo("DB에서 찾을 수 없는 사용자 정보");
     }
 
     @Test

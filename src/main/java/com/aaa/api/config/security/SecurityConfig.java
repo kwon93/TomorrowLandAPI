@@ -71,13 +71,18 @@ public class SecurityConfig {
                     return config;
                         }
                 ))
-                .addFilterBefore(new SessionAuthenticationFilter(customUserDetailsService,redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(sessionAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SessionAuthenticationFilter sessionAuthenticationFilter(){
+        return new SessionAuthenticationFilter(customUserDetailsService, redisTemplate);
     }
 
 }
