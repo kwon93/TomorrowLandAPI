@@ -53,11 +53,6 @@ dependencies {
 	//mockito
 	testImplementation 'org.mockito:mockito-core:4.8.0'
 
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -79,9 +74,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	//redis-session
 	implementation 'org.springframework.session:spring-session-data-redis'
-	//embedded Redis
-	implementation 'it.ozimov:embedded-redis:0.7.2'
-
 
 }
 

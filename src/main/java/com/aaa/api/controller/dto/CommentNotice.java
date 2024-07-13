@@ -1,15 +1,22 @@
 package com.aaa.api.controller.dto;
 
-import lombok.Getter;
+import com.aaa.api.service.dto.CommentNoticeServiceDto;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
 public class CommentNotice {
 
     private String commenter;
     private String postName;
+    private Long postsWriterId;
+    private Long postsId;
 
-    public String notice (){
-        return this.postName + " 글에 "+ this.commenter+"님이 댓글을 달았습니다.";
+    public CommentNoticeServiceDto toServiceDto() {
+        return CommentNoticeServiceDto.builder()
+                .commenter(this.commenter)
+                .postName(this.postName)
+                .postWriterId(this.postsWriterId)
+                .postsId(this.postsId)
+                .build();
     }
-
 }

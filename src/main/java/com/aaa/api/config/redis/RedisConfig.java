@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -32,19 +34,6 @@ public class RedisConfig implements BeanClassLoaderAware {
     }
 
     @Bean
-    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer(objectMapper());
-    }
-
-    private ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        return mapper;
-    }
-
-
-    @Bean
     @Primary
     public RedisTemplate< ? , ? > redisTemplate(){
         RedisTemplate< ? , ? > redisTemplate = new RedisTemplate<>();
@@ -62,9 +51,45 @@ public class RedisConfig implements BeanClassLoaderAware {
         return redisTemplate;
     }
 
+    /**
+     *  springSessionDefaultRedisSerializer()
+     *  objectMapper()
+     *  setBeanClassLoader()
+     *  Redis serialize methods
+     */
+    @Bean
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+        return new GenericJackson2JsonRedisSerializer(objectMapper());
+    }
+
+    private ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        return mapper;
+    }
+
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.loader = classLoader;
     }
 
+    /**
+     * WebSocket PUB/SUB methods...
+     * redisMessageListenerContainer() : pub / sub
+     */
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory,
+                                                                       CommentNoticeSubscriber commentNoticeSubscriber,
+                                                                       ChannelTopic channelTopic) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory);
+        container.addMessageListener(commentNoticeSubscriber, channelTopic);
+        return container;
+    }
+
+    @Bean
+    public ChannelTopic channelTopic() {
+        return new ChannelTopic("commentNotice");
+    }
 }

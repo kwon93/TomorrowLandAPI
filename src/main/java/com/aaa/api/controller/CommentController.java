@@ -4,17 +4,19 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.CommentNotice;
 import com.aaa.api.controller.dto.request.CreateCommentRequest;
 import com.aaa.api.controller.dto.request.UpdateCommentRequest;
+import com.aaa.api.service.CommentNotificationService;
 import com.aaa.api.service.CommentService;
+import com.aaa.api.service.dto.NoticeMessageDatas;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.response.CommentResult;
 import com.aaa.api.service.dto.response.CommentsResponse;
 import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +30,7 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentNotificationService commentNotificationService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PostMapping("/posts/{postsId}/comment")
@@ -47,7 +50,6 @@ public class CommentController {
     }
 
 
-
     @PatchMapping("/comment/{commentId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId,'Comment','PATCH')")
     public ResponseEntity<UpdateCommentResponse> updateComment(
@@ -64,9 +66,18 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-    @MessageMapping("/posts/comment")
-    @SendTo("/topic/notice")
-    public String commentNotice(CommentNotice commentNotice) throws Exception{
-        return commentNotice.notice();
+    @MessageMapping("/ws/notice")
+    public void commentNotice(final CommentNotice commentNotice) throws JsonProcessingException {
+        commentNotificationService.publishCommentNotice(commentNotice.toServiceDto());
     }
+
+    @GetMapping("/comment/notice")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<NoticeMessageDatas> getStoredNotification(@AuthenticationPrincipal CustomUserPrincipal userPrincipal) {
+        NoticeMessageDatas storedNotifications = commentNotificationService.getStoredNotification(userPrincipal.getUserId());
+        return ResponseEntity.ok(storedNotifications);
+    }
+
+    //TODO 알림 읽음처리 개발
 }
+

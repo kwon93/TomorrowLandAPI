@@ -46,6 +46,8 @@ public abstract class ControllerTestSupport {
     protected PostsLikeService likeService;
     @MockBean
     protected SimpMessagingTemplate simpMessagingTemplate;
+    @MockBean
+    protected CommentNotificationService commentNotificationService;
 
 
     //통합테스트환경에서 뺄지 고민중..

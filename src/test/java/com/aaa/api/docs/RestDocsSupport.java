@@ -54,6 +54,8 @@ public abstract class RestDocsSupport {
     protected PostsLikeService likeService;
     @MockBean
     protected SimpMessagingTemplate simpMessagingTemplate;
+    @MockBean
+    protected CommentNotificationService commentNotificationService;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {

@@ -43,6 +43,8 @@ public abstract class IntegrationTestSupport {
     protected CommentService commentService;
     @Autowired
     protected CommentRepository commentRepository;
+    @Autowired
+    protected CommentNotificationService commentNotificationService;
 
     //passwordEncoder
     @Autowired

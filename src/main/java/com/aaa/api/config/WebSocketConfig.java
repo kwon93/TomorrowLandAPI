@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     //최초 웹소켓 연결 엔드포인트 등록
     @Override
@@ -19,8 +19,8 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        //queue : 1 : 1 , topic 1 : many
-        registry.enableSimpleBroker("/queue", "/topic");
-        registry.setApplicationDestinationPrefixes("/comment");
+        registry.enableSimpleBroker("/queue"); //subscribe
+        registry.setApplicationDestinationPrefixes("/app"); //client -> server messaging prefix
+        registry.setApplicationDestinationPrefixes("/user");
     }
 }
