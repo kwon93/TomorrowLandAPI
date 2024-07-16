@@ -28,7 +28,7 @@ public class AuthService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     public long getUserId(final LoginServiceRequest serviceRequest){
         Users users = usersRepository.findByEmail(serviceRequest.getEmail())

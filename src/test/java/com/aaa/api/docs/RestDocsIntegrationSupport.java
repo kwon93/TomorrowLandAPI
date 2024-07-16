@@ -4,6 +4,7 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.domain.enumType.UserLevel;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.service.CommentNotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,9 @@ public abstract class RestDocsIntegrationSupport {
     protected ObjectMapper objectMapper;
     @Autowired
     protected UsersRepository usersRepository;
+    protected BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
-    protected BCryptPasswordEncoder passwordEncoder;
+    protected CommentNotificationService commentNotificationService;
 
     @BeforeEach
     void setUp() {

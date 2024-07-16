@@ -35,8 +35,8 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     @Bean
     @Primary
-    public RedisTemplate< ? , ? > redisTemplate(){
-        RedisTemplate< ? , ? > redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<Object , Object> redisTemplate(){
+        RedisTemplate<Object , Object> redisTemplate = new RedisTemplate<>();
 
         // Key serializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());

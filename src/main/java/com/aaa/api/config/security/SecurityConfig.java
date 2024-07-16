@@ -34,7 +34,7 @@ public class SecurityConfig {
     private final UsersRepository usersRepository;
     private final CustomUserDetailsService customUserDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final RedisTemplate<String , Object> redisTemplate;
+    private final RedisTemplate redisTemplate;
 
 
     @Bean

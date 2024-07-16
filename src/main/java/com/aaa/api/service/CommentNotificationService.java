@@ -11,8 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -25,52 +24,68 @@ public class CommentNotificationService {
     private final ChannelTopic channelTopic;
 
     public void publishCommentNotice(CommentNoticeServiceDto noticeServiceDto) throws JsonProcessingException {
-        String noticeMessage = processingNoticeMessageData(noticeServiceDto);
+        NoticeMessageData noticeMessageData = processingNoticeMessageData(noticeServiceDto);
+        String noticeMessage = objectMapper.writeValueAsString(noticeMessageData);
 
         String keyByNotice = NOTIFICATION_REDIS_KEY + noticeServiceDto.getPostWriterId();
-        redisTemplate.opsForList().leftPush(keyByNotice, noticeMessage);
+        redisTemplate.opsForHash().put(keyByNotice,noticeMessageData.getId(), noticeMessage);
         redisTemplate.expire(keyByNotice, 7, TimeUnit.DAYS);
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), noticeMessage);
     }
 
-    private String processingNoticeMessageData(CommentNoticeServiceDto noticeServiceDto) throws JsonProcessingException {
+    private NoticeMessageData processingNoticeMessageData(CommentNoticeServiceDto noticeServiceDto) throws JsonProcessingException {
         String noticeMessage = String.format("%s 님이 %s 글에 새 댓글을 작성했습니다.", noticeServiceDto.getCommenter(), noticeServiceDto.getPostName());
+        String uuid = UUID.randomUUID().toString().replaceAll("-","").substring(0, 8);
 
-        NoticeMessageData noticeMessageData = NoticeMessageData.builder()
+        return NoticeMessageData.builder()
+                .id(uuid)
                 .noticeMessage(noticeMessage)
                 .postWriterId(noticeServiceDto.getPostWriterId())
                 .postsId(noticeServiceDto.getPostsId())
+                .read(false)
                 .build();
-
-        return objectMapper.writeValueAsString(noticeMessageData);
     }
 
 
-    public NoticeMessageDatas getStoredNotification(Long userId) {
-        List<String> jsonNotifications = getNoticeMessageDatasByRedis(userId);
+    public NoticeMessageDatas getUnreadNotifications(Long userId) {
+        Map<Object,Object> noticeMessageInMap = getNoticeMessageDatasByRedis(userId);
 
-        List<NoticeMessageData> noticeMessageDatas = jsonNotifications.stream()
+        List<NoticeMessageData> noticeMessageDataCollection = noticeMessageInMap.values().stream()
                 .map(this::parseNotification)
                 .filter(Objects::nonNull)
+                .filter(NoticeMessageData::isUnread)
                 .toList();
 
         return NoticeMessageDatas.builder()
-                                 .noticeMessageDatas(noticeMessageDatas)
-                                 .build();
+                .noticeMessageDatas(noticeMessageDataCollection)
+                .build();
     }
 
-    private List<String> getNoticeMessageDatasByRedis(Long userId) {
+    private Map<Object,Object> getNoticeMessageDatasByRedis(Long userId) {
         String keyByNotice = NOTIFICATION_REDIS_KEY + userId.toString();
-        return redisTemplate.opsForList().range(keyByNotice,0, -1);
+        return redisTemplate.opsForHash().entries(keyByNotice);
     }
 
-    private NoticeMessageData parseNotification(String jsonByRedis) {
+    public void updateMarkAsRead(Long userId, String noticeId) throws JsonProcessingException {
+        String keyByNotice = NOTIFICATION_REDIS_KEY + userId.toString();
+        String unreadNotice = (String) redisTemplate.opsForHash().get(keyByNotice, noticeId);
+        NoticeMessageData noticeMessageData = parseNotification(unreadNotice);
+        
+        noticeMessageData.markAsRead();
+        updateNoticeMessage(noticeId, noticeMessageData, keyByNotice);
+    }
+
+    private NoticeMessageData parseNotification(Object jsonByRedis) {
         try {
-            return objectMapper.readValue(jsonByRedis, NoticeMessageData.class);
+            return objectMapper.readValue((String)jsonByRedis, NoticeMessageData.class);
         } catch (JsonProcessingException e) {
             throw new RedisJsonParsingException();
         }
     }
 
+    private void updateNoticeMessage(String noticeId, NoticeMessageData noticeMessageData, String keyByNotice) throws JsonProcessingException {
+        String readNotice = objectMapper.writeValueAsString(noticeMessageData);
+        redisTemplate.opsForHash().put(keyByNotice, noticeId, readNotice);
+    }
 }

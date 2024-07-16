@@ -1,4 +1,4 @@
-package com.aaa.api.controller.dto;
+package com.aaa.api.controller.dto.request;
 
 import com.aaa.api.service.dto.CommentNoticeServiceDto;
 import lombok.NoArgsConstructor;
