@@ -3,18 +3,22 @@ package com.aaa.api.controller;
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CommentNotice;
 import com.aaa.api.controller.dto.request.UpdateCommentNotice;
+import com.aaa.api.http.SseEmitters;
 import com.aaa.api.service.CommentNotificationService;
 import com.aaa.api.service.dto.NoticeMessageDatas;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api")
@@ -22,10 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
     private final CommentNotificationService commentNotificationService;
+    private final SseEmitters sseEmitters;
 
-    @MessageMapping("/ws/notice")
-    public void commentNotice(final CommentNotice commentNotice) throws JsonProcessingException {
-        commentNotificationService.publishCommentNotice(commentNotice.toServiceDto());
+
+    @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> sseConnect(final CommentNotice commentNotice) throws JsonProcessingException {
+        SseEmitter sseEmitter = new SseEmitter();
+        sseEmitters.add(sseEmitter);
+        try {
+            sseEmitter.send(SseEmitter.event()
+                    .name("isSseConnect?")
+                    .data("true"));
+        } catch (IOException e) {
+            //TODO custom으로 수정하기
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok(sseEmitter);
     }
 
     @GetMapping("/comment/notice")

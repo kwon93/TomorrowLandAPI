@@ -4,6 +4,7 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.*;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.http.SseEmitters;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
@@ -30,8 +31,9 @@ import org.springframework.test.web.servlet.MockMvc;
         AuthController.class,
         CommentController.class,
         ImageController.class,
-        PostsLikeController.class
-} )
+        PostsLikeController.class,
+        NotificationController.class
+})
 public abstract class RestDocsSupport {
 
     @Autowired
@@ -56,6 +58,8 @@ public abstract class RestDocsSupport {
     protected SimpMessagingTemplate simpMessagingTemplate;
     @MockBean
     protected CommentNotificationService commentNotificationService;
+    @MockBean
+    protected SseEmitters sseEmitters;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {
