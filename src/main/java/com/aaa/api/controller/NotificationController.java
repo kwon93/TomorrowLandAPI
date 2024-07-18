@@ -3,6 +3,7 @@ package com.aaa.api.controller;
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CommentNotice;
 import com.aaa.api.controller.dto.request.UpdateCommentNotice;
+import com.aaa.api.exception.SseEventSendFailException;
 import com.aaa.api.http.SseEmitters;
 import com.aaa.api.service.CommentNotificationService;
 import com.aaa.api.service.dto.NoticeMessageDatas;
@@ -28,18 +29,16 @@ public class NotificationController {
     private final CommentNotificationService commentNotificationService;
     private final SseEmitters sseEmitters;
 
-
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> sseConnect(final CommentNotice commentNotice) throws JsonProcessingException {
+    public ResponseEntity<SseEmitter> sseConnect(final CommentNotice commentNotice, @AuthenticationPrincipal final CustomUserPrincipal userPrincipal) {
         SseEmitter sseEmitter = new SseEmitter();
-        sseEmitters.add(sseEmitter);
+        sseEmitters.createEmitter(userPrincipal.getUserId(), sseEmitter);
         try {
             sseEmitter.send(SseEmitter.event()
                     .name("isSseConnect?")
                     .data("true"));
         } catch (IOException e) {
-            //TODO custom으로 수정하기
-            throw new RuntimeException(e);
+            throw new SseEventSendFailException(e);
         }
         return ResponseEntity.ok(sseEmitter);
     }
@@ -58,6 +57,4 @@ public class NotificationController {
         commentNotificationService.updateMarkAsRead(userPrincipal.getUserId(), updateCommentNotice.getNoticeId());
         return ResponseEntity.noContent().build();
     }
-
-    //TODO notificationController 분리 및 테스트 진행해야함.
 }

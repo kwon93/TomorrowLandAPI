@@ -9,6 +9,7 @@ import com.aaa.api.service.dto.response.CommentResult;
 import com.aaa.api.service.dto.response.CommentsResponse;
 import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,8 @@ public class CommentController {
     @PostMapping("/posts/{postsId}/comment")
     public ResponseEntity<PostCommentResponse> createComment(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                                              @PathVariable("postsId") final Long postsId,
-                                                             @RequestBody @Validated final CreateCommentRequest request){
+                                                             @RequestBody @Validated final CreateCommentRequest request)
+            throws JsonProcessingException {
 
         final PostCommentResponse response = commentService.create(request.toServiceDto(postsId, userPrincipal.getUserId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

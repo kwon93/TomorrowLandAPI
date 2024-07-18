@@ -9,6 +9,7 @@ public class NoticeMessageData {
 
     @Getter
     private String id;
+    @Getter
     private String noticeMessage;
     @Getter
     private Long postWriterId;
