@@ -5,6 +5,7 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.service.SseService;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.like.PostsLikeRepository;
@@ -14,12 +15,15 @@ import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 public abstract class IntegrationTestSupport {
 
     //Posts
@@ -62,6 +66,14 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected PostsLikeRepository likeRepository;
 
+    //SseEmitter
+    @Autowired
+    protected SseService sseService;
+
+    //EmbeddedRedis
+    @Autowired
+    protected RedisTemplate redisTemplate;
+
     @BeforeEach
     protected void tearDown() {
         likeRepository.deleteAllInBatch();
@@ -72,6 +84,7 @@ public abstract class IntegrationTestSupport {
 
     protected Users createUserInTest(){
         Users users = Users.builder()
+                .id(1L)
                 .email("kwon93@naver.com")
                 .password(passwordEncoder.encode("kdh1234"))
                 .name("kwon")
@@ -99,12 +112,13 @@ public abstract class IntegrationTestSupport {
     protected Posts createPostInTest(Users users) {
         Posts posts = Posts.builder()
                 .user(users)
-                .title("제목")
-                .content("내용")
+                .title("foo title")
+                .content("bar content")
                 .postsCategory(PostsCategory.LIFE)
                 .build();
 
-        return postsRepository.save(posts);
+        postsRepository.save(posts);
+        return posts;
     }
 
 }

@@ -4,7 +4,7 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.*;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.http.SseEmitters;
+import com.aaa.api.service.SseService;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
@@ -59,7 +59,7 @@ public abstract class RestDocsSupport {
     @MockBean
     protected CommentNotificationService commentNotificationService;
     @MockBean
-    protected SseEmitters sseEmitters;
+    protected SseService sseService;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {

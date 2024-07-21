@@ -18,6 +18,7 @@ import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -39,6 +41,7 @@ public class CommentService {
         final Users writeByUser
                 = usersRepository.findById(serviceRequest.getUsersId()).orElseThrow(UserNotFound::new);
 
+
         final Comment comment = serviceRequest.toEntity(commentedPosts, writeByUser);
         final Comment savedComment = commentRepository.save(comment);
 
@@ -46,8 +49,8 @@ public class CommentService {
         return PostCommentResponse.of(savedComment);
     }
 
-    private void publishingNoticeToRedis(Users writeByUser, Posts commentedPosts) throws JsonProcessingException {
-        CommentNoticeServiceDto commentNotice = CommentNoticeServiceDto
+    private void publishingNoticeToRedis(final Users writeByUser, final Posts commentedPosts) throws JsonProcessingException {
+        final CommentNoticeServiceDto commentNotice = CommentNoticeServiceDto
                 .builder()
                 .commenter(writeByUser.getName())
                 .postWriterId(commentedPosts.getUserId())

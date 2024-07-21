@@ -17,7 +17,7 @@ public class NoticeMessageData {
     private boolean read;
 
     @Builder
-    public NoticeMessageData(String id, String noticeMessage, Long postWriterId, Long postsId, boolean read) {
+    public NoticeMessageData(final String id, final String noticeMessage, final Long postWriterId, final Long postsId, final boolean read) {
         this.id = id;
         this.noticeMessage = noticeMessage;
         this.postWriterId = postWriterId;

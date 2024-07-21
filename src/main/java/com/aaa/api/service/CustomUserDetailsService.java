@@ -4,6 +4,7 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.Users;
 import com.aaa.api.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsersRepository usersRepository;

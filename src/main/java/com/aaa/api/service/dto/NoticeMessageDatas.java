@@ -1,11 +1,13 @@
 package com.aaa.api.service.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
 public class NoticeMessageDatas {
 
+    @Getter
     private List<NoticeMessageData> noticeMessageDatas;
     private int noticeCounts;
 

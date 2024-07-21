@@ -1,11 +1,9 @@
 package com.aaa.api.controller;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.controller.dto.request.CommentNotice;
 import com.aaa.api.controller.dto.request.UpdateCommentNotice;
-import com.aaa.api.exception.SseEventSendFailException;
-import com.aaa.api.http.SseEmitters;
 import com.aaa.api.service.CommentNotificationService;
+import com.aaa.api.service.SseService;
 import com.aaa.api.service.dto.NoticeMessageDatas;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +25,11 @@ import java.io.IOException;
 public class NotificationController {
 
     private final CommentNotificationService commentNotificationService;
-    private final SseEmitters sseEmitters;
+    private final SseService sseService;
 
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> sseConnect(final CommentNotice commentNotice, @AuthenticationPrincipal final CustomUserPrincipal userPrincipal) {
-        SseEmitter sseEmitter = new SseEmitter();
-        sseEmitters.createEmitter(userPrincipal.getUserId(), sseEmitter);
-        try {
-            sseEmitter.send(SseEmitter.event()
-                    .name("isSseConnect?")
-                    .data("true"));
-        } catch (IOException e) {
-            throw new SseEventSendFailException(e);
-        }
+    public ResponseEntity<SseEmitter> sseConnect(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal) throws IOException {
+        SseEmitter sseEmitter = sseService.connectToSSE(userPrincipal.getUserId());
         return ResponseEntity.ok(sseEmitter);
     }
 

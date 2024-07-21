@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.List;
+import java.util.Collections;
 
 public class CustomUserPrincipal extends User {
 
@@ -13,7 +13,7 @@ public class CustomUserPrincipal extends User {
     private final Long userId;
 
     public CustomUserPrincipal(final String username, final String userRole, Long userId) {
-        super(username, "", List.of(new SimpleGrantedAuthority("ROLE_"+userRole)));
+        super(username, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole)));
         this.userId = userId;
     }
 }

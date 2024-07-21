@@ -4,16 +4,15 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.PostSearch;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+import com.aaa.api.service.PostsService;
 import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.service.dto.response.PostsResult;
-import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +30,6 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
                                                      @RequestBody @Validated final CreatePostsRequest request){
-        log.info("posts auth test >>> {}",userPrincipal);
-        log.info("posts auth test2 >>> {}", SecurityContextHolder.getContext().getAuthentication());
         final PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
