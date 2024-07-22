@@ -27,7 +27,6 @@ public class CommentNoticeSubscriber implements MessageListener {
         try {
             NoticeMessageData noticeMessageData = objectMapper.readValue(channelMessage, NoticeMessageData.class);
             sseService.sendToUser(noticeMessageData.getPostWriterId(),noticeMessageData.getNoticeMessage());
-            log.info("sub debug >>>> {}", noticeMessageData.getNoticeMessage());
         } catch (JsonProcessingException e) {
             throw new RedisJsonParsingException();
         } catch (IOException e) {

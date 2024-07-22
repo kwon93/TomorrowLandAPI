@@ -4,6 +4,7 @@ import com.aaa.api.config.security.filter.SessionAuthenticationFilter;
 import com.aaa.api.config.security.provider.CustomAuthenticationProvider;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

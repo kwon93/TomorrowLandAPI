@@ -26,7 +26,7 @@ import java.util.Optional;
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final RedisTemplate< String , Object > redisTemplate;
+    private final RedisTemplate redisTemplate;
     @Value("${spring.session.redis.namespace}")
     private  String sessionNamespace;
 
@@ -44,8 +44,8 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             String tomorrowSession = sessionValue.get();
             String session = new String(Base64.getDecoder().decode(tomorrowSession));
             String key = sessionNamespace + ":sessions:" + session;
-            String userEmail = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userEmail");
-            String userRole = (String) redisTemplate.opsForHash().entries(key).get("sessionAttr:userRoles");
+            String userEmail = (String) redisTemplate.opsForHash().get(key,"sessionAttr:userEmail");
+            String userRole = (String) redisTemplate.opsForHash().get(key,"sessionAttr:userRoles");
 
             if (userEmail.isEmpty()) {
                 throw new MissingRedisSession();
