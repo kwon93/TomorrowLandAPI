@@ -28,6 +28,7 @@ public class NotificationController {
     private final SseService sseService;
 
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<SseEmitter> sseConnect(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal) throws IOException {
         SseEmitter sseEmitter = sseService.connectToSSE(userPrincipal.getUserId());
         return ResponseEntity.ok(sseEmitter);

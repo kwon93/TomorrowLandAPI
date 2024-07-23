@@ -88,8 +88,8 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         //then
         Posts post = postsRepository.findById(savedPosts.getId()).orElseThrow(PostNotfound::new);
-        assertThat(post.getTitle()).isEqualTo("제목");
-        assertThat(post.getContent()).isEqualTo("내용");
+        assertThat(post.getTitle()).isEqualTo("foo title");
+        assertThat(post.getContent()).isEqualTo("bar content");
         assertThat(post.getViewCount()).isOne();
     }
 
