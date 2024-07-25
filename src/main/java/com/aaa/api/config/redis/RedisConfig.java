@@ -45,7 +45,7 @@ public class RedisConfig implements BeanClassLoaderAware {
 
         // Value serializer
         redisTemplate.setValueSerializer(springSessionDefaultRedisSerializer());
-        redisTemplate.setHashValueSerializer(springSessionDefaultRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
         redisTemplate.setDefaultSerializer(springSessionDefaultRedisSerializer());
 
         redisTemplate.setConnectionFactory(redisConnectionFactory());

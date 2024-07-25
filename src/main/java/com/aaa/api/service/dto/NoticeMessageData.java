@@ -1,17 +1,16 @@
 package com.aaa.api.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@Getter
 public class NoticeMessageData {
 
-    @Getter
     private String id;
-    @Getter
     private String noticeMessage;
-    @Getter
     private Long postWriterId;
     private Long postsId;
     private boolean read;
@@ -25,6 +24,7 @@ public class NoticeMessageData {
         this.read = read;
     }
 
+    @JsonIgnore
     public boolean isUnread() {
         return !read;
     }

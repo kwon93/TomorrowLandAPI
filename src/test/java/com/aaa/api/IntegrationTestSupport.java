@@ -5,6 +5,7 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.repository.SseRepository;
 import com.aaa.api.service.SseService;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
@@ -13,6 +14,7 @@ import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.image.S3ImageUploader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,6 +28,8 @@ import org.springframework.test.context.ActiveProfiles;
 @AutoConfigureMockMvc
 public abstract class IntegrationTestSupport {
 
+    @Autowired
+    protected ObjectMapper objectMapper;
     //Posts
     @Autowired
     protected PostsService postsService;
@@ -69,10 +73,15 @@ public abstract class IntegrationTestSupport {
     //SseEmitter
     @Autowired
     protected SseService sseService;
+    @Autowired
+    protected SseRepository sseRepository;
 
-    //EmbeddedRedis
+    //Redis
     @Autowired
     protected RedisTemplate redisTemplate;
+
+
+
 
     @BeforeEach
     protected void tearDown() {

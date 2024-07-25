@@ -11,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -36,15 +33,15 @@ public class NotificationController {
 
     @GetMapping("/comment/notice")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<NoticeMessageDatas> getStoredNotification(@AuthenticationPrincipal CustomUserPrincipal userPrincipal) {
+    public ResponseEntity<NoticeMessageDatas> getStoredNotification(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal) {
         NoticeMessageDatas storedNotifications = commentNotificationService.getUnreadNotifications(userPrincipal.getUserId());
         return ResponseEntity.ok(storedNotifications);
     }
 
     @PatchMapping("/comment/notice/update")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')") //permissionEvaluator 추가하기
-    public ResponseEntity<Void> updateToNoticeReadStatus(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
-                                                         UpdateCommentNotice updateCommentNotice) throws JsonProcessingException {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<Void> updateToNoticeReadStatus(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
+                                                          @RequestBody UpdateCommentNotice updateCommentNotice) throws JsonProcessingException {
         commentNotificationService.updateMarkAsRead(userPrincipal.getUserId(), updateCommentNotice.getNoticeId());
         return ResponseEntity.noContent().build();
     }

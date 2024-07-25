@@ -19,6 +19,8 @@ import java.io.Serializable;
 public class TomorrowLandPermissionEvaluator implements PermissionEvaluator {
     private final PostsRepository postsRepository;
     private final CommentRepository commentRepository;
+
+
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
         return false;
@@ -33,6 +35,7 @@ public class TomorrowLandPermissionEvaluator implements PermissionEvaluator {
 
         return true;
     }
+
 
     private boolean postEvaluator(CustomUserPrincipal principal,Serializable targetId){
         final Posts posts = postsRepository.findById((Long) targetId)
