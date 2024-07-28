@@ -24,6 +24,10 @@ include::api/auth.adoc[]
 == Comment API
 include::api/comment.adoc[]
 
+[[Notice-API]]
+== Notice API
+include::api/notice.adoc[]
+
 [[Image-API]]
 == Image API
 include::api/image.adoc[]
