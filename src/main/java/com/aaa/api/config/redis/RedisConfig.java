@@ -38,14 +38,13 @@ public class RedisConfig implements BeanClassLoaderAware {
     public RedisTemplate<Object , Object> redisTemplate(){
         RedisTemplate<Object , Object> redisTemplate = new RedisTemplate<>();
 
-
         // Key serializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 
         // Value serializer
         redisTemplate.setValueSerializer(springSessionDefaultRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(springSessionDefaultRedisSerializer());
         redisTemplate.setDefaultSerializer(springSessionDefaultRedisSerializer());
 
         redisTemplate.setConnectionFactory(redisConnectionFactory());

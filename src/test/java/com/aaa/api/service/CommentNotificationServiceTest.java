@@ -41,11 +41,10 @@ class CommentNotificationServiceTest extends IntegrationTestSupport {
         String noticeUUID = commentNotificationService.publishCommentNotice(request);
 
         //then
-        String  storedNotice =  (String) redisTemplate.opsForHash().get(NOTIFICATION_REDIS_KEY + 1L, noticeUUID);
-        NoticeMessageData noticeMessageData = objectMapper.readValue(storedNotice, NoticeMessageData.class);
+        NoticeMessageData  storedNotice =  (NoticeMessageData) redisTemplate.opsForHash().get(NOTIFICATION_REDIS_KEY + userInTest.getId(), noticeUUID);
 
         assertThat(storedNotice).isNotNull();
-        assertThat(noticeMessageData.getPostWriterId()).isEqualTo(userInTest.getId());
+        assertThat(storedNotice.getPostWriterId()).isEqualTo(userInTest.getId());
     }
 
 
