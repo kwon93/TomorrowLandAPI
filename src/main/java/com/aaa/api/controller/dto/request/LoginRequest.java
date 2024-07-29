@@ -24,7 +24,7 @@ public class LoginRequest {
     private String password;
 
     @Builder
-    public LoginRequest(final String email, final String password) {
+    private LoginRequest(final String email, final String password) {
         this.email = email;
         this.password = password;
     }

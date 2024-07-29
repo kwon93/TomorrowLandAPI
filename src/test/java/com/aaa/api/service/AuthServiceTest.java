@@ -26,7 +26,7 @@ class AuthServiceTest extends IntegrationTestSupport {
                 .password("kdh1234")
                 .build();
         // when
-        SessionDataResponse login = authService.login(request);
+        SessionDataResponse login = authService.processingUserSessionBy(request);
 
         //then
         assertThat(login.getEmail()).isEqualTo(request.getEmail());
@@ -46,7 +46,7 @@ class AuthServiceTest extends IntegrationTestSupport {
 
         // when
         UserNotFound e = assertThrows(UserNotFound.class, () -> {
-            authService.login(request);
+            authService.processingUserSessionBy(request);
         });
 
         assertThat(e.getMessage()).isEqualTo("DB에서 찾을 수 없는 사용자 정보");
@@ -65,7 +65,7 @@ class AuthServiceTest extends IntegrationTestSupport {
 
         // when
         InvalidSignInInfomation e = assertThrows(InvalidSignInInfomation.class, () -> {
-            authService.login(request);
+            authService.processingUserSessionBy(request);
         });
 
         assertThat(e.getMessage()).isEqualTo("이메일 또는 비밀번호 인증 실패");

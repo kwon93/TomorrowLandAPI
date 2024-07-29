@@ -30,35 +30,45 @@ public class AuthService {
     private final CustomUserDetailsService customUserDetailsService;
     private final RedisTemplate redisTemplate;
 
-    public long getUserId(final LoginServiceRequest serviceRequest){
+    @Transactional
+    public SessionDataResponse processingUserSessionBy(final LoginServiceRequest request) {
+        Users userByEmail = usersRepository.findByEmail(request.getEmail())
+                        .orElseThrow(UserNotFound::new);
+
+        if (isNotPasswordMatch(request, userByEmail)) {
+            throw new InvalidSignInInfomation();
+        }
+
+        userInfoStoreToRedis(userByEmail);
+        setAuthenticateBy(userByEmail);
+
+        return SessionDataResponse.of(userByEmail);
+    }
+
+    public long getUserId(final LoginServiceRequest serviceRequest) {
         Users users = usersRepository.findByEmail(serviceRequest.getEmail())
                 .orElseThrow(UserNotFound::new);
         return users.getId();
     }
 
-    @Transactional
-    public SessionDataResponse login(LoginServiceRequest request) {
-        Users userByEmail =
-                usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(UserNotFound::new);
-
-        if(!passwordEncoder.matches(request.getPassword(), userByEmail.getPassword())) {
-            throw new InvalidSignInInfomation();
-        }
-
+    private void setAuthenticateBy(Users userByEmail) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userByEmail.getEmail());
-
-        //TODO @Cacheable 로 refactoring 해보자
-        redisTemplate.opsForHash().put("userInfo","userId", userByEmail.getId());
-        redisTemplate.opsForHash().put("userInfo","username", userByEmail.getEmail());
-        redisTemplate.opsForHash().put("userInfo","userRole", userByEmail.getRoles());
-
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDetails,
                         "",
-                        List.of(new SimpleGrantedAuthority("ROLE_"+userByEmail.getRoles().toString())));
+                        List.of(new SimpleGrantedAuthority("ROLE_" + userByEmail.getRoles().toString())));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
-        return SessionDataResponse.of(userByEmail);
+    private void userInfoStoreToRedis(Users userByEmail) {
+        redisTemplate.opsForHash().put("userInfo", "userId", userByEmail.getId());
+        redisTemplate.opsForHash().put("userInfo", "username", userByEmail.getEmail());
+        redisTemplate.opsForHash().put("userInfo", "userRole", userByEmail.getRoles());
+    }
+
+
+
+    private boolean isNotPasswordMatch(LoginServiceRequest request, Users userByEmail) {
+        return !passwordEncoder.matches(request.getPassword(), userByEmail.getPassword());
     }
 }
