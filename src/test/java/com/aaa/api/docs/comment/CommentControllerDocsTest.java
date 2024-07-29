@@ -71,7 +71,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .content(content)
                 .build();
 
-        given(commentService.create(any(CreateCommentServiceRequest.class))).willReturn(response);
+        given(commentService.createComment(any(CreateCommentServiceRequest.class))).willReturn(response);
 
         // when
         mockMvc.perform(RestDocumentationRequestBuilders.post("/api/posts/{postsId}/comment", post.getId())

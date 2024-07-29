@@ -41,7 +41,7 @@ class CommentServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        commentService.create(request);
+        commentService.createComment(request);
 
         //then
         List<Comment> comments = commentRepository.findAll();
@@ -67,7 +67,7 @@ class CommentServiceTest extends IntegrationTestSupport {
 
         // when
         assertThatThrownBy(()-> {
-            commentService.create(request);
+            commentService.createComment(request);
         }).isInstanceOf(PostNotfound.class).hasMessage("존재하지않는 게시물 참조");
     }
 

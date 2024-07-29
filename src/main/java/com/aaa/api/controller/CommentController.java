@@ -11,7 +11,6 @@ import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
-@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -34,8 +32,7 @@ public class CommentController {
     public ResponseEntity<PostCommentResponse> createComment(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                                              @PathVariable("postsId") final Long postsId,
                                                              @RequestBody @Validated final CreateCommentRequest request) throws JsonProcessingException {
-
-        final PostCommentResponse response = commentService.create(request.toServiceDto(postsId, userPrincipal.getUserId()));
+        final PostCommentResponse response = commentService.createComment(request.toServiceDto(postsId, userPrincipal.getUserId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -45,7 +42,6 @@ public class CommentController {
                     commentService.getAllComments(new GetAllCommentsServiceDto(postsId));
         return ResponseEntity.ok(new CommentResult<>(responses));
     }
-
 
     @PatchMapping("/comment/{commentId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId,'Comment','PATCH')")
