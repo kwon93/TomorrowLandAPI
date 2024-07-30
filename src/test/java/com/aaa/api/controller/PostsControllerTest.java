@@ -47,7 +47,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(PostsCategory.DEV)
                 .build();
 
-        given(postsService.create(any(CreatePostsServiceRequest.class))).willReturn(response);
+        given(postsService.createPosts(any(CreatePostsServiceRequest.class))).willReturn(response);
 
         // expected
         mockMvc.perform(MockMvcRequestBuilders.post("/api/posts")
@@ -60,7 +60,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andDo(print());
 
 
-        verify(postsService, times(1)).create(any(CreatePostsServiceRequest.class));
+        verify(postsService, times(1)).createPosts(any(CreatePostsServiceRequest.class));
     }
 
     @Test
@@ -187,7 +187,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(updateCategory)
                 .build();
 
-        given(postsService.update(any(UpdatePostsServiceRequest.class))).willReturn(response);
+        given(postsService.updatePosts(any(UpdatePostsServiceRequest.class))).willReturn(response);
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())
@@ -198,7 +198,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .andDo(print());
 
         verify(postsService, times(1))
-                .update(any(UpdatePostsServiceRequest.class));
+                .updatePosts(any(UpdatePostsServiceRequest.class));
     }
 
     @Test
@@ -251,7 +251,7 @@ class PostsControllerTest extends ControllerTestSupport {
                 .category(updateCategory)
                 .build();
 
-        given(postsService.update(any(UpdatePostsServiceRequest.class))).willReturn(response);
+        given(postsService.updatePosts(any(UpdatePostsServiceRequest.class))).willReturn(response);
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())

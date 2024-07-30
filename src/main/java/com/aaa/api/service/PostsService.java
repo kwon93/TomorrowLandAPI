@@ -29,18 +29,17 @@ public class PostsService {
     private final S3ImageUploader s3ImageUploader;
 
     @Transactional
-    public PostsResponse create(final CreatePostsServiceRequest serviceRequest) {
-        final Users user = usersRepository.findById(serviceRequest.getUserId())
+    public PostsResponse createPosts(final CreatePostsServiceRequest request) {
+        final Users user = usersRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
-
-        final Posts posts = serviceRequest.toEntity(user);
+        final Posts posts = request.toEntity(user);
 
         postsRepository.save(posts);
-        return PostsResponse.of(posts);
+        return PostsResponse.from(posts);
     }
 
-    public List<Posts> getPage(final PostSearchForService serviceDto) {
-         return postsRepository.getList(serviceDto.toRepository());
+    public List<Posts> getPage(final PostSearchForService requet) {
+         return postsRepository.getList(requet.toRepository());
     }
 
     public List<Posts> getAll(PostsCategory category){
@@ -51,19 +50,17 @@ public class PostsService {
     public PostsResponse getOne(final Long postsId) {
         final Posts posts = postsRepository.getOneByPessimistLock(postsId)
                 .orElseThrow(PostNotfound::new);
-
         posts.increaseViewCount();
-        return PostsResponse.of(posts);
+        return PostsResponse.from(posts);
     }
 
     @Transactional
-    public PostsResponse update(final UpdatePostsServiceRequest serviceRequest) {
-        final Posts posts = findPostsById(serviceRequest.getPostsId());
-        posts.update(serviceRequest.getTitle(), serviceRequest.getContent(), serviceRequest.getCategory());
+    public PostsResponse updatePosts(final UpdatePostsServiceRequest updateRequest) {
+        final Posts updateTargetPosts = findPostsById(updateRequest.getPostsId());
+        updateTargetPosts.update(updateRequest);
 
-        return PostsResponse.of(posts);
+        return PostsResponse.from(updateTargetPosts);
     }
-
 
     @Transactional
     public void delete(final Long id) {
@@ -73,7 +70,6 @@ public class PostsService {
         }
         postsRepository.delete(posts);
     }
-
 
     private Posts findPostsById(final Long id) {
         return postsRepository.findById(id)

@@ -2,6 +2,7 @@ package com.aaa.api.domain;
 
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.exception.NegativeScoreException;
+import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -76,9 +77,9 @@ public class Posts extends BaseEntity{
     public String getUserEmail(){
         return this.user.getEmail();
     }
-    public void update(String title, String content, PostsCategory category) {
-        this.title = title;
-        this.content = content;
-        this.category = category;
+    public void update(final UpdatePostsServiceRequest updateRequest) {
+        this.title = updateRequest.getTitle();
+        this.content = updateRequest.getContent();
+        this.category = updateRequest.getCategory();
     }
 }

@@ -8,7 +8,6 @@ import com.aaa.api.exception.DuplicateLike;
 import com.aaa.api.exception.NegativeScoreException;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Users userInTest = createUserInTest();
         Posts postInTest = createPostInTest(userInTest);
         // when
-        likeService.increase(postInTest.getId(), userInTest.getId());
+        likeService.likeIncreaseProcess(postInTest.getId(), userInTest.getId());
 
         //then
         List<PostsLike> likes = likeRepository.findAll();
@@ -46,7 +45,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Users userInTest = createUserInTest();
         Posts postInTest = createPostInTest(userInTest);
         // when
-        likeService.increase(postInTest.getId(), userInTest.getId());
+        likeService.likeIncreaseProcess(postInTest.getId(), userInTest.getId());
 
         //then
         Posts findPosts = postsRepository.findById(postInTest.getId()).orElseThrow(PostNotfound::new);
@@ -61,7 +60,7 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         final long invalidUserId = 999L;
         Posts postInTest = createPostInTest(createUserInTest());
         // when
-        assertThatThrownBy(()-> likeService.increase(postInTest.getId() ,invalidUserId))
+        assertThatThrownBy(()-> likeService.likeIncreaseProcess(postInTest.getId() ,invalidUserId))
                 .isInstanceOf(UserNotFound.class)
                 .hasMessage("DB에서 찾을 수 없는 사용자 정보");
     }
@@ -74,9 +73,8 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Users userInTest = createUserInTest();
         Posts postInTest = createPostInTest(userInTest);
         // when
-        likeService.increase(postInTest.getId(), userInTest.getId());
+        likeService.likeIncreaseProcess(postInTest.getId(), userInTest.getId());
         likeService.decrease(postInTest.getId(), userInTest.getId());
-
         //then
         Posts posts = postsRepository.findById(postInTest.getId()).orElseThrow(PostNotfound::new);
         assertThat(posts.getLikeCount()).isZero();
@@ -90,9 +88,9 @@ class PostsLikeServiceTest extends IntegrationTestSupport {
         Users userInTest = createUserInTest();
         Posts postInTest = createPostInTest(userInTest);
         // when
-        likeService.increase(postInTest.getId(), userInTest.getId());
+        likeService.likeIncreaseProcess(postInTest.getId(), userInTest.getId());
 
-        assertThatThrownBy(()-> likeService.increase(postInTest.getId(), userInTest.getId()))
+        assertThatThrownBy(()-> likeService.likeIncreaseProcess(postInTest.getId(), userInTest.getId()))
                 .isInstanceOf(DuplicateLike.class)
                 .hasMessage("사용자의 중복 추천 게시물");
     }

@@ -24,7 +24,7 @@ class PostsLikeControllerTest extends ControllerTestSupport {
     void test1() throws Exception {
         //given
         final long testId = 1L;
-        doNothing().when(likeService).increase(anyLong(),anyLong());
+        doNothing().when(likeService).likeIncreaseProcess(anyLong(),anyLong());
 
         // when
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/like/{postsId}",
@@ -34,7 +34,7 @@ class PostsLikeControllerTest extends ControllerTestSupport {
         result.andExpect(status().isNoContent())
                 .andDo(print());
 
-        verify(likeService, times(1)).increase(anyLong(), anyLong());
+        verify(likeService, times(1)).likeIncreaseProcess(anyLong(), anyLong());
     }
 
     @Test
@@ -44,7 +44,7 @@ class PostsLikeControllerTest extends ControllerTestSupport {
         //given
         final long testId = 1L;
 
-        doThrow(new PostNotfound()).when(likeService).increase(anyLong(),anyLong());
+        doThrow(new PostNotfound()).when(likeService).likeIncreaseProcess(anyLong(),anyLong());
 
         // when
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/like/{postsId}",
@@ -55,7 +55,7 @@ class PostsLikeControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.errorMessage").value("존재하지않는 게시물 참조"))
                 .andDo(print());
 
-        verify(likeService, times(1)).increase(anyLong(), anyLong());
+        verify(likeService, times(1)).likeIncreaseProcess(anyLong(), anyLong());
     }
 
     @Test

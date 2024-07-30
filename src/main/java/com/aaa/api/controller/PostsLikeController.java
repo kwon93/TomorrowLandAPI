@@ -19,10 +19,8 @@ public class PostsLikeController {
     @PostMapping("like/{postsId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<Void> increaseLike(@PathVariable("postsId") final Long postsId,
-                                          @AuthenticationPrincipal final CustomUserPrincipal userPrincipal
-                                          ){
-
-        likeService.increase(postsId,userPrincipal.getUserId());
+                                          @AuthenticationPrincipal final CustomUserPrincipal userPrincipal){
+        likeService.likeIncreaseProcess(postsId,userPrincipal.getUserId());
         return ResponseEntity.noContent().build();
     }
 

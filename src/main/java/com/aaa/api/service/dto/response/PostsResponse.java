@@ -58,7 +58,7 @@ public class PostsResponse {
     }
 
 
-    public static PostsResponse of(final Posts entity){
+    public static PostsResponse from(final Posts entity){
         return PostsResponse.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())

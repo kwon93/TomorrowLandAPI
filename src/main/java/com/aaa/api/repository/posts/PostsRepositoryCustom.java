@@ -14,6 +14,4 @@ public interface PostsRepositoryCustom {
     List<Posts> getNoPagingLists(PostsCategory category);
 
     Optional<Posts> getOneByPessimistLock(Long postsId);
-
-
 }

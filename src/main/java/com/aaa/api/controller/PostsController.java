@@ -30,7 +30,7 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
                                                      @RequestBody @Validated final CreatePostsRequest request){
-        final PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
+        final PostsResponse posts = postsService.createPosts(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
 
@@ -52,7 +52,7 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
     public ResponseEntity<PostsResponse> updatePosts(@RequestBody final UpdatePostsRequest request,
                                      @PathVariable("postsId") final Long postsId){
-        postsService.update(request.toServiceDto(postsId));
+        postsService.updatePosts(request.toServiceDto(postsId));
         return ResponseEntity.noContent().build();
     }
 
