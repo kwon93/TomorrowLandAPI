@@ -12,17 +12,24 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ImageInfo {
 
-    private final String contentType;
-    private final long contentLengthLong;
-    private final ServletInputStream stream;
-    private final String originalFileName;
+    private String contentType;
+    private long contentLengthLong;
+    private ServletInputStream stream;
+    private String originalFileName;
 
     @Builder
-    public ImageInfo(HttpServletRequest request, String originalFileName) throws IOException {
+    private ImageInfo(HttpServletRequest request, String originalFileName) throws IOException {
         this.contentType = request.getContentType();
         this.contentLengthLong = request.getContentLengthLong();
         this.stream = request.getInputStream();
         this.originalFileName = originalFileName;
+    }
+
+    public static ImageInfo of(HttpServletRequest request, String originalFileName) throws IOException {
+        return ImageInfo.builder()
+                .originalFileName(originalFileName)
+                .request(request)
+                .build();
     }
 
 }

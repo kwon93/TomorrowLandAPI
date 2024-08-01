@@ -24,14 +24,12 @@ public class ImageController {
     private final ImageService imageService;
     private final S3ImageUploader imageUploader;
 
-    //REST API Resource image로 통일해야함.. 실수 TODO
     @PostMapping("image/upload")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ImageResponse> uploadImage(@RequestHeader("originalFileName")final String originalFileName,
                                                      final HttpServletRequest request) throws IOException {
-
-        final ImageInfo imageInfo = new ImageInfo(request, originalFileName);
-        final String uuId = imageService.imageProcessing(imageInfo);
+        final ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
+        final String uuId = imageService.imageFileNameProcessing(imageInfo);
         final ImageResponse imageResponse = imageUploader.uploadToS3(uuId, imageInfo);
 
         final HttpHeaders httpHeaders = new HttpHeaders();

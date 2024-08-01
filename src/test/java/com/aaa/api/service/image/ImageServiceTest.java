@@ -26,10 +26,10 @@ class ImageServiceTest extends IntegrationTestSupport {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContentType(contentType);
         request.setContent(mockByte);
-        ImageInfo imageInfo = new ImageInfo(request, originalFileName);
+        ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
 
         // when
-        String uuid = imageService.imageProcessing(imageInfo);
+        String uuid = imageService.imageFileNameProcessing(imageInfo);
 
         //then
         assertThat(uuid).isInstanceOf(String.class);
@@ -47,10 +47,10 @@ class ImageServiceTest extends IntegrationTestSupport {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContentType(contentType);
         request.setContent(mockByte);
-        ImageInfo imageInfo = new ImageInfo(request, originalFileName);
+        ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
 
         // when
-        assertThatThrownBy(() -> imageService.imageProcessing(imageInfo))
+        assertThatThrownBy(() -> imageService.imageFileNameProcessing(imageInfo))
                 .isInstanceOf(InvalidImageExtension.class)
                 .hasMessage("png,jpg,jpeg,webp 외의 확장자명 오류");
 

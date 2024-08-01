@@ -27,7 +27,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .imagepath("image/test.png")
                 .build();
 
-        given(imageService.imageProcessing(any(ImageInfo.class))).willReturn("testUUID");
+        given(imageService.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
         given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
@@ -39,7 +39,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .andExpect(header().stringValues("ImagePath",response.getImagePath()))
                 .andDo(print());
 
-        verify(imageService, times(1)).imageProcessing(any(ImageInfo.class));
+        verify(imageService, times(1)).imageFileNameProcessing(any(ImageInfo.class));
         verify(imageUploader, times(1)).uploadToS3(anyString(), any(ImageInfo.class));
     }
 

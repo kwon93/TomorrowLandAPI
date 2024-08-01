@@ -15,23 +15,34 @@ public class ImageService {
     private static final String EXTENSION_SEPARATOR = ".";
     private static final String[] ALLOWED_EXTENSIONS = {"*.jpg", "*.jpeg", "*.png", "*.webp"};
 
-    public String imageProcessing(final ImageInfo image){
-        validateImage(image);
-        final String originalFilename = image.getOriginalFileName();
-        final String extensionName = EXTENSION_SEPARATOR + StringUtils.getFilenameExtension(originalFilename);
-        final String uuId = UUID.randomUUID()
-                .toString()
-                .replaceAll("-", "")
-                .substring(0, 8);
+    public String imageFileNameProcessing(final ImageInfo imageInfo) {
+        this.validateImage(imageInfo);
+        final String extensionName = extractExtensionNameFrom(imageInfo);
+        final String uuId = getUUID();
         return uuId + extensionName;
     }
 
-    private void validateImage(final ImageInfo image) {
-        final String originalFileName = image.getOriginalFileName();
-        final String extensionName = EXTENSION_SEPARATOR + StringUtils.getFilenameExtension(originalFileName);
+    private static String extractExtensionNameFrom(ImageInfo image) {
+        final String originalFilename = image.getOriginalFileName();
+        return EXTENSION_SEPARATOR + StringUtils.getFilenameExtension(originalFilename);
+    }
 
-        if (!PatternMatchUtils.simpleMatch(ALLOWED_EXTENSIONS,extensionName)){
+    private static String getUUID() {
+        return UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 8);
+    }
+
+    private void validateImage(final ImageInfo image) {
+        final String extensionName = extractExtensionNameFrom(image);
+
+        if (isInvalidImageFile(extensionName)) {
             throw new InvalidImageExtension();
         }
+    }
+
+    private static boolean isInvalidImageFile(String extensionName) {
+        return !PatternMatchUtils.simpleMatch(ALLOWED_EXTENSIONS, extensionName);
     }
 }

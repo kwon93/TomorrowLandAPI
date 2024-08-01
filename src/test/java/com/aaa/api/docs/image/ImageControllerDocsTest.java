@@ -6,7 +6,6 @@ import com.aaa.api.service.dto.response.ImageResponse;
 import com.aaa.api.service.dto.response.ImageUrl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,7 +13,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -39,7 +37,7 @@ public class ImageControllerDocsTest extends RestDocsSupport {
                 .imagepath("image/test.png")
                 .build();
 
-        given(imageService.imageProcessing(any(ImageInfo.class))).willReturn("testUUID");
+        given(imageService.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
         given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
