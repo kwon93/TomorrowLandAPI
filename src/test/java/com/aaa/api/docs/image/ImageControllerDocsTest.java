@@ -3,7 +3,7 @@ package com.aaa.api.docs.image;
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.service.dto.request.ImageInfo;
 import com.aaa.api.service.dto.response.ImageResponse;
-import com.aaa.api.service.dto.response.ImageUrl;
+import com.aaa.api.service.dto.response.ImagePath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -38,7 +38,7 @@ public class ImageControllerDocsTest extends RestDocsSupport {
                 .build();
 
         given(imageService.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
-        given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
+        given(imageUploader.uploadImage(anyString(), any(ImageInfo.class))).willReturn(response);
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
                 .with(csrf().asHeader())
@@ -69,11 +69,11 @@ public class ImageControllerDocsTest extends RestDocsSupport {
         final String imagePath = "image/test.png";
         final String testURL = "http://aaa-upload-image.s3.com";
 
-        ImageUrl imageUrl = ImageUrl.builder()
+        ImagePath imageUrl = ImagePath.builder()
                 .imageUrl(testURL)
                 .build();
 
-        given(imageUploader.getPreSignedUrl(imagePath)).willReturn(imageUrl);
+        given(imageUploader.downloadImageBy(imagePath)).willReturn(imageUrl);
 
         // when
         ResultActions result = mockMvc.perform(get("/api/image/url")

@@ -16,7 +16,7 @@ public class ImageService {
     private static final String[] ALLOWED_EXTENSIONS = {"*.jpg", "*.jpeg", "*.png", "*.webp"};
 
     public String imageFileNameProcessing(final ImageInfo imageInfo) {
-        this.validateImage(imageInfo);
+        this.validateImageFileName(imageInfo);
         final String extensionName = extractExtensionNameFrom(imageInfo);
         final String uuId = getUUID();
         return uuId + extensionName;
@@ -34,15 +34,14 @@ public class ImageService {
                 .substring(0, 8);
     }
 
-    private void validateImage(final ImageInfo image) {
+    private void validateImageFileName(final ImageInfo image) {
         final String extensionName = extractExtensionNameFrom(image);
-
-        if (isInvalidImageFile(extensionName)) {
+        if (isInvalidExtension(extensionName)) {
             throw new InvalidImageExtension();
         }
     }
 
-    private static boolean isInvalidImageFile(String extensionName) {
+    private static boolean isInvalidExtension(String extensionName) {
         return !PatternMatchUtils.simpleMatch(ALLOWED_EXTENSIONS, extensionName);
     }
 }

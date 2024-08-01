@@ -1,7 +1,7 @@
 package com.aaa.api.service.image;
 
 import com.aaa.api.service.dto.request.ImageInfo;
-import com.aaa.api.service.dto.response.ImageUrl;
+import com.aaa.api.service.dto.response.ImagePath;
 import com.aaa.api.service.dto.response.ImageResponse;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -20,8 +20,7 @@ import java.util.Date;
  */
 @RequiredArgsConstructor
 @Component
-public class S3ImageUploader {
-
+public class S3ImageManager implements ImageManager{
 
     private static final long EXPIRATION_DATE = 3 * 60 * 1000;
     @Value("${cloud.aws.s3.bucket}")
@@ -32,13 +31,14 @@ public class S3ImageUploader {
     private String folder;
     private final AmazonS3 amazonS3;
 
-    public ImageResponse uploadToS3(final String uniqueName, final ImageInfo image) {
-        final String path = folder + uniqueName;
-        final ServletInputStream inputStream = image.getStream();
+    @Override
+    public ImageResponse uploadImage(final String fileName, final ImageInfo imageInfo) {
+        final String path = folder + fileName;
+        final ServletInputStream inputStream = imageInfo.getStream();
         final ObjectMetadata metadata = new ObjectMetadata();
 
-        metadata.setContentType(image.getContentType());
-        metadata.setContentLength(image.getContentLengthLong());
+        metadata.setContentType(imageInfo.getContentType());
+        metadata.setContentLength(imageInfo.getContentLengthLong());
         amazonS3.putObject(bucket,path,inputStream,metadata);
 
         return ImageResponse.builder()
@@ -46,24 +46,26 @@ public class S3ImageUploader {
                 .build();
     }
 
-    public ImageUrl getPreSignedUrl(String imagePath){
+    @Override
+    public ImagePath downloadImageBy(String imagePath){
         Date expiration = generateExpirationTime();
         GeneratePresignedUrlRequest presignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket,imagePath)
                 .withExpiration(expiration);
-
         URL url = amazonS3.generatePresignedUrl(presignedUrlRequest);
-        return ImageUrl.builder()
+
+        return ImagePath.builder()
                 .imageUrl(url.toString())
                 .build();
     }
 
+    @Override
     public void deleteImage(String fileName) throws AmazonServiceException {
         amazonS3.deleteObject(bucket, fileName);
     }
 
     private Date generateExpirationTime(){
         long now = new Date().getTime();
-        return new Date(now + S3ImageUploader.EXPIRATION_DATE);
+        return new Date(now + S3ImageManager.EXPIRATION_DATE);
     }
 }

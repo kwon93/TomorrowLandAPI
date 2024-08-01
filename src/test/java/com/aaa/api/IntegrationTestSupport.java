@@ -13,7 +13,7 @@ import com.aaa.api.repository.like.PostsLikeRepository;
 import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageService;
-import com.aaa.api.service.image.S3ImageUploader;
+import com.aaa.api.service.image.S3ImageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected ImageService imageService;
     @Autowired
-    protected S3ImageUploader imageUploader;
+    protected S3ImageManager imageUploader;
 
     //PostsLikeService
     @Autowired

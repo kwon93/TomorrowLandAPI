@@ -2,7 +2,7 @@ package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.service.dto.request.ImageInfo;
-import com.aaa.api.service.dto.response.ImageUrl;
+import com.aaa.api.service.dto.response.ImagePath;
 import com.aaa.api.service.dto.response.ImageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .build();
 
         given(imageService.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
-        given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
+        given(imageUploader.uploadImage(anyString(), any(ImageInfo.class))).willReturn(response);
 
         ResultActions result = mockMvc.perform(post("/api/image/upload")
                 .with(csrf())
@@ -40,7 +40,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .andDo(print());
 
         verify(imageService, times(1)).imageFileNameProcessing(any(ImageInfo.class));
-        verify(imageUploader, times(1)).uploadToS3(anyString(), any(ImageInfo.class));
+        verify(imageUploader, times(1)).uploadImage(anyString(), any(ImageInfo.class));
     }
 
 
@@ -52,11 +52,11 @@ class ImageControllerTest extends ControllerTestSupport {
         final String imagePath = "image/test.png";
         final String testURL = "http://aaa-upload-image.s3.com";
 
-        ImageUrl imageUrl = ImageUrl.builder()
+        ImagePath imageUrl = ImagePath.builder()
                 .imageUrl(testURL)
                 .build();
 
-        given(imageUploader.getPreSignedUrl(imagePath)).willReturn(imageUrl);
+        given(imageUploader.downloadImageBy(imagePath)).willReturn(imageUrl);
 
         // when
         ResultActions result = mockMvc.perform(get("/api/image/url")
@@ -67,7 +67,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.imageUrl").value(imageUrl.getImageUrl()))
                 .andDo(print());
 
-        verify(imageUploader, times(1)).getPreSignedUrl(imagePath);
+        verify(imageUploader, times(1)).downloadImageBy(imagePath);
 
     }
 

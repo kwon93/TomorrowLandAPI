@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImageUrl {
+public class ImagePath {
 
     private String imageUrl;
 
     @Builder
-    public ImageUrl(String imageUrl) {
+    public ImagePath(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }
