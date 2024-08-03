@@ -15,6 +15,6 @@ public class ImageStoreFailException extends TomorrowException {
 
     @Override
     public int statusCode() {
-        return 0;
+        return 400;
     }
 }
