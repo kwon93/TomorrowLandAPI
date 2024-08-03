@@ -1,10 +1,10 @@
 package com.aaa.api.controller;
 
-import com.aaa.api.service.dto.response.ImagePath;
-import com.aaa.api.service.image.ImageService;
 import com.aaa.api.service.dto.request.ImageInfo;
+import com.aaa.api.service.dto.response.ImageResourceResponse;
 import com.aaa.api.service.dto.response.ImageResponse;
-import com.aaa.api.service.image.S3ImageManager;
+import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.ImageStorageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -21,16 +21,16 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("api")
 public class ImageController {
 
-    private final ImageService imageService;
-    private final S3ImageManager imageUploader;
+    private final ImageFileNameProcessor imageFileNameProcessor;
+    private final ImageStorageManager imageStorageManager;
 
-    @PostMapping("image/upload")
+    @PostMapping("image")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ImageResponse> uploadImage(@RequestHeader("originalFileName") final String originalFileName,
                                                      final HttpServletRequest request) throws IOException {
         final ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
-        final String fileNameByUuid = imageService.imageFileNameProcessing(imageInfo);
-        final ImageResponse imageResponse = imageUploader.uploadImage(fileNameByUuid, imageInfo);
+        final String fileNameByUuid = imageFileNameProcessor.imageFileNameProcessing(imageInfo);
+        final ImageResponse imageResponse = imageStorageManager.uploadImage(fileNameByUuid, imageInfo);
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("ImagePath", imageResponse.getImagePath());
@@ -38,9 +38,9 @@ public class ImageController {
         return ResponseEntity.status(CREATED).headers(httpHeaders).body(imageResponse);
     }
 
-    @GetMapping("image/url")
-    public ResponseEntity<ImagePath> getImage(@RequestHeader("imagePath") final String imagePath) {
-        ImagePath imagePath1 = imageUploader.downloadImageBy(imagePath);
-        return ResponseEntity.ok(imagePath1);
+    @GetMapping("image")
+    public ResponseEntity<ImageResourceResponse> getImage(@RequestHeader("imagePath") final String imagePath) {
+        final ImageResourceResponse imageResourceResponse = imageStorageManager.downloadImage(imagePath);
+        return ResponseEntity.ok(imageResourceResponse);
     }
 }

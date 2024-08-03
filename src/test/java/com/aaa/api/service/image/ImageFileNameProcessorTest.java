@@ -13,7 +13,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ImageServiceTest extends IntegrationTestSupport {
+class ImageFileNameProcessorTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("imageProcessing(): imageInfoDTO를 통해 uuid 생성에 성공한다. ")
@@ -29,7 +29,7 @@ class ImageServiceTest extends IntegrationTestSupport {
         ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
 
         // when
-        String uuid = imageService.imageFileNameProcessing(imageInfo);
+        String uuid = imageFileNameProcessor.imageFileNameProcessing(imageInfo);
 
         //then
         assertThat(uuid).isInstanceOf(String.class);
@@ -50,7 +50,7 @@ class ImageServiceTest extends IntegrationTestSupport {
         ImageInfo imageInfo = ImageInfo.of(request, originalFileName);
 
         // when
-        assertThatThrownBy(() -> imageService.imageFileNameProcessing(imageInfo))
+        assertThatThrownBy(() -> imageFileNameProcessor.imageFileNameProcessing(imageInfo))
                 .isInstanceOf(InvalidImageExtension.class)
                 .hasMessage("png,jpg,jpeg,webp 외의 확장자명 오류");
 

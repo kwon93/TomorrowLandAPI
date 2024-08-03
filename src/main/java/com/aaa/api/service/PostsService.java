@@ -11,7 +11,7 @@ import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
 import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import com.aaa.api.service.dto.response.PostsResponse;
-import com.aaa.api.service.image.S3ImageManager;
+import com.aaa.api.service.image.S3ImageStorageManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final UsersRepository usersRepository;
-    private final S3ImageManager s3ImageManager;
+    private final S3ImageStorageManager s3ImageManager;
 
     @Transactional
     public PostsResponse createPosts(final CreatePostsServiceRequest request) {

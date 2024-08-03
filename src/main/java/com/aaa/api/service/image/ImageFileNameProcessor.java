@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class ImageFileNameProcessor {
     private static final String EXTENSION_SEPARATOR = ".";
     private static final String[] ALLOWED_EXTENSIONS = {"*.jpg", "*.jpeg", "*.png", "*.webp"};
 

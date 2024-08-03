@@ -32,4 +32,10 @@ public class ImageInfo {
                 .build();
     }
 
+    public byte[] extractByteImage() throws IOException {
+        return this.stream.readAllBytes();
+    }
+
+
+
 }

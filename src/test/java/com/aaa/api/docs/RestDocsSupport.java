@@ -6,8 +6,8 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.service.SseService;
 import com.aaa.api.service.*;
-import com.aaa.api.service.image.ImageService;
-import com.aaa.api.service.image.S3ImageManager;
+import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.S3ImageStorageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,9 +49,9 @@ public abstract class RestDocsSupport {
     @MockBean
     protected CommentService commentService;
     @MockBean
-    protected ImageService imageService;
+    protected ImageFileNameProcessor imageFileNameProcessor;
     @MockBean
-    protected S3ImageManager imageUploader;
+    protected S3ImageStorageManager imageUploader;
     @MockBean
     protected PostsLikeService likeService;
     @MockBean

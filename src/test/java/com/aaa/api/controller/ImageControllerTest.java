@@ -2,7 +2,7 @@ package com.aaa.api.controller;
 
 import com.aaa.api.ControllerTestSupport;
 import com.aaa.api.service.dto.request.ImageInfo;
-import com.aaa.api.service.dto.response.ImagePath;
+import com.aaa.api.service.dto.response.ImageResourceResponse;
 import com.aaa.api.service.dto.response.ImageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,14 +23,12 @@ class ImageControllerTest extends ControllerTestSupport {
     @DisplayName("uploadImage(): 요청을 받고 이미지 업로드 후 http status 201 응답에 성공한다.")
     void test1() throws Exception {
         //given
-        ImageResponse response = ImageResponse.builder()
-                .imagepath("image/test.png")
-                .build();
+        ImageResponse response = ImageResponse.from("image/test.png");
 
-        given(imageService.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
+        given(imageFileNameProcessor.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
         given(imageUploader.uploadImage(anyString(), any(ImageInfo.class))).willReturn(response);
 
-        ResultActions result = mockMvc.perform(post("/api/image/upload")
+        ResultActions result = mockMvc.perform(post("/api/image")
                 .with(csrf())
                 .header("originalFileName","test.png")
         );
@@ -39,7 +37,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .andExpect(header().stringValues("ImagePath",response.getImagePath()))
                 .andDo(print());
 
-        verify(imageService, times(1)).imageFileNameProcessing(any(ImageInfo.class));
+        verify(imageFileNameProcessor, times(1)).imageFileNameProcessing(any(ImageInfo.class));
         verify(imageUploader, times(1)).uploadImage(anyString(), any(ImageInfo.class));
     }
 
@@ -52,14 +50,14 @@ class ImageControllerTest extends ControllerTestSupport {
         final String imagePath = "image/test.png";
         final String testURL = "http://aaa-upload-image.s3.com";
 
-        ImagePath imageUrl = ImagePath.builder()
+        ImageResourceResponse imageUrl = ImageResourceResponse.builder()
                 .imageUrl(testURL)
                 .build();
 
-        given(imageUploader.downloadImageBy(imagePath)).willReturn(imageUrl);
+        given(imageUploader.downloadImage(imagePath)).willReturn(imageUrl);
 
         // when
-        ResultActions result = mockMvc.perform(get("/api/image/url")
+        ResultActions result = mockMvc.perform(get("/api/image")
                 .with(csrf())
                 .header("imagePath", imagePath));
         //then
@@ -67,7 +65,7 @@ class ImageControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.imageUrl").value(imageUrl.getImageUrl()))
                 .andDo(print());
 
-        verify(imageUploader, times(1)).downloadImageBy(imagePath);
+        verify(imageUploader, times(1)).downloadImage(imagePath);
 
     }
 
