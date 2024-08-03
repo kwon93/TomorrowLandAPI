@@ -1,5 +1,7 @@
 package com.aaa.api.service.image;
 
+import com.aaa.api.exception.FileDeleteFailException;
+import com.aaa.api.exception.FileNotExistException;
 import com.aaa.api.exception.ImageExtractFailException;
 import com.aaa.api.exception.ImageStoreFailException;
 import com.aaa.api.service.dto.request.ImageInfo;
@@ -10,10 +12,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @Primary
@@ -47,8 +49,28 @@ public class LocalImageStorageManager implements ImageStorageManager {
     }
 
     @Override
-    public void deleteImage(String fileName) {
+    public void deleteImage(String imagePath) {
+        Path storedFilePath = Paths.get(imagePath);
+        fileExistValidation(storedFilePath);
+        deleteFileBy(storedFilePath);
+    }
 
+    private void deleteFileBy(Path storedFilePath) {
+        try {
+            Files.delete(storedFilePath);
+        } catch (IOException e) {
+            throw new FileDeleteFailException(e);
+        }
+    }
+
+    private void fileExistValidation(Path storedFilePath) {
+        if (isNotExistFile(storedFilePath)) {
+            throw new FileNotExistException();
+        }
+    }
+
+    private boolean isNotExistFile(Path storedFilePath) {
+        return !Files.exists(storedFilePath);
     }
 
     private byte[] extractStoredFileFrom(String imagePath) throws IOException {

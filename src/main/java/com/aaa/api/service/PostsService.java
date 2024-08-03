@@ -5,13 +5,13 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.exception.PostNotfound;
 import com.aaa.api.exception.UserNotFound;
-import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.repository.UsersRepository;
+import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import com.aaa.api.service.dto.request.PostSearchForService;
 import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
 import com.aaa.api.service.dto.response.PostsResponse;
-import com.aaa.api.service.image.S3ImageStorageManager;
+import com.aaa.api.service.image.ImageStorageManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final UsersRepository usersRepository;
-    private final S3ImageStorageManager s3ImageManager;
+    private final ImageStorageManager imageStorageManager;
 
     @Transactional
     public PostsResponse createPosts(final CreatePostsServiceRequest request) {
@@ -66,7 +66,7 @@ public class PostsService {
     public void delete(final Long id) {
         final Posts posts = findPostsById(id);
         if (StringUtils.hasText(posts.getImagePath())){
-            s3ImageManager.deleteImage(posts.getImagePath());
+            imageStorageManager.deleteImage(posts.getImagePath());
         }
         postsRepository.delete(posts);
     }
