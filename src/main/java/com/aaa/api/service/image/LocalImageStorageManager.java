@@ -26,15 +26,9 @@ public class LocalImageStorageManager implements ImageStorageManager {
 
     @Override
     public ImageResponse uploadImage(final String fileName, final ImageInfo imageInfo) throws IOException {
-        String filePath = localPath + fileName;
-        File storedFilePath = new File(filePath);
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(storedFilePath)) {
-            fileOutputStream.write(imageInfo.extractByteImage());
-        } catch (IOException ioException) {
-            throw new ImageStoreFailException(ioException);
-        }
-
+        String filePath = extractFilePath(fileName);
+        File baseFile = makeBaseFile(filePath);
+        storeImageToBaseFile(imageInfo, baseFile);
         return ImageResponse.from(filePath);
     }
 
@@ -53,6 +47,14 @@ public class LocalImageStorageManager implements ImageStorageManager {
         Path storedFilePath = Paths.get(imagePath);
         fileExistValidation(storedFilePath);
         deleteFileBy(storedFilePath);
+    }
+
+    private void storeImageToBaseFile(ImageInfo imageInfo, File storedFilePath) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(storedFilePath)) {
+            fileOutputStream.write(imageInfo.extractByteImage());
+        } catch (IOException ioException) {
+            throw new ImageStoreFailException(ioException);
+        }
     }
 
     private void deleteFileBy(Path storedFilePath) {
@@ -75,6 +77,14 @@ public class LocalImageStorageManager implements ImageStorageManager {
 
     private byte[] extractStoredFileFrom(String imagePath) throws IOException {
         return StreamUtils.copyToByteArray(new FileInputStream(imagePath));
+    }
+
+    private File makeBaseFile(String filePath) {
+        return new File(filePath);
+    }
+
+    private String extractFilePath(String fileName) {
+        return localPath + fileName;
     }
 
 }
