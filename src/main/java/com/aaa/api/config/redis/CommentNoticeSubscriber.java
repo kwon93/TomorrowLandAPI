@@ -1,9 +1,8 @@
 package com.aaa.api.config.redis;
 
-import com.aaa.api.exception.RedisJsonParsingException;
+import com.aaa.api.exception.FailToSendNotificationException;
 import com.aaa.api.service.SseService;
 import com.aaa.api.service.dto.NoticeMessageData;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,20 +16,26 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class CommentNoticeSubscriber implements MessageListener {
-    
+
     private final ObjectMapper objectMapper;
     private final SseService sseService;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        String channelMessage = new String(message.getBody());
+        String channelMessage = getChannelMessage(message);
+        sendMessageToSSE(channelMessage);
+    }
+
+    private void sendMessageToSSE(String channelMessage) {
         try {
             NoticeMessageData noticeMessageData = objectMapper.readValue(channelMessage, NoticeMessageData.class);
-            sseService.sendToUser(noticeMessageData.getPostWriterId(),noticeMessageData.getNoticeMessage());
-        } catch (JsonProcessingException e) {
-            throw new RedisJsonParsingException();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            sseService.sendToUser(noticeMessageData);
+        } catch (IOException ioException) {
+            throw new FailToSendNotificationException(ioException);
         }
+    }
+
+    private String getChannelMessage(Message message) {
+        return new String(message.getBody());
     }
 }

@@ -1,0 +1,240 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PostsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.service</a>
+</div>
+
+<h1>Coverage Summary for Class: PostsService (com.aaa.api.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PostsService</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.5%
+  </span>
+  <span class="absValue">
+    (19/21)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PostsService$$SpringCGLIB$$0</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$6ypeymhU</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$cNH0GfRv</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$EDcddisa</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$hklZyP8z</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$l3NXWomN</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$pk7f6EA4</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$PyVMHXKx</td>
+  </tr>
+  <tr>
+    <td class="name">PostsService$MockitoMock$poUY1CR4$auxiliary$VuWzEFH8</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.5%
+  </span>
+  <span class="absValue">
+    (19/21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.service;
+&nbsp;
+&nbsp;import com.aaa.api.domain.Posts;
+&nbsp;import com.aaa.api.domain.Users;
+&nbsp;import com.aaa.api.domain.enumType.PostsCategory;
+&nbsp;import com.aaa.api.exception.PostNotfound;
+&nbsp;import com.aaa.api.exception.UserNotFound;
+&nbsp;import com.aaa.api.repository.UsersRepository;
+&nbsp;import com.aaa.api.repository.posts.PostsRepository;
+&nbsp;import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
+&nbsp;import com.aaa.api.service.dto.request.PostSearchForService;
+&nbsp;import com.aaa.api.service.dto.request.UpdatePostsServiceRequest;
+&nbsp;import com.aaa.api.service.dto.response.PostsResponse;
+&nbsp;import com.aaa.api.service.image.ImageStorageManager;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+&nbsp;@Transactional(readOnly = true)
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class PostsService {
+&nbsp;
+&nbsp;    private final PostsRepository postsRepository;
+&nbsp;    private final UsersRepository usersRepository;
+&nbsp;    private final ImageStorageManager imageStorageManager;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public PostsResponse createPosts(final CreatePostsServiceRequest request) {
+<b class="fc">&nbsp;        final Users user = usersRepository.findById(request.getUserId())</b>
+<b class="fc">&nbsp;                .orElseThrow(UserNotFound::new);</b>
+<b class="fc">&nbsp;        final Posts posts = request.toEntity(user);</b>
+&nbsp;
+<b class="fc">&nbsp;        postsRepository.save(posts);</b>
+<b class="fc">&nbsp;        return PostsResponse.from(posts);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Posts&gt; getPage(final PostSearchForService requet) {
+<b class="fc">&nbsp;         return postsRepository.getList(requet.toRepository());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Posts&gt; getAll(PostsCategory category){
+<b class="nc">&nbsp;        return postsRepository.getNoPagingLists(category);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public PostsResponse getOne(final Long postsId) {
+<b class="fc">&nbsp;        final Posts posts = postsRepository.getOneByPessimistLock(postsId)</b>
+<b class="fc">&nbsp;                .orElseThrow(PostNotfound::new);</b>
+<b class="fc">&nbsp;        posts.increaseViewCount();</b>
+<b class="fc">&nbsp;        return PostsResponse.from(posts);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public PostsResponse updatePosts(final UpdatePostsServiceRequest updateRequest) {
+<b class="fc">&nbsp;        final Posts updateTargetPosts = findPostsById(updateRequest.getPostsId());</b>
+<b class="fc">&nbsp;        updateTargetPosts.update(updateRequest);</b>
+&nbsp;
+<b class="fc">&nbsp;        return PostsResponse.from(updateTargetPosts);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void delete(final Long id) {
+<b class="fc">&nbsp;        final Posts posts = findPostsById(id);</b>
+<b class="pc">&nbsp;        if (StringUtils.hasText(posts.getImagePath())){</b>
+<b class="nc">&nbsp;            imageStorageManager.deleteImage(posts.getImagePath());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        postsRepository.delete(posts);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Posts findPostsById(final Long id) {
+<b class="fc">&nbsp;        return postsRepository.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(PostNotfound::new);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

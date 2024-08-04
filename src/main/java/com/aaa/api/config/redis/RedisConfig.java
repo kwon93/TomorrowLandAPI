@@ -22,10 +22,8 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     @Value("${spring.data.redis.host}")
     private String host;
-
     @Value("${spring.data.redis.port}")
     private int port;
-
     private ClassLoader loader;
 
     @Bean
@@ -52,7 +50,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     }
 
     /**
-     *  springSessionDefaultRedisSerializer()
+     *  springSessionDefaultRedisSerializer() 2024.08.04
      *  objectMapper()
      *  setBeanClassLoader()
      *  Redis serialize methods
@@ -75,7 +73,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     }
 
     /**
-     * WebSocket PUB/SUB methods...
+     * WebSocket PUB/SUB methods... 2024.08.04
      * redisMessageListenerContainer() : pub / sub
      */
     @Bean
