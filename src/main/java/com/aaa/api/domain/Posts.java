@@ -55,13 +55,10 @@ public class Posts extends BaseEntity{
     public Long getUserId(){
         return this.user.getId();
     }
-
     public void increaseViewCount(){
         this.viewCount++;
     }
-
     public void increaseLikeCount(){this.likeCount++;}
-
     public void decreaseLikeCount(){
         if (this.likeCount > 0){
             this.likeCount--;
@@ -69,11 +66,9 @@ public class Posts extends BaseEntity{
             throw new NegativeScoreException();
         }
     }
-
     public String getUserName(){
         return this.user.getName();
     }
-
     public String getUserEmail(){
         return this.user.getEmail();
     }

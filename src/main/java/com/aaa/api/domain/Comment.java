@@ -45,14 +45,12 @@ public class Comment extends BaseEntity {
     public void updateRewardState(){
         this.isRewarded = IsRewarded.True;
     }
-
     public Long getUsersId(){
         return this.users.getId();
     }
     public String  getUsername(){
         return this.users.getName();
     }
-
     public String getUserEmail(){
         return this.users.getEmail();
     }

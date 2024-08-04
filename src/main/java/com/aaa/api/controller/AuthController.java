@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity<Void> signIn(@RequestBody @Validated final LoginRequest loginRequest, HttpSession session) {
-        SessionDataResponse sessionData = authService.processingUserSessionBy(loginRequest.toServiceDto());
+        SessionDataResponse sessionData = authService.signInProcess(loginRequest.toServiceDto());
 
         session.setAttribute("userEmail", sessionData.getEmail());
         session.setAttribute("userRoles", sessionData.getRole().toString());

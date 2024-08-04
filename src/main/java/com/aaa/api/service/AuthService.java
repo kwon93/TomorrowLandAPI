@@ -31,14 +31,9 @@ public class AuthService {
     private final RedisTemplate redisTemplate;
 
     @Transactional
-    public SessionDataResponse processingUserSessionBy(final LoginServiceRequest request) {
-        Users userByEmail = usersRepository.findByEmail(request.getEmail())
-                        .orElseThrow(UserNotFound::new);
-
-        if (isNotPasswordMatch(request, userByEmail)) {
-            throw new InvalidSignInInfomation();
-        }
-
+    public SessionDataResponse signInProcess(final LoginServiceRequest request) {
+        Users userByEmail = findUserByEmail(request);
+        invalidSignInValidation(request, userByEmail);
         userInfoStoreToRedis(userByEmail);
         setAuthenticateBy(userByEmail);
 
@@ -46,8 +41,7 @@ public class AuthService {
     }
 
     public long getUserId(final LoginServiceRequest serviceRequest) {
-        Users users = usersRepository.findByEmail(serviceRequest.getEmail())
-                .orElseThrow(UserNotFound::new);
+        Users users = findUserByEmail(serviceRequest);
         return users.getId();
     }
 
@@ -66,7 +60,16 @@ public class AuthService {
         redisTemplate.opsForHash().put("userInfo", "userRole", userByEmail.getRoles());
     }
 
+    private Users findUserByEmail(LoginServiceRequest request) {
+        return usersRepository.findByEmail(request.getEmail())
+                .orElseThrow(UserNotFound::new);
+    }
 
+    private void invalidSignInValidation(LoginServiceRequest request, Users userByEmail) {
+        if (isNotPasswordMatch(request, userByEmail)) {
+            throw new InvalidSignInInfomation();
+        }
+    }
 
     private boolean isNotPasswordMatch(LoginServiceRequest request, Users userByEmail) {
         return !passwordEncoder.matches(request.getPassword(), userByEmail.getPassword());

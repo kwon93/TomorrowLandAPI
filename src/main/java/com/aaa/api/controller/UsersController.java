@@ -5,12 +5,10 @@ import com.aaa.api.controller.dto.request.CreateUsersRequest;
 import com.aaa.api.service.UsersService;
 import com.aaa.api.service.dto.response.UserInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +26,7 @@ public class UsersController {
 
     @PatchMapping("reward/{rewardUserId}/posts/{postsId}/comment/{commentId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
-    public ResponseEntity<?> rewardPoint(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
+    public ResponseEntity<Void> rewardPoint(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                          @PathVariable("rewardUserId") final Long rewardUserId,
                                          @PathVariable("commentId") final Long commentId,
                                          @PathVariable("postsId") final Long postsId

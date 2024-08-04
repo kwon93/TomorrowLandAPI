@@ -24,13 +24,16 @@ public class CommentNotificationService {
     public String publishCommentNotice(CommentNoticeServiceDto noticeServiceDto) throws JsonProcessingException {
         NoticeMessageData noticeMessageData = processingNoticeMessageData(noticeServiceDto);
         String noticeMessage = objectMapper.writeValueAsString(noticeMessageData);
+        String noticeKey = NOTIFICATION_REDIS_KEY + noticeServiceDto.getPostWriterId();
 
-        String keyByNotice = NOTIFICATION_REDIS_KEY + noticeServiceDto.getPostWriterId();
+        persistNoticeInfoToRedis(noticeKey, noticeMessageData, noticeMessage);
+        return noticeMessageData.getId();
+    }
+
+    private void persistNoticeInfoToRedis(String keyByNotice, NoticeMessageData noticeMessageData, String noticeMessage) {
         redisTemplate.opsForHash().put(keyByNotice, noticeMessageData.getId(), noticeMessage);
         redisTemplate.expire(keyByNotice, 7, TimeUnit.DAYS);
-
         redisTemplate.convertAndSend(channelTopic.getTopic(), noticeMessage);
-        return noticeMessageData.getId();
     }
 
     private NoticeMessageData processingNoticeMessageData(CommentNoticeServiceDto noticeServiceDto) {

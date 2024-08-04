@@ -67,9 +67,6 @@ dependencies {
 	//MySql
 	implementation 'mysql:mysql-connector-java:8.0.23'
 
-	//webSocket
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	//redis-session
