@@ -69,16 +69,19 @@ class AuthControllerDocsTest extends RestDocsIntegrationSupport {
         //given
         Session session = sessionRepository.createSession();
         session.setAttribute("userEmail", "foo@bar.com");
+        session.setAttribute("userRoles", "ADMIN");
+
         sessionRepository.save(session);
 
         String encodedSessionId = Base64.getEncoder().encodeToString(session.getId().getBytes());
         Cookie tomorrowSession = new Cookie("tomorrowSession", encodedSessionId);
 
-//        when
+        //when
         ResultActions result = mockMvc.perform(post("/api/logout")
                         .with(request -> request)
                         .cookie(tomorrowSession));
-//        then
+
+        //then
         result.andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(document("auth-logout",

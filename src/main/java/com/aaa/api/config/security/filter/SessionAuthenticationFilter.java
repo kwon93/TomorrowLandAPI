@@ -25,6 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
+    public static final String SESSION_ATTR_USER_EMAIL = "sessionAttr:userEmail";
+    public static final String SESSION_ATTR_USER_ROLES = "sessionAttr:userRoles";
     private final CustomUserDetailsService customUserDetailsService;
     private final RedisTemplate redisTemplate;
     @Value("${spring.session.redis.namespace}")
@@ -32,34 +34,23 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
+        Cookie[] sessionCookie = request.getCookies();
+        if (sessionCookie == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        Optional<String> sessionValue = extractSessionFromCookie(cookies);
-
-        if (sessionValue.isPresent()) {
-            String tomorrowSession = sessionValue.get();
-            String session = new String(Base64.getDecoder().decode(tomorrowSession));
-            String key = sessionNamespace + ":sessions:" + session;
-            String userEmail = (String) redisTemplate.opsForHash().get(key,"sessionAttr:userEmail");
-            String userRole = (String) redisTemplate.opsForHash().get(key,"sessionAttr:userRoles");
-
-            if (userEmail.isEmpty()) {
-                throw new MissingRedisSession();
-            }
-
-            setAuthenticationBySession(userEmail, userRole);
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+        extractSessionCookie(sessionCookie).ifPresent(this::authenticationProcess);
         filterChain.doFilter(request,response);
     }
 
-    private Optional<String> extractSessionFromCookie(Cookie[] cookies) {
+    private void authenticationProcess(String session) {
+        String key = getSessionRedisKey(session);
+        String userEmail = getUserInfoFromRedis(key, SESSION_ATTR_USER_EMAIL);
+        String userRole = getUserInfoFromRedis(key, SESSION_ATTR_USER_ROLES);
+        setAuthenticationBySession(userEmail, userRole);
+    }
+
+    private Optional<String> extractSessionCookie(Cookie[] cookies) {
         return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("tomorrowSession"))
                 .map(Cookie::getValue)
@@ -73,6 +64,23 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
                         "",
                         List.of(new SimpleGrantedAuthority("ROLE_" + userRole)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private String getUserInfoFromRedis(String key, String hashKey) {
+        String userInfo = (String) redisTemplate.opsForHash().get(key,hashKey);
+        invalidRedisSessionValidation(userInfo);
+        return userInfo;
+    }
+
+    private String getSessionRedisKey(String session) {
+        String decodedSession = new String(Base64.getDecoder().decode(session));
+        return sessionNamespace + ":sessions:" + decodedSession;
+    }
+
+    private void invalidRedisSessionValidation(String userEmail) {
+        if (userEmail == null) {
+            throw new MissingRedisSession();
+        }
     }
 
 }
