@@ -22,12 +22,12 @@ public class ImageFileNameProcessor {
         return uuId + extensionName;
     }
 
-    private static String extractExtensionNameFrom(ImageInfo image) {
+    private String extractExtensionNameFrom(ImageInfo image) {
         final String originalFilename = image.getOriginalFileName();
         return EXTENSION_SEPARATOR + StringUtils.getFilenameExtension(originalFilename);
     }
 
-    private static String getUUID() {
+    private String getUUID() {
         return UUID.randomUUID()
                 .toString()
                 .replace("-", "")
@@ -41,7 +41,7 @@ public class ImageFileNameProcessor {
         }
     }
 
-    private static boolean isInvalidExtension(String extensionName) {
+    private boolean isInvalidExtension(String extensionName) {
         return !PatternMatchUtils.simpleMatch(ALLOWED_EXTENSIONS, extensionName);
     }
 }

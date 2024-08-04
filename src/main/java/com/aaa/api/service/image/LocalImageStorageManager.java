@@ -17,8 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Service
 @Primary
+@Service
 public class LocalImageStorageManager implements ImageStorageManager {
 
     @Value("${image.localPath}")

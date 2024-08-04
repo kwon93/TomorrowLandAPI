@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.servlet.ServletInputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.util.Date;
@@ -19,7 +19,7 @@ import java.util.Date;
  * S3 관련
  */
 @RequiredArgsConstructor
-@Component
+@Service
 public class S3ImageStorageManager implements ImageStorageManager {
 
     private static final long EXPIRATION_DATE = 3 * 60 * 1000;
