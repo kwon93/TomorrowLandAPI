@@ -12,7 +12,7 @@ public class UpdateCommentServiceRequest {
     private final Long commentId;
 
     @Builder
-    public UpdateCommentServiceRequest(final String content, final String password, final Long commentId) {
+    private UpdateCommentServiceRequest(final String content, final String password, final Long commentId) {
         this.content = content;
         this.password = password;
         this.commentId = commentId;

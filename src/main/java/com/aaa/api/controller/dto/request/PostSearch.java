@@ -18,7 +18,7 @@ public class PostSearch {
     private String searchKeyword;
 
     @Builder
-    public PostSearch(final Integer page, final Integer size, PostsCategory category, String searchKeyword) {
+    private PostSearch(final Integer page, final Integer size, PostsCategory category, String searchKeyword) {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
         this.category = category;

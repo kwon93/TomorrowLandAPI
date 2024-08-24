@@ -19,7 +19,7 @@ public class UpdateCommentRequest {
 
 
     @Builder
-    public UpdateCommentRequest(final String content) {
+    private UpdateCommentRequest(final String content) {
         this.content = content;
     }
 

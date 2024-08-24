@@ -16,7 +16,7 @@ public class UpdatePostsRequest {
     private PostsCategory category;
 
     @Builder
-    public UpdatePostsRequest(final String title, final String content, final PostsCategory category) {
+    private UpdatePostsRequest(final String title, final String content, final PostsCategory category) {
         this.title = title;
         this.content = content;
         this.category = category;

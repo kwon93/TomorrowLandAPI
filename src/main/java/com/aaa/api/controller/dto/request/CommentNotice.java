@@ -15,7 +15,7 @@ public class CommentNotice {
     private Long postsId;
 
     @Builder
-    public CommentNotice(String commenter, String postName, Long postsWriterId, Long postsId) {
+    private CommentNotice(String commenter, String postName, Long postsWriterId, Long postsId) {
         this.commenter = commenter;
         this.postName = postName;
         this.postsWriterId = postsWriterId;

@@ -15,7 +15,7 @@ public class PostSearchForService {
     private final String searchKeyword;
 
     @Builder
-    public PostSearchForService(final int page, final int size, final int offset, PostsCategory category, String searchKeyword) {
+    private PostSearchForService(final int page, final int size, final int offset, PostsCategory category, String searchKeyword) {
         this.page = page;
         this.size = size;
         this.offset = offset;

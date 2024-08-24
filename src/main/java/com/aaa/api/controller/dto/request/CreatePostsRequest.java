@@ -4,7 +4,6 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class CreatePostsRequest {
     private String imagePath;
 
     @Builder
-    public CreatePostsRequest(final String  category,final String title, final String content, String imagePath) {
+    private CreatePostsRequest(final String  category,final String title, final String content, String imagePath) {
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;

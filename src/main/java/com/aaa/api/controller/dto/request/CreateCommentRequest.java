@@ -17,7 +17,7 @@ public class CreateCommentRequest {
     private String content;
 
     @Builder
-    public CreateCommentRequest(final String content) {
+    private CreateCommentRequest(final String content) {
         this.content = content;
     }
 

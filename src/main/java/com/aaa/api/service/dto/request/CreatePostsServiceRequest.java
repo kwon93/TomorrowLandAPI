@@ -16,7 +16,7 @@ public class CreatePostsServiceRequest {
     private final String imagePath;
 
     @Builder
-    public CreatePostsServiceRequest(final String title, final String content, final PostsCategory category, final Long userId, String imagePath) {
+    private CreatePostsServiceRequest(final String title, final String content, final PostsCategory category, final Long userId, String imagePath) {
         this.title = title;
         this.content = content;
         this.category = category;

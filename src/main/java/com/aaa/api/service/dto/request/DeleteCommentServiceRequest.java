@@ -10,7 +10,7 @@ public class DeleteCommentServiceRequest {
     private final Long commentId;
 
     @Builder
-    public DeleteCommentServiceRequest(final String password, final Long commentId) {
+    private DeleteCommentServiceRequest(final String password, final Long commentId) {
         this.password = password;
         this.commentId = commentId;
     }

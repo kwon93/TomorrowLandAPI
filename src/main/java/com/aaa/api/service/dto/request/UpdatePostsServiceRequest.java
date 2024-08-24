@@ -1,6 +1,5 @@
 package com.aaa.api.service.dto.request;
 
-import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.enumType.PostsCategory;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +13,7 @@ public class UpdatePostsServiceRequest {
     private final Long postsId;
 
     @Builder
-    public UpdatePostsServiceRequest(final String title,
+    private UpdatePostsServiceRequest(final String title,
                                      final String content,
                                      final PostsCategory category,
                                      final Long postsId) {

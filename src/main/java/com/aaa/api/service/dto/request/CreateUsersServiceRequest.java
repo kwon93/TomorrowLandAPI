@@ -4,7 +4,6 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 public class CreateUsersServiceRequest {
@@ -15,7 +14,7 @@ public class CreateUsersServiceRequest {
     private final Role role;
 
     @Builder
-    public CreateUsersServiceRequest(final String email, final String password, final String name, final Role role) {
+    private CreateUsersServiceRequest(final String email, final String password, final String name, final Role role) {
         this.email = email;
         this.password = password;
         this.name = name;

@@ -14,7 +14,7 @@ public class CreateCommentServiceRequest {
     private final Long usersId;
 
     @Builder
-    public CreateCommentServiceRequest(final String content, final Long postsId, Long usersId) {
+    private CreateCommentServiceRequest(final String content, final Long postsId, Long usersId) {
         this.content = content;
         this.postsId = postsId;
         this.usersId = usersId;
