@@ -1,13 +1,11 @@
 package com.aaa.api;
 
 import com.aaa.api.config.CustomMockSecurityContext;
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
-import com.aaa.api.config.security.jwt.JwtTokenReIssueProvider;
 import com.aaa.api.controller.*;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.*;
-import com.aaa.api.service.image.ImageService;
-import com.aaa.api.service.image.S3ImageUploader;
+import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.S3ImageStorageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +38,13 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected CommentService commentService;
     @MockBean
-    protected JwtTokenProvider jwtTokenProvider;
+    protected ImageFileNameProcessor imageFileNameProcessor;
     @MockBean
-    protected JwtTokenReIssueProvider reIssueProvider;
-    @MockBean
-    protected ImageService imageService;
-    @MockBean
-    protected S3ImageUploader imageUploader;
+    protected S3ImageStorageManager imageUploader;
     @MockBean
     protected PostsLikeService likeService;
+    @MockBean
+    protected CommentNotificationService commentNotificationService;
 
 
     //통합테스트환경에서 뺄지 고민중..

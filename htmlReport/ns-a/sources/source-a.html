@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Users</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.domain</a>
+</div>
+
+<h1>Coverage Summary for Class: Users (com.aaa.api.domain)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Users</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Users$HibernateInstantiator$AXZ4tu9g</td>
+  </tr>
+  <tr>
+    <td class="name">Users$HibernateInstantiator$WqqfU9bV</td>
+  </tr>
+  <tr>
+    <td class="name">Users$HibernateInstantiator$xdPGNFx8</td>
+  </tr>
+  <tr>
+    <td class="name">Users$HibernateProxy$3t2aBddy</td>
+  </tr>
+  <tr>
+    <td class="name">Users$HibernateProxy$D95ipIPa</td>
+  </tr>
+  <tr>
+    <td class="name">Users$HibernateProxy$sLojt7wi</td>
+  </tr>
+  <tr>
+    <td class="name">Users$UsersBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (24/25)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.domain;
+&nbsp;
+&nbsp;import com.aaa.api.domain.enumType.Role;
+&nbsp;import com.aaa.api.domain.enumType.UserLevel;
+&nbsp;import com.aaa.api.exception.NotEnoughPoint;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import static com.aaa.api.domain.enumType.UserLevel.*;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Getter
+<b class="fc">&nbsp;@NoArgsConstructor(access = AccessLevel.PROTECTED)</b>
+<b class="nc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class Users extends BaseEntity {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<b class="fc">&nbsp;    private Long id;</b>
+&nbsp;
+&nbsp;    @Column(nullable = false,unique = true)
+<b class="fc">&nbsp;    private String email;</b>
+&nbsp;
+&nbsp;    @Column(nullable = false)
+<b class="fc">&nbsp;    private String password;</b>
+&nbsp;
+<b class="fc">&nbsp;    private String name;</b>
+&nbsp;
+<b class="fc">&nbsp;    private Integer point;</b>
+&nbsp;
+&nbsp;    @Enumerated(EnumType.STRING)
+<b class="fc">&nbsp;    private UserLevel userLevel;</b>
+&nbsp;
+&nbsp;    @Enumerated(EnumType.STRING)
+<b class="fc">&nbsp;    private Role roles;</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    @Builder</b>
+<b class="fc">&nbsp;    public Users(long id,String email, String password, String name, Integer point, UserLevel userLevel, Role role) {</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.point = point == null ? 200 : point;</b>
+<b class="fc">&nbsp;        this.userLevel = Beginner;</b>
+<b class="fc">&nbsp;        this.roles = role == null ? Role.USER : role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void decreasePoint() {
+<b class="fc">&nbsp;        if (this.point &gt;= 20){</b>
+<b class="fc">&nbsp;            this.point -= 20;</b>
+<b class="fc">&nbsp;            this.userLevel = measurementLevel(this.point);</b>
+&nbsp;        }else {
+<b class="fc">&nbsp;            throw new NotEnoughPoint();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void increasePoint(){
+<b class="fc">&nbsp;        this.point += 50;</b>
+<b class="fc">&nbsp;        this.userLevel = measurementLevel(this.point);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

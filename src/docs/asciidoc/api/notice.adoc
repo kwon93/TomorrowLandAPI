@@ -1,0 +1,11 @@
+=== Server Sent Event 최초 연결
+
+==== HttpRequest
+include::{snippets}/sse-connect-init/http-request.adoc[]
+
+==== HttpResponse
+include::{snippets}/sse-connect-init/http-response.adoc[]
+include::{snippets}/sse-connect-init/response-body.adoc[]
+
+
+

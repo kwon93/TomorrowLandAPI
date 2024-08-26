@@ -1,32 +1,36 @@
 package com.aaa.api;
 
 
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
 import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
-import com.aaa.api.repository.posts.PostsRepository;
-import com.aaa.api.repository.like.PostsLikeRepository;
+import com.aaa.api.repository.SseRepository;
+import com.aaa.api.service.SseService;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
+import com.aaa.api.repository.like.PostsLikeRepository;
+import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.*;
-import com.aaa.api.service.image.ImageService;
-import com.aaa.api.service.image.S3ImageUploader;
-import org.junit.jupiter.api.AfterEach;
+import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.LocalImageStorageManager;
+import com.aaa.api.service.image.S3ImageStorageManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.crypto.SecretKey;
-
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 public abstract class IntegrationTestSupport {
 
+    @Autowired
+    protected ObjectMapper objectMapper;
     //Posts
     @Autowired
     protected PostsService postsService;
@@ -48,18 +52,20 @@ public abstract class IntegrationTestSupport {
     protected CommentService commentService;
     @Autowired
     protected CommentRepository commentRepository;
+    @Autowired
+    protected CommentNotificationService commentNotificationService;
 
     //passwordEncoder
     @Autowired
     protected PasswordEncoder passwordEncoder;
-    @Autowired
-    protected JwtTokenProvider jwtTokenProvider;
 
     //ImageService
     @Autowired
-    protected ImageService imageService;
+    protected ImageFileNameProcessor imageFileNameProcessor;
     @Autowired
-    protected S3ImageUploader imageUploader;
+    protected S3ImageStorageManager s3ImageStorageManager;
+    @Autowired
+    protected LocalImageStorageManager localImageStorageManager;
 
     //PostsLikeService
     @Autowired
@@ -67,10 +73,18 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected PostsLikeRepository likeRepository;
 
-    //JwtKey
-    @Value("${jwt.secretKey}")
-    protected String secretKey;
-    protected SecretKey key;
+    //SseEmitter
+    @Autowired
+    protected SseService sseService;
+    @Autowired
+    protected SseRepository sseRepository;
+
+    //Redis
+    @Autowired
+    protected RedisTemplate redisTemplate;
+
+
+
 
     @BeforeEach
     protected void tearDown() {
@@ -82,6 +96,7 @@ public abstract class IntegrationTestSupport {
 
     protected Users createUserInTest(){
         Users users = Users.builder()
+                .id(1L)
                 .email("kwon93@naver.com")
                 .password(passwordEncoder.encode("kdh1234"))
                 .name("kwon")
@@ -109,12 +124,13 @@ public abstract class IntegrationTestSupport {
     protected Posts createPostInTest(Users users) {
         Posts posts = Posts.builder()
                 .user(users)
-                .title("제목")
-                .content("내용")
+                .title("foo title")
+                .content("bar content")
                 .postsCategory(PostsCategory.LIFE)
                 .build();
 
-        return postsRepository.save(posts);
+        postsRepository.save(posts);
+        return posts;
     }
 
 }

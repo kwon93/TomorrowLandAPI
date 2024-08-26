@@ -6,7 +6,6 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.repository.posts.dto.PostSearchForRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class PostsRepositoryCustomImplTest extends IntegrationTestSupport {
@@ -85,7 +83,6 @@ class PostsRepositoryCustomImplTest extends IntegrationTestSupport {
         ).toList();
 
         postsRepository.saveAll(posts);
-
         List<Posts> devPosts = LongStream.range(0, 5).mapToObj(i ->
                 Posts.builder()
                         .user(userInTest)
@@ -123,4 +120,59 @@ class PostsRepositoryCustomImplTest extends IntegrationTestSupport {
         //then
         assertThat(postsByCategorySearch.size()).isEqualTo(7);
     }
+
+
+    @Test
+    @DisplayName("getList(): 제목 검색에 성공한다.")
+    void test3() {
+        //given
+        final String searchKeyword = "keyword";
+        Users userInTest = createUserInTest();
+
+
+        List<Posts> posts = LongStream.range(0, 3).mapToObj(i ->
+                Posts.builder()
+                        .user(userInTest)
+                        .title("testPosts" + i)
+                        .content("testContent" + i)
+                        .postsCategory(PostsCategory.MEDIA)
+                        .regDate(LocalDateTime.now())
+                        .modDate(LocalDateTime.now())
+                        .build()
+        ).toList();
+
+        List<Posts> searchPosts = LongStream.range(0, 2).mapToObj(i ->
+                Posts.builder()
+                        .user(userInTest)
+                        .title(searchKeyword + i)
+                        .content("testContent" + i)
+                        .postsCategory(PostsCategory.LIFE)
+                        .regDate(LocalDateTime.now())
+                        .modDate(LocalDateTime.now())
+                        .build()
+        ).toList();
+
+        postsRepository.saveAll(posts);
+        postsRepository.saveAll(searchPosts);
+
+        //when
+        PostSearchForRepository postSearch = PostSearchForRepository.builder()
+                .page(1)
+                .size(10)
+                .offset(0)
+                .category(null)
+                .searchKeyword(searchKeyword)
+                .build();
+
+        List<Posts> list = postsRepository.getList(postSearch);
+
+        //then
+        assertThat(list.get(0).getTitle()).isEqualTo(searchKeyword+1);
+        assertThat(list.size()).isEqualTo(2);
+    }
+
+
+
+
+
 }

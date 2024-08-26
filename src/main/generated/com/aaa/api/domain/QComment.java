@@ -28,17 +28,17 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final EnumPath<com.aaa.api.domain.enumType.IsRewarded> isRewarded = createEnum("isRewarded", com.aaa.api.domain.enumType.IsRewarded.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDate = _super.modDate;
-
-    public final StringPath name = createString("name");
 
     public final QPosts posts;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final QUsers user;
+    public final QUsers users;
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);
@@ -59,7 +59,7 @@ public class QComment extends EntityPathBase<Comment> {
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.posts = inits.isInitialized("posts") ? new QPosts(forProperty("posts"), inits.get("posts")) : null;
-        this.user = inits.isInitialized("user") ? new QUsers(forProperty("user")) : null;
+        this.users = inits.isInitialized("users") ? new QUsers(forProperty("users")) : null;
     }
 
 }

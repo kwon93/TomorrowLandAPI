@@ -1,0 +1,202 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > S3ImageStorageManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.service.image</a>
+</div>
+
+<h1>Coverage Summary for Class: S3ImageStorageManager (com.aaa.api.service.image)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">S3ImageStorageManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.6%
+  </span>
+  <span class="absValue">
+    (1/18)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo</td>
+  </tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo$auxiliary$DJDaP2uv</td>
+  </tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo$auxiliary$qh8IXhrs</td>
+  </tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo$auxiliary$RiJh2zDe</td>
+  </tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo$auxiliary$tW74dYyH</td>
+  </tr>
+  <tr>
+    <td class="name">S3ImageStorageManager$MockitoMock$0JoT1Pmo$auxiliary$V2ziLT4K</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.6%
+  </span>
+  <span class="absValue">
+    (1/18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.service.image;
+&nbsp;
+&nbsp;import com.aaa.api.service.dto.request.ImageInfo;
+&nbsp;import com.aaa.api.service.dto.response.ImageResourceResponse;
+&nbsp;import com.aaa.api.service.dto.response.ImageResponse;
+&nbsp;import com.amazonaws.AmazonServiceException;
+&nbsp;import com.amazonaws.services.s3.AmazonS3;
+&nbsp;import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+&nbsp;import com.amazonaws.services.s3.model.ObjectMetadata;
+&nbsp;import jakarta.servlet.ServletInputStream;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.net.URL;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;/**
+&nbsp; * S3 관련
+&nbsp; */
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;@Service
+&nbsp;public class S3ImageStorageManager implements ImageStorageManager {
+&nbsp;
+&nbsp;    private static final long EXPIRATION_DATE = 3 * 60 * 1000;
+&nbsp;    @Value(&quot;${cloud.aws.s3.bucket}&quot;)
+&nbsp;    private String bucket;
+&nbsp;    @Value(&quot;${cloud.aws.credentials.access-key}&quot;)
+&nbsp;    private String accessKey;
+&nbsp;    @Value(&quot;${cloud.aws.s3.folder}&quot;)
+&nbsp;    private String folder;
+&nbsp;    private final AmazonS3 amazonS3;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ImageResponse uploadImage(final String fileName, final ImageInfo imageInfo) {
+<b class="nc">&nbsp;        final String path = uploadImageToS3Storage(fileName, imageInfo);</b>
+<b class="nc">&nbsp;        return ImageResponse.from(path);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ImageResourceResponse downloadImage(String imagePath) {
+<b class="nc">&nbsp;        GeneratePresignedUrlRequest presignedUrlRequest = preSignedUrlRequestProcessing(imagePath);</b>
+<b class="nc">&nbsp;        URL presignedUrl = amazonS3.generatePresignedUrl(presignedUrlRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;        return ImageResourceResponse.toS3StorageResponse(presignedUrl.toString());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void deleteImage(String fileName) throws AmazonServiceException {
+<b class="nc">&nbsp;        amazonS3.deleteObject(bucket, fileName);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String uploadImageToS3Storage(String fileName, ImageInfo imageInfo) {
+<b class="nc">&nbsp;        final String path = folder + fileName;</b>
+<b class="nc">&nbsp;        final ServletInputStream inputStream = imageInfo.getStream();</b>
+<b class="nc">&nbsp;        final ObjectMetadata metadata = new ObjectMetadata();</b>
+&nbsp;
+<b class="nc">&nbsp;        metadata.setContentType(imageInfo.getContentType());</b>
+<b class="nc">&nbsp;        metadata.setContentLength(imageInfo.getContentLengthLong());</b>
+<b class="nc">&nbsp;        amazonS3.putObject(bucket, path, inputStream, metadata);</b>
+<b class="nc">&nbsp;        return path;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private GeneratePresignedUrlRequest preSignedUrlRequestProcessing(String imagePath) {
+<b class="nc">&nbsp;        Date expiration = generateExpirationTime();</b>
+<b class="nc">&nbsp;        return new GeneratePresignedUrlRequest(bucket, imagePath).withExpiration(expiration);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Date generateExpirationTime() {
+<b class="nc">&nbsp;        long now = new Date().getTime();</b>
+<b class="nc">&nbsp;        return new Date(now + S3ImageStorageManager.EXPIRATION_DATE);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

@@ -1,7 +1,6 @@
 package com.aaa.api.service.dto.response;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +9,13 @@ import lombok.NoArgsConstructor;
 public class ImageResponse {
 
     private String imagePath;
-    @Builder
-    public ImageResponse(String imagepath) {
-        this.imagePath = imagepath;
+
+    private ImageResponse(String imagePath) {
+        this.imagePath = imagePath;
     }
+
+    public static ImageResponse from(String imagePath) {
+        return new ImageResponse(imagePath);
+    }
+
 }

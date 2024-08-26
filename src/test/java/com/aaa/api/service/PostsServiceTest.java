@@ -35,7 +35,7 @@ class PostsServiceTest extends IntegrationTestSupport {
                 .category(PostsCategory.DEV)
                 .build();
         // when
-        postsService.create(request);
+        postsService.createPosts(request);
 
         //then
         Posts posts = postsRepository.findAll().get(0);
@@ -88,8 +88,8 @@ class PostsServiceTest extends IntegrationTestSupport {
 
         //then
         Posts post = postsRepository.findById(savedPosts.getId()).orElseThrow(PostNotfound::new);
-        assertThat(post.getTitle()).isEqualTo("제목");
-        assertThat(post.getContent()).isEqualTo("내용");
+        assertThat(post.getTitle()).isEqualTo("foo title");
+        assertThat(post.getContent()).isEqualTo("bar content");
         assertThat(post.getViewCount()).isOne();
     }
 
@@ -127,7 +127,7 @@ class PostsServiceTest extends IntegrationTestSupport {
 
 
         // when
-        postsService.update(request);
+        postsService.updatePosts(request);
 
         //then
         var post = postsRepository.findById(postInTest.getId())
@@ -159,7 +159,7 @@ class PostsServiceTest extends IntegrationTestSupport {
         //given
         Users userInTest = createUserInTest();
         Posts savedPosts = createPostInTest(userInTest);
-        likeService.increase(savedPosts.getId(), userInTest.getId());
+        likeService.likeIncreaseProcess(savedPosts.getId(), userInTest.getId());
 
         // when
         postsService.getOne(savedPosts.getId());

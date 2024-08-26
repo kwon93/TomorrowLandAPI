@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -26,7 +25,7 @@ public class PostsLikeControllerDocsTest extends RestDocsSupport {
     void test1() throws Exception {
         //given
         final long testId = 1L;
-        doNothing().when(likeService).increase(anyLong(),anyLong());
+        doNothing().when(likeService).likeIncreaseProcess(anyLong(),anyLong());
 
         // when
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/api/like/{postsId}",

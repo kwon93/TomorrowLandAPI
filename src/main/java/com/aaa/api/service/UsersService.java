@@ -9,13 +9,13 @@ import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
 import com.aaa.api.service.dto.response.UserInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -27,13 +27,11 @@ public class UsersService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public String  createUser(final CreateUsersServiceRequest serviceRequest) {
+    public String createUser(final CreateUsersServiceRequest serviceRequest) {
         duplicationEmailValidation(serviceRequest);
-
-        final String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());
-        final Users users = serviceRequest.toEntity(encodedPassword);
-        usersRepository.save(users);
-
+        
+        String encodedPassword = passwordHashing(serviceRequest);
+        Users users = persistUser(serviceRequest, encodedPassword);
         return users.getName();
     }
 
@@ -41,7 +39,7 @@ public class UsersService {
     public void reward(Long questionUserId, Long rewardUserId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
-        rewardValidator(questionUserId, rewardUserId, comment);
+        rewardValidation(questionUserId, rewardUserId, comment);
 
         final Users questionUser = usersRepository.findById(questionUserId)
                 .orElseThrow(UserNotFound::new);
@@ -50,17 +48,7 @@ public class UsersService {
         final Users rewardUser = usersRepository.findById(rewardUserId)
                 .orElseThrow(UserNotFound::new);
         rewardUser.increasePoint();
-
         comment.updateRewardState();
-    }
-
-    private static void rewardValidator(Long questionUserId, Long rewardUserId, Comment comment) {
-        if(comment.getIsRewarded().equals(IsRewarded.True)){
-            throw new DuplicateReward();
-        }
-        if(questionUserId.equals(rewardUserId)){
-            throw new InvalidReward();
-        }
     }
 
     public UserInfo getUsersInfo(Long userId) {
@@ -73,12 +61,40 @@ public class UsersService {
                 .build();
     }
 
+    private Users persistUser(CreateUsersServiceRequest serviceRequest, String encodedPassword) {
+        Users users = serviceRequest.toEntity(encodedPassword);
+        usersRepository.save(users);
+        return users;
+    }
+    
+    private String passwordHashing(CreateUsersServiceRequest serviceRequest) {
+        return passwordEncoder.encode(serviceRequest.getPassword());
+    }
+
+    private void rewardValidation(Long questionUserId, Long rewardUserId, Comment comment) {
+        if(doseUserAlreadyRewarded(comment)){
+            throw new DuplicateReward();
+        }
+
+        if(doseUserSelfReward(questionUserId, rewardUserId)){
+            throw new InvalidReward();
+        }
+    }
+
     private void duplicationEmailValidation(final CreateUsersServiceRequest serviceRequest) {
         Optional<Users> duplicateEmail
                 = usersRepository.findByEmail(serviceRequest.getEmail());
         if (duplicateEmail.isPresent()){
             throw new DuplicateEmail();
         }
+    }
+
+    private boolean doseUserSelfReward(Long questionUserId, Long rewardUserId) {
+        return questionUserId.equals(rewardUserId);
+    }
+
+    private boolean doseUserAlreadyRewarded(Comment comment) {
+        return comment.getIsRewarded().equals(IsRewarded.True);
     }
 
 }

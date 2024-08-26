@@ -15,13 +15,16 @@ public class PostSearch {
     private Integer page = 1;
     private Integer size = 10;
     private PostsCategory category;
+    private String searchKeyword;
 
     @Builder
-    public PostSearch(final Integer page, final Integer size, PostsCategory category) {
+    private PostSearch(final Integer page, final Integer size, PostsCategory category, String searchKeyword) {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
         this.category = category;
+        this.searchKeyword = searchKeyword;
     }
+
     public int getOffset(){
         return (Math.max(1, page) - 1) * size;
     }
@@ -32,6 +35,7 @@ public class PostSearch {
                 .size(this.size)
                 .offset(this.getOffset())
                 .category(this.category)
+                .searchKeyword(this.searchKeyword)
                 .build();
     }
 

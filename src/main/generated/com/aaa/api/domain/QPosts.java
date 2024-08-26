@@ -24,13 +24,15 @@ public class QPosts extends EntityPathBase<Posts> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final EnumPath<com.aaa.api.domain.enumType.Category> category = createEnum("category", com.aaa.api.domain.enumType.Category.class);
+    public final EnumPath<com.aaa.api.domain.enumType.PostsCategory> category = createEnum("category", com.aaa.api.domain.enumType.PostsCategory.class);
 
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath imagePath = createString("imagePath");
+
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDate = _super.modDate;

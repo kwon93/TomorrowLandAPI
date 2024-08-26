@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PostsController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: PostsController (com.aaa.api.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PostsController</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (10/14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PostsController$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (10/14)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.controller;
+&nbsp;
+&nbsp;import com.aaa.api.config.security.CustomUserPrincipal;
+&nbsp;import com.aaa.api.controller.dto.request.CreatePostsRequest;
+&nbsp;import com.aaa.api.controller.dto.request.PostSearch;
+&nbsp;import com.aaa.api.controller.dto.request.UpdatePostsRequest;
+&nbsp;import com.aaa.api.service.PostsService;
+&nbsp;import com.aaa.api.service.dto.response.PostsResponse;
+&nbsp;import com.aaa.api.service.dto.response.PostsResult;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.security.access.prepost.PreAuthorize;
+&nbsp;import org.springframework.security.core.annotation.AuthenticationPrincipal;
+&nbsp;import org.springframework.validation.annotation.Validated;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;api&quot;)
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+<b class="fc">&nbsp;@Slf4j</b>
+&nbsp;public class PostsController {
+&nbsp;
+&nbsp;    private final PostsService postsService;
+&nbsp;
+&nbsp;    @PostMapping(&quot;posts&quot;)
+&nbsp;    @PreAuthorize(&quot;hasAnyRole(&#39;ROLE_ADMIN&#39;,&#39;ROLE_USER&#39;)&quot;)
+&nbsp;    public ResponseEntity&lt;PostsResponse&gt; createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
+&nbsp;                                                     @RequestBody @Validated final CreatePostsRequest request){
+<b class="fc">&nbsp;        final PostsResponse posts = postsService.createPosts(request.toServiceDto(userPrincipal));</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(posts);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;posts&quot;)
+&nbsp;    public ResponseEntity&lt;PostsResult&lt;PostsResponse&gt;&gt; getAllPosts(@ModelAttribute final PostSearch postSearch){
+<b class="nc">&nbsp;        final List&lt;PostsResponse&gt; responses = postsService.getPage(postSearch.toServiceDto()).stream()</b>
+<b class="nc">&nbsp;                .map(PostsResponse::new)</b>
+<b class="nc">&nbsp;                .toList();</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok(new PostsResult&lt;&gt;(responses));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;posts/{postId}&quot;)
+&nbsp;    public ResponseEntity&lt;PostsResponse&gt; getOnePosts(@PathVariable(&quot;postId&quot;) final Long id ){
+<b class="fc">&nbsp;        PostsResponse response = postsService.getOne(id);</b>
+<b class="fc">&nbsp;        return ResponseEntity.ok(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PatchMapping(&quot;posts/{postsId}&quot;)
+&nbsp;    @PreAuthorize(&quot;hasAnyRole(&#39;ROLE_ADMIN&#39;, &#39;ROLE_USER&#39;) &amp;&amp; hasPermission(#postsId, &#39;Posts&#39;, &#39;PATCH&#39;)&quot;)
+&nbsp;    public ResponseEntity&lt;PostsResponse&gt; updatePosts(@RequestBody final UpdatePostsRequest request,
+&nbsp;                                     @PathVariable(&quot;postsId&quot;) final Long postsId){
+<b class="fc">&nbsp;        postsService.updatePosts(request.toServiceDto(postsId));</b>
+<b class="fc">&nbsp;        return ResponseEntity.noContent().build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;posts/{postsId}&quot;)
+&nbsp;    @PreAuthorize(&quot;hasAnyRole(&#39;ROLE_ADMIN&#39;, &#39;ROLE_USER&#39;) &amp;&amp; hasPermission(#postsId, &#39;Posts&#39;, &#39;DELETE&#39;)&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; deletePosts(@PathVariable(&quot;postsId&quot;) final Long postsId){
+<b class="fc">&nbsp;        postsService.delete(postsId);</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

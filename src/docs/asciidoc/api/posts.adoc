@@ -39,7 +39,7 @@ include::{snippets}/posts-update/request-fields.adoc[]
 
 ==== HttpResponse
 include::{snippets}/posts-update/http-response.adoc[]
-include::{snippets}/posts-update/response-fields.adoc[]
+include::{snippets}/posts-update/response-body.adoc[]
 
 === 게시물 삭제
 

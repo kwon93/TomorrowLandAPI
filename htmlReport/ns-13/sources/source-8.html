@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SseService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.service</a>
+</div>
+
+<h1>Coverage Summary for Class: SseService (com.aaa.api.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SseService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SseService$MockitoMock$c1gGCl4X</td>
+  </tr>
+  <tr>
+    <td class="name">SseService$MockitoMock$c1gGCl4X$auxiliary$hSrqlzxc</td>
+  </tr>
+  <tr>
+    <td class="name">SseService$MockitoMock$c1gGCl4X$auxiliary$phaSuNet</td>
+  </tr>
+  <tr>
+    <td class="name">SseService$MockitoMock$c1gGCl4X$auxiliary$rf8yyHcs</td>
+  </tr>
+  <tr>
+    <td class="name">SseService$MockitoMock$c1gGCl4X$auxiliary$Znt7b2cn</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.service;
+&nbsp;
+&nbsp;import com.aaa.api.exception.UserNotFound;
+&nbsp;import com.aaa.api.repository.SseRepository;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class SseService {
+&nbsp;
+<b class="fc">&nbsp;    private static final Long SSE_TIMEOUT = 60L * 1000 * 60;</b>
+&nbsp;    private final SseRepository sseRepository;
+&nbsp;
+&nbsp;    public SseEmitter connectToSSE(final Long userId) throws IOException {
+<b class="fc">&nbsp;        createEmitter(userId);</b>
+<b class="fc">&nbsp;        return sendToUser(userId, &quot;UserId: &quot;+userId+&quot;&#39;s SSE init&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void createEmitter(Long userId) {
+<b class="fc">&nbsp;        SseEmitter sseEmitter = new SseEmitter(SSE_TIMEOUT);</b>
+<b class="fc">&nbsp;        sseRepository.save(userId,sseEmitter);</b>
+&nbsp;
+<b class="fc">&nbsp;        sseEmitter.onCompletion(() -&gt; sseRepository.deleteById(userId));</b>
+<b class="fc">&nbsp;        sseEmitter.onTimeout(() -&gt; sseRepository.deleteById(userId));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public SseEmitter sendToUser(Long userId, String eventData) throws IOException {
+<b class="fc">&nbsp;        SseEmitter emitter = sseRepository.get(userId);</b>
+<b class="fc">&nbsp;         if (emitter == null) throw new UserNotFound();</b>
+&nbsp;
+<b class="fc">&nbsp;         emitter.send(SseEmitter</b>
+<b class="fc">&nbsp;                 .event()</b>
+<b class="fc">&nbsp;                 .name(&quot;Server Sent Event&quot;)</b>
+<b class="fc">&nbsp;                 .data(eventData));</b>
+<b class="fc">&nbsp;         return emitter;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

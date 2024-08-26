@@ -1,25 +1,19 @@
 package com.aaa.api.config.security;
 
 
-import com.aaa.api.domain.Users;
 import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 public class CustomUserPrincipal extends User {
 
     @Getter
     private final Long userId;
-    public CustomUserPrincipal(final Users users) {
-        super(users.getEmail(), users.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_"+users.getRoles())));
-        userId = users.getId();
-    }
 
-    public static CustomUserPrincipal of(Users users){
-        return new CustomUserPrincipal(users);
+    public CustomUserPrincipal(final String username, final String userRole, Long userId) {
+        super(username, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole)));
+        this.userId = userId;
     }
 }

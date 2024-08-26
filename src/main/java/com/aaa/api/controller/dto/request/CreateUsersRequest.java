@@ -26,7 +26,7 @@ public class CreateUsersRequest {
     private String name;
 
     @Builder
-    public CreateUsersRequest(final String email, final String password, final String name, final Role role) {
+    private CreateUsersRequest(final String email, final String password, final String name, final Role role) {
         this.email = email;
         this.password = password;
         this.name = name;

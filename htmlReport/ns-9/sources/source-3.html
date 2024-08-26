@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CreatePostsRequest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.controller.dto.request</a>
+</div>
+
+<h1>Coverage Summary for Class: CreatePostsRequest (com.aaa.api.controller.dto.request)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CreatePostsRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/22)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CreatePostsRequest$CreatePostsRequestBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.controller.dto.request;
+&nbsp;
+&nbsp;import com.aaa.api.config.security.CustomUserPrincipal;
+&nbsp;import com.aaa.api.domain.enumType.PostsCategory;
+&nbsp;import com.aaa.api.service.dto.request.CreatePostsServiceRequest;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import lombok.AccessLevel;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;@Getter
+<b class="fc">&nbsp;@NoArgsConstructor(access = AccessLevel.PRIVATE)</b>
+&nbsp;public class CreatePostsRequest {
+&nbsp;
+&nbsp;    @NotBlank(message = &quot;제목을 입력해주세요.&quot;)
+<b class="fc">&nbsp;    private String title;</b>
+&nbsp;    @NotBlank(message = &quot;내용을 입력해주세요.&quot;)
+<b class="fc">&nbsp;    private String content;</b>
+&nbsp;    @NotBlank(message = &quot;카테고리를 선택해주세요.&quot;)
+<b class="fc">&nbsp;    private String  category;</b>
+<b class="fc">&nbsp;    private String imagePath;</b>
+&nbsp;
+<b class="fc">&nbsp;    @Builder</b>
+<b class="fc">&nbsp;    public CreatePostsRequest(final String  category,final String title, final String content, String imagePath) {</b>
+<b class="fc">&nbsp;        this.title = title;</b>
+<b class="fc">&nbsp;        this.content = content;</b>
+<b class="fc">&nbsp;        this.imagePath = imagePath;</b>
+<b class="fc">&nbsp;        this.category = category;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public CreatePostsServiceRequest toServiceDto(final CustomUserPrincipal userPrincipal){
+<b class="fc">&nbsp;        return CreatePostsServiceRequest.builder()</b>
+<b class="fc">&nbsp;                .userId(userPrincipal.getUserId())</b>
+<b class="fc">&nbsp;                .title(this.title)</b>
+<b class="fc">&nbsp;                .content(this.content)</b>
+<b class="fc">&nbsp;                .category(enumChecker(this.category))</b>
+<b class="fc">&nbsp;                .imagePath(imagePath)</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PostsCategory enumChecker(String stringToEnum){
+<b class="fc">&nbsp;        return Arrays.stream(PostsCategory.values())</b>
+<b class="fc">&nbsp;                .filter(category1 -&gt; category1.value().equals(stringToEnum))</b>
+<b class="fc">&nbsp;                .findFirst()</b>
+<b class="fc">&nbsp;                .orElseThrow(RuntimeException::new);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

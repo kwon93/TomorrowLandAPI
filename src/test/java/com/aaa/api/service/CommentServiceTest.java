@@ -10,6 +10,7 @@ import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import com.aaa.api.service.dto.response.CommentsResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class CommentServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("create(): 댓글 작성에 성공한다.")
-    void test1() {
+    void test1() throws JsonProcessingException {
         //given
         final String name = "kwon";
         final String content = "댓글 내용";
@@ -40,7 +41,7 @@ class CommentServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        commentService.create(request);
+        commentService.createComment(request);
 
         //then
         List<Comment> comments = commentRepository.findAll();
@@ -66,7 +67,7 @@ class CommentServiceTest extends IntegrationTestSupport {
 
         // when
         assertThatThrownBy(()-> {
-            commentService.create(request);
+            commentService.createComment(request);
         }).isInstanceOf(PostNotfound.class).hasMessage("존재하지않는 게시물 참조");
     }
 

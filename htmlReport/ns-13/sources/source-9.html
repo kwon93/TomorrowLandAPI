@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UsersService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aaa.api.service</a>
+</div>
+
+<h1>Coverage Summary for Class: UsersService (com.aaa.api.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UsersService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (30/30)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UsersService$$SpringCGLIB$$0</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv$auxiliary$4vUs1Jak</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv$auxiliary$cUXzK04H</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv$auxiliary$eSumqJZg</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv$auxiliary$mmhrMP4a</td>
+  </tr>
+  <tr>
+    <td class="name">UsersService$MockitoMock$4crdCYfv$auxiliary$Mxpo7o5M</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (30/30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aaa.api.service;
+&nbsp;
+&nbsp;import com.aaa.api.domain.Comment;
+&nbsp;import com.aaa.api.domain.Users;
+&nbsp;import com.aaa.api.domain.enumType.IsRewarded;
+&nbsp;import com.aaa.api.exception.*;
+&nbsp;import com.aaa.api.repository.UsersRepository;
+&nbsp;import com.aaa.api.repository.comment.CommentRepository;
+&nbsp;import com.aaa.api.service.dto.request.CreateUsersServiceRequest;
+&nbsp;import com.aaa.api.service.dto.response.UserInfo;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+&nbsp;@Transactional(readOnly = true)
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class UsersService {
+&nbsp;
+&nbsp;    private final UsersRepository usersRepository;
+&nbsp;    private final PasswordEncoder passwordEncoder;
+&nbsp;    private final CommentRepository commentRepository;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public String  createUser(final CreateUsersServiceRequest serviceRequest) {
+<b class="fc">&nbsp;        duplicationEmailValidation(serviceRequest);</b>
+&nbsp;
+<b class="fc">&nbsp;        final String encodedPassword = passwordEncoder.encode(serviceRequest.getPassword());</b>
+<b class="fc">&nbsp;        final Users users = serviceRequest.toEntity(encodedPassword);</b>
+<b class="fc">&nbsp;        usersRepository.save(users);</b>
+&nbsp;
+<b class="fc">&nbsp;        return users.getName();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void reward(Long questionUserId, Long rewardUserId, Long commentId) {
+<b class="fc">&nbsp;        Comment comment = commentRepository.findById(commentId)</b>
+<b class="fc">&nbsp;                .orElseThrow(CommentNotFound::new);</b>
+<b class="fc">&nbsp;        rewardValidator(questionUserId, rewardUserId, comment);</b>
+&nbsp;
+<b class="fc">&nbsp;        final Users questionUser = usersRepository.findById(questionUserId)</b>
+<b class="fc">&nbsp;                .orElseThrow(UserNotFound::new);</b>
+<b class="fc">&nbsp;        questionUser.decreasePoint();</b>
+&nbsp;
+<b class="fc">&nbsp;        final Users rewardUser = usersRepository.findById(rewardUserId)</b>
+<b class="fc">&nbsp;                .orElseThrow(UserNotFound::new);</b>
+<b class="fc">&nbsp;        rewardUser.increasePoint();</b>
+&nbsp;
+<b class="fc">&nbsp;        comment.updateRewardState();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void rewardValidator(Long questionUserId, Long rewardUserId, Comment comment) {
+<b class="fc">&nbsp;        if(comment.getIsRewarded().equals(IsRewarded.True)){</b>
+<b class="fc">&nbsp;            throw new DuplicateReward();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if(questionUserId.equals(rewardUserId)){</b>
+<b class="fc">&nbsp;            throw new InvalidReward();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public UserInfo getUsersInfo(Long userId) {
+<b class="fc">&nbsp;        Users users = usersRepository.findById(userId).orElseThrow(UserNotFound::new);</b>
+<b class="fc">&nbsp;        List&lt;Comment&gt; commentsByUser = commentRepository.findByUserId(users.getId());</b>
+&nbsp;
+<b class="fc">&nbsp;        return UserInfo.builder()</b>
+<b class="fc">&nbsp;                .entity(users)</b>
+<b class="fc">&nbsp;                .userAnswer(commentsByUser.size())</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void duplicationEmailValidation(final CreateUsersServiceRequest serviceRequest) {
+<b class="fc">&nbsp;        Optional&lt;Users&gt; duplicateEmail</b>
+<b class="fc">&nbsp;                = usersRepository.findByEmail(serviceRequest.getEmail());</b>
+<b class="fc">&nbsp;        if (duplicateEmail.isPresent()){</b>
+<b class="fc">&nbsp;            throw new DuplicateEmail();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-08-04 19:26</div>
+</div>
+</body>
+</html>

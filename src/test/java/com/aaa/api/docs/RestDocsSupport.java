@@ -1,14 +1,13 @@
 package com.aaa.api.docs;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
-import com.aaa.api.config.security.jwt.JwtTokenProvider;
-import com.aaa.api.config.security.jwt.JwtTokenReIssueProvider;
 import com.aaa.api.controller.*;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.Role;
+import com.aaa.api.service.SseService;
 import com.aaa.api.service.*;
-import com.aaa.api.service.image.ImageService;
-import com.aaa.api.service.image.S3ImageUploader;
+import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.S3ImageStorageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@ExtendWith({RestDocumentationExtension.class})
+@ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.tomorrow.com", uriPort = 443)
 @ActiveProfiles("test")
 @WebMvcTest( controllers = {
@@ -31,8 +30,9 @@ import org.springframework.test.web.servlet.MockMvc;
         AuthController.class,
         CommentController.class,
         ImageController.class,
-        PostsLikeController.class
-} )
+        PostsLikeController.class,
+        NotificationController.class
+})
 public abstract class RestDocsSupport {
 
     @Autowired
@@ -48,15 +48,16 @@ public abstract class RestDocsSupport {
     @MockBean
     protected CommentService commentService;
     @MockBean
-    protected JwtTokenProvider jwtTokenProvider;
+    protected ImageFileNameProcessor imageFileNameProcessor;
     @MockBean
-    protected JwtTokenReIssueProvider reIssueProvider;
-    @MockBean
-    protected ImageService imageService;
-    @MockBean
-    protected S3ImageUploader imageUploader;
+    protected S3ImageStorageManager imageUploader;
     @MockBean
     protected PostsLikeService likeService;
+    @MockBean
+    protected CommentNotificationService commentNotificationService;
+    @MockBean
+    protected SseService sseService;
+
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {
         Users user = Users.builder()
@@ -66,7 +67,8 @@ public abstract class RestDocsSupport {
                 .password("password")
                 .build();
 
-        userPrincipal = CustomUserPrincipal.of(user);
+        userPrincipal = new CustomUserPrincipal("test@test.net","ADMIN",1L);
     }
+
 }
 

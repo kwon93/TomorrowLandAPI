@@ -1,6 +1,5 @@
 package com.aaa.api.docs.comment;
 
-import com.aaa.api.config.CustomMockUser;
 import com.aaa.api.config.RestDocMockUser;
 import com.aaa.api.controller.dto.request.CreateCommentRequest;
 import com.aaa.api.controller.dto.request.DeleteCommentRequest;
@@ -11,7 +10,6 @@ import com.aaa.api.domain.Posts;
 import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.service.dto.request.CreateCommentServiceRequest;
-import com.aaa.api.service.dto.request.DeleteCommentServiceRequest;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
 import com.aaa.api.service.dto.request.UpdateCommentServiceRequest;
 import com.aaa.api.service.dto.response.CommentsResponse;
@@ -28,20 +26,17 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,7 +71,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .content(content)
                 .build();
 
-        given(commentService.create(any(CreateCommentServiceRequest.class))).willReturn(response);
+        given(commentService.createComment(any(CreateCommentServiceRequest.class))).willReturn(response);
 
         // when
         mockMvc.perform(RestDocumentationRequestBuilders.post("/api/posts/{postsId}/comment", post.getId())

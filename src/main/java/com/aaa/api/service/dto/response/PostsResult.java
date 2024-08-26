@@ -13,8 +13,8 @@ public class PostsResult<PostsResponse> {
 
     private List<PostsResponse> postsResponses;
     private Integer totalPosts;
-    public PostsResult(List<PostsResponse> postsResponses, List<Posts> allPosts) {
+    public PostsResult(List<PostsResponse> postsResponses) {
         this.postsResponses = postsResponses;
-        this.totalPosts = allPosts.size();
+        this.totalPosts = postsResponses.size();
     }
 }

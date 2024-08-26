@@ -3,12 +3,13 @@ package com.aaa.api.controller;
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreateCommentRequest;
 import com.aaa.api.controller.dto.request.UpdateCommentRequest;
+import com.aaa.api.service.CommentService;
 import com.aaa.api.service.dto.request.GetAllCommentsServiceDto;
-import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.CommentResult;
 import com.aaa.api.service.dto.response.CommentsResponse;
+import com.aaa.api.service.dto.response.PostCommentResponse;
 import com.aaa.api.service.dto.response.UpdateCommentResponse;
-import com.aaa.api.service.CommentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -30,9 +31,8 @@ public class CommentController {
     @PostMapping("/posts/{postsId}/comment")
     public ResponseEntity<PostCommentResponse> createComment(@AuthenticationPrincipal final CustomUserPrincipal userPrincipal,
                                                              @PathVariable("postsId") final Long postsId,
-                                                             @RequestBody @Validated final CreateCommentRequest request){
-
-        final PostCommentResponse response = commentService.create(request.toServiceDto(postsId, userPrincipal.getUserId()));
+                                                             @RequestBody @Validated final CreateCommentRequest request) throws JsonProcessingException {
+        final PostCommentResponse response = commentService.createComment(request.toServiceDto(postsId, userPrincipal.getUserId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -42,8 +42,6 @@ public class CommentController {
                     commentService.getAllComments(new GetAllCommentsServiceDto(postsId));
         return ResponseEntity.ok(new CommentResult<>(responses));
     }
-
-
 
     @PatchMapping("/comment/{commentId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#commentId,'Comment','PATCH')")
@@ -62,3 +60,4 @@ public class CommentController {
     }
 
 }
+

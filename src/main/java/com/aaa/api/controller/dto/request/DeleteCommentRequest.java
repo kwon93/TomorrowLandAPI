@@ -17,7 +17,7 @@ public class DeleteCommentRequest {
     private String password;
 
     @Builder
-    public DeleteCommentRequest(final String password) {
+    private DeleteCommentRequest(final String password) {
         this.password = password;
     }
 

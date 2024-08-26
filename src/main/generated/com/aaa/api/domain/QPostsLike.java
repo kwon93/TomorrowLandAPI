@@ -24,8 +24,6 @@ public class QPostsLike extends EntityPathBase<PostsLike> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
-
     public final QPosts posts;
 
     public final QUsers user;

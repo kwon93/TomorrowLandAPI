@@ -2,8 +2,8 @@ package com.aaa.api.config;
 
 import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.domain.Users;
-import com.aaa.api.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,7 +13,9 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 public class CustomMockSecurityContext implements WithSecurityContextFactory<CustomMockUser> {
+
 
 
     @Override
@@ -26,12 +28,10 @@ public class CustomMockSecurityContext implements WithSecurityContextFactory<Cus
                 .role(annotation.role())
                 .build();
 
-        CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.of(user);
-
-
+        CustomUserPrincipal customUserPrincipal = new CustomUserPrincipal(annotation.name(), user.getRoles().toString(),annotation.id());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserPrincipal,
                 "password",
-                List.of(new SimpleGrantedAuthority(customUserPrincipal.getAuthorities().toString())));
+                List.of(new SimpleGrantedAuthority("ROLE_"+user.getRoles().toString())));
 
 
         SecurityContext context = SecurityContextHolder.getContext();

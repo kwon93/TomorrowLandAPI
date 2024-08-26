@@ -4,11 +4,11 @@ import com.aaa.api.config.security.CustomUserPrincipal;
 import com.aaa.api.controller.dto.request.CreatePostsRequest;
 import com.aaa.api.controller.dto.request.PostSearch;
 import com.aaa.api.controller.dto.request.UpdatePostsRequest;
-import com.aaa.api.domain.Posts;
+import com.aaa.api.service.PostsService;
 import com.aaa.api.service.dto.response.PostsResponse;
 import com.aaa.api.service.dto.response.PostsResult;
-import com.aaa.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
+@Slf4j
 public class PostsController {
 
     private final PostsService postsService;
@@ -29,8 +30,7 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<PostsResponse> createPosts(@AuthenticationPrincipal CustomUserPrincipal userPrincipal,
                                                      @RequestBody @Validated final CreatePostsRequest request){
-
-        final PostsResponse posts = postsService.create(request.toServiceDto(userPrincipal));
+        final PostsResponse posts = postsService.createPosts(request.toServiceDto(userPrincipal));
         return ResponseEntity.status(HttpStatus.CREATED).body(posts);
     }
 
@@ -39,7 +39,7 @@ public class PostsController {
         final List<PostsResponse> responses = postsService.getPage(postSearch.toServiceDto()).stream()
                 .map(PostsResponse::new)
                 .toList();
-        return ResponseEntity.ok(new PostsResult<>(responses, postsService.getAll(postSearch.getCategory())));
+        return ResponseEntity.ok(new PostsResult<>(responses));
     }
 
     @GetMapping("posts/{postId}")
@@ -52,7 +52,7 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER') && hasPermission(#postsId, 'Posts', 'PATCH')")
     public ResponseEntity<PostsResponse> updatePosts(@RequestBody final UpdatePostsRequest request,
                                      @PathVariable("postsId") final Long postsId){
-        postsService.update(request.toServiceDto(postsId));
+        postsService.updatePosts(request.toServiceDto(postsId));
         return ResponseEntity.noContent().build();
     }
 

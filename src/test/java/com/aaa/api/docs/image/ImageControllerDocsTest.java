@@ -2,11 +2,10 @@ package com.aaa.api.docs.image;
 
 import com.aaa.api.docs.RestDocsSupport;
 import com.aaa.api.service.dto.request.ImageInfo;
+import com.aaa.api.service.dto.response.ImageResourceResponse;
 import com.aaa.api.service.dto.response.ImageResponse;
-import com.aaa.api.service.dto.response.ImageUrl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,11 +13,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -35,20 +32,18 @@ public class ImageControllerDocsTest extends RestDocsSupport {
     @DisplayName("RestDocs: 이미지 업로드 요청 API")
     void test1() throws Exception {
         //given
-        ImageResponse response = ImageResponse.builder()
-                .imagepath("image/test.png")
-                .build();
+        ImageResponse response = ImageResponse.from("image/test.png");
 
-        given(imageService.imageProcessing(any(ImageInfo.class))).willReturn("testUUID");
-        given(imageUploader.uploadToS3(anyString(), any(ImageInfo.class))).willReturn(response);
+        given(imageFileNameProcessor.imageFileNameProcessing(any(ImageInfo.class))).willReturn("testUUID");
+        given(imageUploader.uploadImage(anyString(), any(ImageInfo.class))).willReturn(response);
 
-        ResultActions result = mockMvc.perform(post("/api/image/upload")
+        ResultActions result = mockMvc.perform(post("/api/image")
                 .with(csrf().asHeader())
-                .header("originalFileName","test.png")
+                .header("originalFileName", "test.png")
         );
         //then
         result.andExpect(status().isCreated())
-                .andExpect(header().stringValues("ImagePath",response.getImagePath()))
+                .andExpect(header().stringValues("ImagePath", response.getImagePath()))
                 .andDo(print())
                 .andDo(document("image-upload",
                         preprocessRequest(prettyPrint(), modifyHeaders().remove("X-CSRF-TOKEN")),
@@ -60,7 +55,7 @@ public class ImageControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("imagePath").type(JsonFieldType.STRING).description("S3 이미지 저장 경로")
                         )
 
-                        ));
+                ));
     }
 
     @Test
@@ -71,14 +66,14 @@ public class ImageControllerDocsTest extends RestDocsSupport {
         final String imagePath = "image/test.png";
         final String testURL = "http://aaa-upload-image.s3.com";
 
-        ImageUrl imageUrl = ImageUrl.builder()
+        ImageResourceResponse imageUrl = ImageResourceResponse.builder()
                 .imageUrl(testURL)
                 .build();
 
-        given(imageUploader.getPreSignedUrl(imagePath)).willReturn(imageUrl);
+        given(imageUploader.downloadImage(imagePath)).willReturn(imageUrl);
 
         // when
-        ResultActions result = mockMvc.perform(get("/api/image/url")
+        ResultActions result = mockMvc.perform(get("/api/image")
                 .with(csrf().asHeader())
                 .header("imagePath", imagePath));
         //then
@@ -92,9 +87,12 @@ public class ImageControllerDocsTest extends RestDocsSupport {
                                 headerWithName("imagePath").description("다운로드 대상 이미지 경로")
                         ),
                         responseFields(
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("AWS S3 객체 URL")
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("AWS S3 객체 URL"),
+                                fieldWithPath("localImageResource").type(JsonFieldType.STRING).description("Local Image Binary File"),
+                                fieldWithPath("localStorage").type(JsonFieldType.BOOLEAN)
+                                        .description("Local 저장 방식이라면 true, s3 url 응답 방식이라면 false")
                         )
-                        ));
+                ));
     }
 
 }

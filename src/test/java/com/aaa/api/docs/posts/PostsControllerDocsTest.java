@@ -25,7 +25,6 @@ import java.util.stream.LongStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -66,7 +65,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .build();
 
 
-        given(postsService.create(any(CreatePostsServiceRequest.class))).willReturn(response);
+        given(postsService.createPosts(any(CreatePostsServiceRequest.class))).willReturn(response);
 
         // expected
         mockMvc.perform(post("/api/posts")
@@ -289,7 +288,7 @@ public class PostsControllerDocsTest extends RestDocsSupport {
                 .imagePath("image/test.png")
                 .build();
 
-        given(postsService.update(any(UpdatePostsServiceRequest.class))).willReturn(response);
+        given(postsService.updatePosts(any(UpdatePostsServiceRequest.class))).willReturn(response);
 
         // when then
         mockMvc.perform(patch("/api/posts/{postId}",response.getId())

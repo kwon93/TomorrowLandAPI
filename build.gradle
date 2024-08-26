@@ -53,11 +53,6 @@ dependencies {
 	//mockito
 	testImplementation 'org.mockito:mockito-core:4.8.0'
 
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -68,6 +63,19 @@ dependencies {
 	//REST Docs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	//MySql
+	implementation 'mysql:mysql-connector-java:8.0.23'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//redis-session
+	implementation 'org.springframework.session:spring-session-data-redis'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	implementation 'org.springframework.security:spring-security-cas'
 
 }
 

@@ -65,7 +65,7 @@ class CommentControllerTest extends ControllerTestSupport {
                 .content(content)
                 .build();
 
-        given(commentService.create(any(CreateCommentServiceRequest.class))).willReturn(response);
+        given(commentService.createComment(any(CreateCommentServiceRequest.class))).willReturn(response);
 
         // when
         mockMvc.perform(post("/api/posts/{postsId}/comment", post.getId())
@@ -76,7 +76,7 @@ class CommentControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.content").value(content))
                 .andDo(print());
 
-        verify(commentService, times(1)).create(any(CreateCommentServiceRequest.class));
+        verify(commentService, times(1)).createComment(any(CreateCommentServiceRequest.class));
     }
 
     @Test

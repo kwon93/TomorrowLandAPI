@@ -33,7 +33,6 @@ include::{snippets}/comment-update/response-fields.adoc[]
 
 ==== HttpRequest
 include::{snippets}/comment-delete/http-request.adoc[]
-include::{snippets}/comment-delete/request-fields.adoc[]
 
 ==== HttpResponse
 include::{snippets}/comment-delete/http-response.adoc[]
