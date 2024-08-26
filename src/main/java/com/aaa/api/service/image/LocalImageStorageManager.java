@@ -55,6 +55,7 @@ public class LocalImageStorageManager implements ImageStorageManager {
         } catch (IOException ioException) {
             throw new ImageStoreFailException(ioException);
         }
+
     }
 
     private void deleteFileBy(Path storedFilePath) {
