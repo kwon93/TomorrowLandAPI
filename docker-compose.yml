@@ -30,6 +30,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/${DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: ${DB_HOST}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - /var/lib/tomorrowland/images:/var/lib/tomorrowland/images
     depends_on:
       - database
     networks:
