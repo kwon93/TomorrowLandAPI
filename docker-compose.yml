@@ -34,7 +34,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     volumes:
       - /var/lib/tomorrowland/images:/var/lib/tomorrowland/images
-      - -api-docs:/usr/src/docs
     depends_on:
       - database
     networks:
@@ -57,4 +56,3 @@ networks:
 volumes:
   mysql_data:
   redis_data:
-  api-docs:
