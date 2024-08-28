@@ -1,3 +1,4 @@
+version: "3.8"
 
 services:
   database:
@@ -24,6 +25,7 @@ services:
     restart: always
     build:
       context: ./
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -32,6 +34,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     volumes:
       - /var/lib/tomorrowland/images:/var/lib/tomorrowland/images
+      - -api-docs:/usr/src/docs
     depends_on:
       - database
     networks:
@@ -54,3 +57,4 @@ networks:
 volumes:
   mysql_data:
   redis_data:
+  api-docs:
