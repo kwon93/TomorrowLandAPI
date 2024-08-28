@@ -10,6 +10,5 @@ FROM openjdk:17-slim
 WORKDIR /usr/src/app
 
 COPY --from=build /home/gradle/src/build/libs/*.jar ./app.jar
-COPY --from=build /home/gradle/src/build/docs/asciidoc /usr/src/docs
 
 CMD ["java", "-jar", "app.jar"]
