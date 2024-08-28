@@ -25,7 +25,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "7070:7070"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/${DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: ${DB_HOST}
