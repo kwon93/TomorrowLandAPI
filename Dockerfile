@@ -2,7 +2,7 @@
 FROM gradle:7.2-jdk17 AS build
 WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle . .
-RUN gradle build asciidoctor --no-daemon
+RUN gradle build
 
 # 실행 스테이지
 FROM openjdk:17-slim
