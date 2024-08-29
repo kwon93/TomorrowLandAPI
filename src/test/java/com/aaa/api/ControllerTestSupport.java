@@ -5,7 +5,7 @@ import com.aaa.api.controller.*;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageFileNameProcessor;
-import com.aaa.api.service.image.S3ImageStorageManager;
+import com.aaa.api.service.image.ImageStorageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected ImageFileNameProcessor imageFileNameProcessor;
     @MockBean
-    protected S3ImageStorageManager imageUploader;
+    protected ImageStorageManager imageUploader;
     @MockBean
     protected PostsLikeService likeService;
     @MockBean

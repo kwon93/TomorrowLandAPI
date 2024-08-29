@@ -6,15 +6,14 @@ import com.aaa.api.domain.Users;
 import com.aaa.api.domain.enumType.PostsCategory;
 import com.aaa.api.domain.enumType.Role;
 import com.aaa.api.repository.SseRepository;
-import com.aaa.api.service.SseService;
 import com.aaa.api.repository.UsersRepository;
 import com.aaa.api.repository.comment.CommentRepository;
 import com.aaa.api.repository.like.PostsLikeRepository;
 import com.aaa.api.repository.posts.PostsRepository;
 import com.aaa.api.service.*;
 import com.aaa.api.service.image.ImageFileNameProcessor;
+import com.aaa.api.service.image.ImageStorageManager;
 import com.aaa.api.service.image.LocalImageStorageManager;
-import com.aaa.api.service.image.S3ImageStorageManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,7 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected ImageFileNameProcessor imageFileNameProcessor;
     @Autowired
-    protected S3ImageStorageManager s3ImageStorageManager;
+    protected ImageStorageManager s3ImageStorageManager;
     @Autowired
     protected LocalImageStorageManager localImageStorageManager;
 

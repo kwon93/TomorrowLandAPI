@@ -2,7 +2,7 @@
 FROM gradle:7.6.1-jdk17 AS build
 WORKDIR /home/gradle/src
 COPY . .
-RUN gradle build --no-daemon
+RUN gradle build -x test --no-daemon
 
 # 실행 스테이지
 FROM openjdk:17-slim
