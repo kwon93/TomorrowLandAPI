@@ -18,35 +18,35 @@ public class S3ImageStorageManager{
     @Value("${cloud.aws.s3.folder}")
     private String folder;
 
-//    @Override
-//    public ImageResponse uploadImage(final String fileName, final ImageInfo imageInfo) {
-//        final String path = uploadImageToS3Storage(fileName, imageInfo);
-//        return ImageResponse.from(path);
-//    }
+    @Override
+    public ImageResponse uploadImage(final String fileName, final ImageInfo imageInfo) {
+        final String path = uploadImageToS3Storage(fileName, imageInfo);
+        return ImageResponse.from(path);
+    }
 
-//    @Override
-//    public ImageResourceResponse downloadImage(String imagePath) {
-//        GeneratePresignedUrlRequest presignedUrlRequest = preSignedUrlRequestProcessing(imagePath);
-//        URL presignedUrl = amazonS3.generatePresignedUrl(presignedUrlRequest);
-//
-//        return ImageResourceResponse.toS3StorageResponse(presignedUrl.toString());
-//    }
+    @Override
+    public ImageResourceResponse downloadImage(String imagePath) {
+        GeneratePresignedUrlRequest presignedUrlRequest = preSignedUrlRequestProcessing(imagePath);
+        URL presignedUrl = amazonS3.generatePresignedUrl(presignedUrlRequest);
 
-//    @Override
-//    public void deleteImage(String fileName) throws AmazonServiceException {
-//        amazonS3.deleteObject(bucket, fileName);
-//    }
+        return ImageResourceResponse.toS3StorageResponse(presignedUrl.toString());
+    }
 
-//    private String uploadImageToS3Storage(String fileName, ImageInfo imageInfo) {
-//        final String path = folder + fileName;
-//        final ServletInputStream inputStream = imageInfo.getStream();
-//        final ObjectMetadata metadata = new ObjectMetadata();
-//
-//        metadata.setContentType(imageInfo.getContentType());
-//        metadata.setContentLength(imageInfo.getContentLengthLong());
-//        amazonS3.putObject(bucket, path, inputStream, metadata);
-//        return path;
-//    }
+    @Override
+    public void deleteImage(String fileName) throws AmazonServiceException {
+        amazonS3.deleteObject(bucket, fileName);
+    }
+
+    private String uploadImageToS3Storage(String fileName, ImageInfo imageInfo) {
+        final String path = folder + fileName;
+        final ServletInputStream inputStream = imageInfo.getStream();
+        final ObjectMetadata metadata = new ObjectMetadata();
+
+        metadata.setContentType(imageInfo.getContentType());
+        metadata.setContentLength(imageInfo.getContentLengthLong());
+        amazonS3.putObject(bucket, path, inputStream, metadata);
+        return path;
+    }
 
     private GeneratePresignedUrlRequest preSignedUrlRequestProcessing(String imagePath) {
         Date expiration = generateExpirationTime();

@@ -12,9 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,17 +34,11 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final RedisTemplate redisTemplate;
 
-
     @Bean
     public AuthenticationManager configure() throws Exception {
         ProviderManager manager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
         manager.getProviders().add(new CustomAuthenticationProvider());
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return WebSecurity::ignoring;
     }
 
     @Bean
