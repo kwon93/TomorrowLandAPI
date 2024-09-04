@@ -2,6 +2,8 @@
 
 <p>
     <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/27863cfc-40be-4b97-9660-b74701b5aa92">
+    ![스크린샷 2024-09-03 오전 12 12 14](https://github.com/user-attachments/assets/53b949f9-480c-4755-90d3-d351fbde3e5e)
+
 </p>
 **지식 정보 공유 커뮤니티 사이트**
 
