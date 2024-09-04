@@ -1,4 +1,4 @@
-## 1. TomorrowLand 1.0 [ 개인 프로젝트 ]
+## 1. TomorrowLand 2.0 [ 개인 프로젝트 ]
 
 <p>
     <img src="https://github.com/user-attachments/assets/53b949f9-480c-4755-90d3-d351fbde3e5e">
