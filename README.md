@@ -1,9 +1,7 @@
 ## 1. TomorrowLand 1.0 [ 개인 프로젝트 ]
 
 <p>
-    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/27863cfc-40be-4b97-9660-b74701b5aa92">
-    ![스크린샷 2024-09-03 오전 12 12 14](https://github.com/user-attachments/assets/53b949f9-480c-4755-90d3-d351fbde3e5e)
-
+    <img src="https://github.com/user-attachments/assets/53b949f9-480c-4755-90d3-d351fbde3e5e">
 </p>
 **지식 정보 공유 커뮤니티 사이트**
 
@@ -37,8 +35,29 @@
 </p>
 
 
+### *[ TomorrowLand ver 2.0 **release now** ]*
 
-### *기능 구현*
+1. **AWS → RaspBerry Pi 홈 서버 구축**
+    - 보안 관련 설정 진행
+        - SSH Port 변경, Fail2Ban, ufw 설정
+    - Port Fowarding 을 통한 외부 접속 설정
+    
+    [RaspBerry Pi 보안 설정. ( Blog Link )](https://kdh931228.tistory.com/89)
+    
+2. **JWT → Session 방식의 인증 방식 변경**  
+    - Redis를 활용한 **Session Clustering** 방식으로 **Stateless** 한 서버 구축
+    - **Spring Session**을 사용해 간편한 세션 설정
+    
+3. **SSE 와 Redis PUB/SUB 을 활용한 알림 기능** 
+    - 실시간 통신 활용에 WebSocket이 아닌 **SSE**를 활용
+        - HTTP 프로토콜을 그대로 이용할 수 있다는 장점
+        - 높은 브라우저 호환성으로 추가 라이브러리가 필요없다는 장점
+        
+4. **이미지 저장시 AWS S3 → Local Disk 저장방식으로 변경하며 이미지 업로더 추상화 진행**
+    - Bottom-up 방식의 **구현 → 추상화** 진행
+    - 이미지 업로드 방식에대한 확장성 증가
+
+### *[ TomorrowLand ver 1.0 ]*
 
 1. **JWT 를 통한 인증 및 인가 시스템 구축.** 
     - AccessToken → Web Storage 저장
