@@ -31,7 +31,6 @@
 
 <p>
     <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/8b3c56c8-cd6b-42ef-97d2-3bd8d02f510c">
-    <img src="https://github.com/kwon93/TomorrowLandAPI/assets/133971731/e30206a3-e90c-4f47-9e62-e7f48bc82d6b">
 </p>
 
 
