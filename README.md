@@ -1,7 +1,7 @@
 ## 1. TomorrowLand 2.0 [ 개인 프로젝트 ]
 
 <p>
-    <img src="https://github.com/user-attachments/assets/53b949f9-480c-4755-90d3-d351fbde3e5e">
+    <img src="https://github.com/user-attachments/assets/3ca554b0-28a2-4fc1-93b3-0eebe75edbb7">
 </p>
 **지식 정보 공유 커뮤니티 사이트**
 
